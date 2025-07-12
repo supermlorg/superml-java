@@ -4,6 +4,18 @@ Thank you for your interest in contributing to SuperML Java! This guide will hel
 
 ## 🎯 Ways to Contribute
 
+# Contributing to SuperML Java
+
+1. Fork the repository
+2. Create a new branch
+3. Open a pull request (PR)
+4. Describe the issue being fixed or feature added
+5. Wait for review and approval
+
+We encourage clean, modular, well-documented code.
+
+## Things to Note:
+
 ### 1. Code Contributions
 - **New Algorithms**: Implement additional ML algorithms
 - **Performance Improvements**: Optimize existing algorithms

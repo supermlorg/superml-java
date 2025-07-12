@@ -6,6 +6,8 @@ plugins:
   - jekyll-toc
   - jekyll-search
   - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
 
 # Markdown settings
 markdown: kramdown
