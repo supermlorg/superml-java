@@ -1,3 +1,5 @@
+<img src="docs/logo.png" alt="SuperML Logo" width="100" /> By SuperML.org with SuperML.dev
+
 # SuperML Java
 
 A comprehensive Java Machine Learning Framework inspired by scikit-learn, developed by the SuperML community.
