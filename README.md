@@ -26,11 +26,11 @@ SuperML Java is a comprehensive machine learning library for Java that provides:
 ## 🚀 Quick Start
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.pipeline.Pipeline;
-import com.superml.preprocessing.StandardScaler;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.pipeline.Pipeline;
+import org.superml.preprocessing.StandardScaler;
+import org.superml.model_selection.ModelSelection;
 
 // Load data and create pipeline
 Datasets.Dataset dataset = Datasets.loadIris();
@@ -49,8 +49,8 @@ double[] predictions = pipeline.predict(split.XTest);
 Train on any Kaggle dataset with one line:
 
 ```java
-import com.superml.datasets.KaggleTrainingManager;
-import com.superml.datasets.KaggleIntegration.KaggleCredentials;
+import org.superml.datasets.KaggleTrainingManager;
+import org.superml.datasets.KaggleIntegration.KaggleCredentials;
 
 KaggleCredentials credentials = KaggleCredentials.fromDefaultLocation();
 KaggleTrainingManager trainer = new KaggleTrainingManager(credentials);
@@ -72,8 +72,8 @@ System.out.println("Model saved to: " + results.get(0).modelFilePath);
 Save and load trained models with automatic training statistics capture:
 
 ```java
-import com.superml.persistence.ModelPersistence;
-import com.superml.persistence.ModelManager;
+import org.superml.persistence.ModelPersistence;
+import org.superml.persistence.ModelManager;
 
 // Train a model
 LogisticRegression model = new LogisticRegression().setMaxIter(1000);
@@ -129,7 +129,7 @@ List<String> allModels = manager.listModels();
 
 ```xml
 <dependency>
-    <groupId>com.superml</groupId>
+    <groupId>org.superml</groupId>
     <artifactId>superml-java</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>
@@ -147,10 +147,10 @@ mvn clean install
 ### Basic Classification
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 // Load dataset
 Datasets.Dataset dataset = Datasets.loadIris();
@@ -171,9 +171,9 @@ System.out.printf("Accuracy: %.3f\n", accuracy);
 ### Advanced Pipeline with Hyperparameter Tuning
 
 ```java
-import com.superml.pipeline.Pipeline;
-import com.superml.preprocessing.StandardScaler;
-import com.superml.model_selection.GridSearchCV;
+import org.superml.pipeline.Pipeline;
+import org.superml.preprocessing.StandardScaler;
+import org.superml.model_selection.GridSearchCV;
 
 // Create pipeline
 Pipeline pipeline = new Pipeline()
@@ -196,8 +196,8 @@ System.out.println("Best params: " + gridSearch.getBestParams());
 ### Model Persistence and Management
 
 ```java
-import com.superml.persistence.ModelPersistence;
-import com.superml.persistence.ModelManager;
+import org.superml.persistence.ModelPersistence;
+import org.superml.persistence.ModelManager;
 
 // Train and save a pipeline
 Pipeline pipeline = new Pipeline()
@@ -233,8 +233,8 @@ for (ModelManager.ModelInfo info : models) {
 Deploy models in production with high-performance inference capabilities:
 
 ```java
-import com.superml.inference.InferenceEngine;
-import com.superml.inference.BatchInferenceProcessor;
+import org.superml.inference.InferenceEngine;
+import org.superml.inference.BatchInferenceProcessor;
 
 // Create inference engine and load model
 InferenceEngine engine = new InferenceEngine();
@@ -260,20 +260,22 @@ BatchResult result = processor.processCSV("input.csv", "output.csv", "classifier
 
 ## 📚 Documentation
 
-- **[Quick Start Guide](docs/quick-start.md)** - Get started in 5 minutes
-- **[Model Persistence](docs/model-persistence.md)** - Save and load trained models
-- **[Kaggle Integration](docs/kaggle-integration.md)** - Train on real datasets
-- **[API Reference](docs/api/core-classes.md)** - Complete API documentation
-- **[Examples](docs/examples/basic-examples.md)** - Comprehensive code examples
-- **[Architecture](docs/architecture.md)** - Framework design and patterns
-- **[Contributing](docs/contributing.md)** - Development guidelines
-- **[Inference Guide](docs/inference-guide.md)** - High-performance model inference and deployment
+- **[SuperML Java Framework Introduction](https://superml-java.superml.org/)** - SuperML Java Framework Introduction
+- **[Quick Start Guide](https://superml-java.superml.org/quick-start)** - Get started in 5 minutes
+- **[Model Persistence](https://superml-java.superml.org/model-persistence)** - Save and load trained models
+- **[Kaggle Integration](https://superml-java.superml.org/kaggle-integration)** - Train on real datasets
+- **[API Reference](https://superml-java.superml.org/api/core-classes)** - Complete API documentation
+- **[Examples](https://superml-java.superml.org/examples/basic-examples)** - Comprehensive code examples
+- **[Architecture](https://superml-java.superml.org/architecture)** - Framework design and patterns
+- **[Contributing](https://superml-java.superml.org/contributing)** - Development guidelines
+- **[Inference Guide](https://superml-java.superml.org/inference-guide)** - High-performance model inference and deployment
 
 ## 🤝 Contributing
 
-We welcome contributions to SuperML Java! Please see our [Contributing Guide](docs/contributing.md) for details.
+We welcome contributions to SuperML Java! Please see our [Contributing Guide](https://superml-java.superml.org/contributing) for details.
 
 ### Ways to Contribute
+
 - **Code**: Implement new algorithms, improve performance, fix bugs
 - **Documentation**: Improve guides, add examples, write tutorials  
 - **Testing**: Add test cases, improve coverage, performance testing
@@ -290,8 +292,8 @@ mvn test
 ## 🌟 Community & Support
 
 - **Website**: [superML.dev](https://superML.dev) - Main project website
-- **Organization**: [superML.org](https://superML.org) - Community organization
-- **Documentation**: [GitHub Wiki](https://github.com/superml/superml-java/wiki)
+- **Organization**: [superML.org](https://superml.org/community) - Community organization
+- **Documentation**: [GitHub Wiki](https://superml-java.superml.org)
 - **Issues**: [GitHub Issues](https://github.com/superml/superml-java/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/superml/superml-java/discussions)
 

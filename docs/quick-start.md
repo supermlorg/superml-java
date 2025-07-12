@@ -16,19 +16,19 @@ Add SuperML Java to your Maven project:
 
 ```xml
 <dependency>
-    <groupId>com.superml</groupId>
+    <groupId>org.superml</groupId>
     <artifactId>superml-java</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
 ### Step 2: Your First Model
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class QuickStart {
     public static void main(String[] args) {
@@ -115,8 +115,8 @@ double meanScore = Arrays.stream(scores).average().orElse(0.0);
 Chain preprocessing and models together:
 
 ```java
-import com.superml.pipeline.Pipeline;
-import com.superml.preprocessing.StandardScaler;
+import org.superml.pipeline.Pipeline;
+import org.superml.preprocessing.StandardScaler;
 
 // Create a pipeline
 var pipeline = new Pipeline()
@@ -155,7 +155,7 @@ double r2 = Metrics.r2Score(yTrue, yPred);
 Automatically find the best parameters:
 
 ```java
-import com.superml.model_selection.GridSearchCV;
+import org.superml.model_selection.GridSearchCV;
 
 // Define parameter grid
 Map<String, Object[]> paramGrid = Map.of(
@@ -180,8 +180,8 @@ System.out.println("Best params: " + gridSearch.getBestParams());
 Train models on real Kaggle datasets with one line:
 
 ```java
-import com.superml.datasets.KaggleTrainingManager;
-import com.superml.datasets.KaggleIntegration.KaggleCredentials;
+import org.superml.datasets.KaggleTrainingManager;
+import org.superml.datasets.KaggleIntegration.KaggleCredentials;
 
 // Setup Kaggle credentials (see Kaggle Integration guide)
 var credentials = KaggleCredentials.fromDefaultLocation();

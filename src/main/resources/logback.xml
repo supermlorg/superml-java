@@ -43,19 +43,19 @@
     </appender>
     
     <!-- SuperML specific loggers -->
-    <logger name="com.superml" level="INFO" additivity="false">
+    <logger name="org.superml" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>
     
     <!-- Kaggle integration specific logging -->
-    <logger name="com.superml.datasets.KaggleIntegration" level="DEBUG" additivity="false">
+    <logger name="org.superml.datasets.KaggleIntegration" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>
     
     <!-- Training manager logging -->
-    <logger name="com.superml.datasets.KaggleTrainingManager" level="DEBUG" additivity="false">
+    <logger name="org.superml.datasets.KaggleTrainingManager" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>

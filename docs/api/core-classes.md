@@ -9,7 +9,7 @@ This document provides comprehensive API documentation for the core classes and 
 The foundational interface that all ML components implement.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public interface Estimator {
     /**
@@ -39,7 +39,7 @@ model.setParams(Map.of("learningRate", 0.01, "maxIterations", 1000));
 Interface for algorithms that learn from labeled data.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public interface SupervisedLearner extends Estimator {
     /**
@@ -79,7 +79,7 @@ double[] predictions = learner.predict(testX);
 Specialized interface for classification algorithms.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public interface Classifier extends SupervisedLearner {
     /**
@@ -110,7 +110,7 @@ double[] classes = classifier.getClasses();
 Interface for regression algorithms.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public interface Regressor extends SupervisedLearner {
     // Inherits fit() and predict() from SupervisedLearner
@@ -123,7 +123,7 @@ public interface Regressor extends SupervisedLearner {
 Interface for algorithms that learn from unlabeled data.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public interface UnsupervisedLearner extends Estimator {
     /**
@@ -159,7 +159,7 @@ public interface UnsupervisedLearner extends Estimator {
 Abstract base class providing common parameter management functionality.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public abstract class BaseEstimator implements Estimator {
     protected Map<String, Object> parameters = new HashMap<>();
@@ -320,7 +320,7 @@ public class ValidatedEstimator extends BaseEstimator {
 ### Custom Exceptions
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 /**
  * Base exception for all SuperML errors.
@@ -361,7 +361,7 @@ public class ConvergenceException extends SuperMLException {
 ### Validation Utilities
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public class ValidationUtils {
     /**

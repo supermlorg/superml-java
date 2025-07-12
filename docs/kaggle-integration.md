@@ -39,8 +39,8 @@ Your `kaggle.json` should look like:
 ### One-Line Training
 
 ```java
-import com.superml.datasets.KaggleTrainingManager;
-import com.superml.datasets.KaggleIntegration.KaggleCredentials;
+import org.superml.datasets.KaggleTrainingManager;
+import org.superml.datasets.KaggleIntegration.KaggleCredentials;
 
 public class KaggleQuickStart {
     public static void main(String[] args) {

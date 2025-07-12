@@ -7,10 +7,10 @@ This guide provides simple, focused examples to help you get started with SuperM
 ### Example 1: Basic Binary Classification
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class BasicClassification {
     public static void main(String[] args) {
@@ -73,10 +73,10 @@ Confusion Matrix:
 ### Example 2: Multiclass Classification with Iris Dataset
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class MulticlassClassification {
     public static void main(String[] args) {
@@ -138,10 +138,10 @@ public class MulticlassClassification {
 ### Example 3: Linear Regression
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LinearRegression;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LinearRegression;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class BasicRegression {
     public static void main(String[] args) {
@@ -193,10 +193,10 @@ public class BasicRegression {
 ### Example 4: Regularized Regression Comparison
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.*;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.*;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class RegularizedRegression {
     public static void main(String[] args) {
@@ -259,12 +259,12 @@ public class RegularizedRegression {
 ### Example 5: Classification Pipeline
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.pipeline.Pipeline;
-import com.superml.preprocessing.StandardScaler;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.pipeline.Pipeline;
+import org.superml.preprocessing.StandardScaler;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class ClassificationPipeline {
     public static void main(String[] args) {
@@ -310,12 +310,12 @@ public class ClassificationPipeline {
 ### Example 6: Regression Pipeline
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.Ridge;
-import com.superml.pipeline.Pipeline;
-import com.superml.preprocessing.StandardScaler;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.Ridge;
+import org.superml.pipeline.Pipeline;
+import org.superml.preprocessing.StandardScaler;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class RegressionPipeline {
     public static void main(String[] args) {
@@ -370,8 +370,8 @@ public class RegressionPipeline {
 ### Example 7: K-Means Clustering
 
 ```java
-import com.superml.cluster.KMeans;
-import com.superml.datasets.Datasets;
+import org.superml.cluster.KMeans;
+import org.superml.datasets.Datasets;
 
 public class BasicClustering {
     public static void main(String[] args) {
@@ -434,9 +434,9 @@ public class BasicClustering {
 ### Example 8: Model Validation
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.model_selection.ModelSelection;
 
 public class CrossValidation {
     public static void main(String[] args) {
@@ -493,7 +493,7 @@ public class CrossValidation {
 ### Example 9: Model Parameters
 
 ```java
-import com.superml.linear_model.LogisticRegression;
+import org.superml.linear_model.LogisticRegression;
 import java.util.Map;
 
 public class ParameterManagement {
@@ -574,9 +574,9 @@ Each example is self-contained and demonstrates a specific concept. Try modifyin
 ### Example 10: Production Inference
 
 ```java
-import com.superml.inference.InferenceEngine;
-import com.superml.inference.BatchInferenceProcessor;
-import com.superml.inference.InferenceMetrics;
+import org.superml.inference.InferenceEngine;
+import org.superml.inference.BatchInferenceProcessor;
+import org.superml.inference.InferenceMetrics;
 import java.util.concurrent.CompletableFuture;
 
 public class ProductionInference {

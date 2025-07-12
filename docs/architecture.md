@@ -82,7 +82,7 @@ var pipeline = new Pipeline()
 
 ## 🧩 Core Component Design
 
-### Base Interfaces (`com.superml.core`)
+### Base Interfaces (`org.superml.core`)
 
 ```java
 // Foundation interface for all ML components

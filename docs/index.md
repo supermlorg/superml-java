@@ -38,10 +38,10 @@ A comprehensive machine learning library for Java, inspired by scikit-learn and 
 ## 🎯 Quick Example
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.model_selection.ModelSelection;
-import com.superml.metrics.Metrics;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.model_selection.ModelSelection;
+import org.superml.metrics.Metrics;
 
 // Load dataset
 var dataset = Datasets.loadIris();

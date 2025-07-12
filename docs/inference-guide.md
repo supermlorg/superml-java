@@ -24,7 +24,7 @@ The SuperML Java Inference Layer provides a complete solution for deploying trai
 ### Basic Inference
 
 ```java
-import com.superml.inference.InferenceEngine;
+import org.superml.inference.InferenceEngine;
 
 // Create inference engine
 InferenceEngine engine = new InferenceEngine();
@@ -116,7 +116,7 @@ engine.unloadModel("lr");
 For high-throughput processing of large datasets:
 
 ```java
-import com.superml.inference.BatchInferenceProcessor;
+import org.superml.inference.BatchInferenceProcessor;
 
 // Create batch processor
 BatchInferenceProcessor processor = new BatchInferenceProcessor(engine);

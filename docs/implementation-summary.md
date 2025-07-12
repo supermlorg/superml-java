@@ -7,7 +7,7 @@ Successfully created a comprehensive machine learning framework for Java, inspir
 
 ### Package Structure
 ```
-com.superml/
+org.superml/
 ├── core/                    # Base interfaces and abstract classes
 ├── linear_model/           # Linear algorithms with regularization
 ├── cluster/                # Unsupervised clustering algorithms  
@@ -18,7 +18,7 @@ com.superml/
 └── datasets/              # Data generation and loading utilities
 ```
 
-### Core Interfaces (com.superml.core)
+### Core Interfaces (org.superml.core)
 - **Estimator**: Base interface for all ML algorithms
 - **SupervisedLearner**: Interface for supervised learning algorithms
 - **UnsupervisedLearner**: Interface for unsupervised learning algorithms
@@ -28,32 +28,32 @@ com.superml/
 
 ## ✅ Implemented Algorithms
 
-### Linear Models (com.superml.linear_model)
+### Linear Models (org.superml.linear_model)
 1. **LogisticRegression**: Binary classification with gradient descent
 2. **LinearRegression**: Ordinary least squares regression with normal equation
 3. **Ridge**: L2 regularized regression with closed-form solution
 4. **Lasso**: L1 regularized regression with coordinate descent algorithm
 
-### Clustering (com.superml.cluster)
+### Clustering (org.superml.cluster)
 1. **KMeans**: K-means clustering with k-means++ initialization, multiple restarts, and inertia calculation
 
-### Preprocessing (com.superml.preprocessing)
+### Preprocessing (org.superml.preprocessing)
 1. **StandardScaler**: Feature standardization (z-score normalization)
 
 ## ✅ Advanced Framework Features
 
-### Pipeline System (com.superml.pipeline)
+### Pipeline System (org.superml.pipeline)
 - **Pipeline**: Chains preprocessing steps and estimators like sklearn
 - Supports complex ML workflows: preprocessing → model training → prediction
 - Parameter management across pipeline steps
 - Seamless fit/transform/predict operations
 
-### Model Selection (com.superml.model_selection)
+### Model Selection (org.superml.model_selection)
 - **GridSearchCV**: Comprehensive hyperparameter optimization with cross-validation
 - **KFold**: K-fold cross-validation with shuffle support
 - **TrainTestSplit**: Train-test data splitting utilities
 
-### Data Loading (com.superml.datasets)
+### Data Loading (org.superml.datasets)
 - **DataLoaders**: CSV file reading/writing with comprehensive error handling
 - Support for custom delimiters, headers, target column specification
 - Dataset information analysis and train-test split file generation
@@ -61,20 +61,20 @@ com.superml/
 - **KaggleIntegration**: Direct integration with Kaggle API for dataset downloading
 - **KaggleTrainingManager**: Automated ML training workflows for Kaggle datasets
 
-### Metrics (com.superml.metrics)
+### Metrics (org.superml.metrics)
 - **Classification**: Accuracy, precision, recall, F1-score, confusion matrix
 - **Regression**: MSE, MAE, R² score
 
 ## ✅ Enterprise-Grade Kaggle Integration
 
-### Kaggle API Integration (com.superml.datasets.KaggleIntegration)
+### Kaggle API Integration (org.superml.datasets.KaggleIntegration)
 - **Authentication**: Secure API key management with multiple credential sources
 - **Dataset Discovery**: Search and browse Kaggle datasets programmatically
 - **Automatic Downloads**: ZIP extraction and file management
 - **Dataset Information**: Comprehensive metadata and file listings
 - **Smart File Detection**: Automatic CSV file identification and loading
 
-### Automated Training Manager (com.superml.datasets.KaggleTrainingManager)
+### Automated Training Manager (org.superml.datasets.KaggleTrainingManager)
 - **One-Click Training**: Download datasets and train models with single method calls
 - **Smart Algorithm Selection**: Automatic classification vs regression detection
 - **Multi-Algorithm Comparison**: Parallel training of Linear, Logistic, Ridge, Lasso models
@@ -244,7 +244,7 @@ SuperML Java is now a fully functional, production-ready machine learning framew
 
 ## ✅ Kaggle Integration & Automated Training
 
-### Kaggle API Integration (com.superml.datasets)
+### Kaggle API Integration (org.superml.datasets)
 - **KaggleIntegration**: Complete REST API client for Kaggle
   - Dataset search and discovery
   - Authenticated downloads with API credentials
