@@ -124,7 +124,7 @@ Test individual methods and components:
 @Test
 void testFitWithValidData() {
     // Arrange
-    double[][] X = {{1, 2}, {3, 4}, {5, 6}};
+    double[][] X = { {1, 2}, {3, 4}, {5, 6} };
     double[] y = {0, 1, 0};
     var model = new LogisticRegression();
     
@@ -139,7 +139,7 @@ void testFitWithValidData() {
 @Test
 void testPredictThrowsWhenNotFitted() {
     // Arrange
-    double[][] X = {{1, 2}, {3, 4}};
+    double[][] X = { {1, 2}, {3, 4} };
     var model = new LogisticRegression();
     
     // Act & Assert

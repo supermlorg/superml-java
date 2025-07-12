@@ -1,6 +1,21 @@
-title: SuperML.org| SuperML.org
+title: SuperML.org | Machine Learning Framework
 description: A modular machine learning framework in Java
 remote_theme: pages-themes/cayman@v0.2.0
 plugins:
   - jekyll-remote-theme
-  - jekyll-seo-tag 
+  - jekyll-seo-tag
+
+# Markdown settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+# Liquid settings to prevent parsing issues
+liquid:
+  error_mode: warn
+  strict_filters: false
+  strict_variables: false 

@@ -1,3 +1,9 @@
+---
+title: "Quick Start Guide"
+description: "Get up and running with SuperML Java in minutes"
+layout: default
+---
+
 # Quick Start Guide
 
 Get up and running with SuperML Java in just a few minutes! This guide will walk you through setting up the framework and training your first machine learning model.

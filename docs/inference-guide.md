@@ -1,3 +1,8 @@
+---
+title: "Inference Layer Guide"
+description: "Production model deployment and high-performance inference with SuperML Java"
+---
+
 # Inference Layer Guide
 
 Comprehensive guide to using the SuperML Java Inference Layer for production model deployment and high-performance inference.
@@ -32,7 +37,7 @@ double[] features = {1.0, 2.0, 3.0, 4.0};
 double prediction = engine.predict("my_classifier", features);
 
 // Batch prediction
-double[][] batchFeatures = {{1,2,3,4}, {5,6,7,8}};
+double[][] batchFeatures = { {1,2,3,4}, {5,6,7,8} };
 double[] predictions = engine.predict("my_classifier", batchFeatures);
 
 // Cleanup

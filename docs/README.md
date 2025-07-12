@@ -1,3 +1,9 @@
+---
+title: "SuperML Java Documentation"
+description: "Comprehensive machine learning library for Java"
+layout: default
+---
+
 # SuperML Java Framework - Documentation
 
 Welcome to the SuperML Java Framework documentation. This is a comprehensive machine learning library for Java, inspired by scikit-learn and designed for enterprise-grade applications.
