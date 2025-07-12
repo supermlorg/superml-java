@@ -1,4 +1,4 @@
-package com.superml.examples;
+package examples;
 
 import com.superml.datasets.Datasets;
 import com.superml.linear_model.LinearRegression;

@@ -5,83 +5,100 @@ import com.superml.linear_model.LogisticRegression;
 import com.superml.model_selection.ModelSelection;
 import com.superml.metrics.Metrics;
 
-import java.util.Arrays;
-
 /**
- * Basic classification example using the Iris dataset.
- * Demonstrates fundamental SuperML concepts: loading data, training, and evaluation.
+ * Basic classification example using synthetic data.
+ * Demonstrates a complete machine learning workflow from data loading to evaluation.
  */
 public class BasicClassification {
     
     public static void main(String[] args) {
         System.out.println("=".repeat(60));
-        System.out.println("        SuperML Java - Basic Classification Example");
+        System.out.println("     SuperML Java - Basic Classification Example");
         System.out.println("=".repeat(60));
         
         try {
-            // 1. Load the famous Iris dataset
-            System.out.println("Loading Iris dataset...");
-            var dataset = Datasets.loadIris();
+            // 1. Generate a synthetic classification dataset (similar to Iris)
+            System.out.println("Generating synthetic classification dataset...");
+            var dataset = Datasets.makeClassification(150, 4, 3, 42);
             
-            System.out.printf("Dataset loaded: %d samples, %d features\n", 
-                            dataset.data.length, dataset.data[0].length);
-            System.out.println("Target classes: " + Arrays.toString(dataset.targetNames));
+            // Create feature and class names for demonstration
+            String[] featureNames = {"Feature 1", "Feature 2", "Feature 3", "Feature 4"};
+            String[] classNames = {"Class A", "Class B", "Class C"};
             
-            // 2. Split into training and test sets
+            System.out.printf("Dataset generated: %d samples, %d features, %d classes\n", 
+                            dataset.data.length, dataset.data[0].length, classNames.length);
+            System.out.printf("Classes: %s\n", String.join(", ", classNames));
+            
+            // 2. Split the data into training and testing sets
             System.out.println("\nSplitting data (80% train, 20% test)...");
             var split = ModelSelection.trainTestSplit(dataset.data, dataset.target, 0.2, 42);
             
-            System.out.printf("Training samples: %d\n", split.XTrain.length);
-            System.out.printf("Test samples: %d\n", split.XTest.length);
+            System.out.printf("Training set: %d samples\n", split.XTrain.length);
+            System.out.printf("Test set: %d samples\n", split.XTest.length);
             
-            // 3. Create and train classifier
-            System.out.println("\nTraining Logistic Regression classifier...");
-            var classifier = new LogisticRegression()
-                .setMaxIter(1000)
-                .setLearningRate(0.01);
+            // 3. Create and train the model
+            System.out.println("\nTraining Logistic Regression model...");
+            var model = new LogisticRegression().setMaxIter(1000);
             
             long startTime = System.currentTimeMillis();
-            classifier.fit(split.XTrain, split.yTrain);
+            model.fit(split.XTrain, split.yTrain);
             long trainingTime = System.currentTimeMillis() - startTime;
             
-            System.out.printf("Training completed in %d ms\n", trainingTime);
+            System.out.printf("✓ Model trained in %d ms\n", trainingTime);
             
             // 4. Make predictions
-            System.out.println("\nMaking predictions on test set...");
-            double[] predictions = classifier.predict(split.XTest);
+            System.out.println("Making predictions on test set...");
+            double[] predictions = model.predict(split.XTest);
             
-            // 5. Evaluate performance
+            // 5. Evaluate the model
+            System.out.println("\n" + "=".repeat(40));
+            System.out.println("Model Performance:");
+            System.out.println("=".repeat(40));
+            
             double accuracy = Metrics.accuracy(split.yTest, predictions);
             double precision = Metrics.precision(split.yTest, predictions);
             double recall = Metrics.recall(split.yTest, predictions);
             double f1 = Metrics.f1Score(split.yTest, predictions);
             
-            System.out.println("\n" + "=".repeat(30));
-            System.out.println("        RESULTS");
-            System.out.println("=".repeat(30));
-            System.out.printf("Accuracy:  %.3f (%.1f%%)\n", accuracy, accuracy * 100);
-            System.out.printf("Precision: %.3f\n", precision);
-            System.out.printf("Recall:    %.3f\n", recall);
-            System.out.printf("F1-Score:  %.3f\n", f1);
+            System.out.printf("Accuracy:        %.4f (%.1f%%)\n", accuracy, accuracy * 100);
+            System.out.printf("Precision:       %.4f\n", precision);
+            System.out.printf("Recall:          %.4f\n", recall);
+            System.out.printf("F1-Score:        %.4f\n", f1);
             
             // 6. Show confusion matrix
-            int[][] confMatrix = Metrics.confusionMatrix(split.yTest, predictions);
             System.out.println("\nConfusion Matrix:");
+            int[][] confMatrix = Metrics.confusionMatrix(split.yTest, predictions);
+            System.out.println("       Predicted");
+            System.out.print("      ");
             for (int i = 0; i < confMatrix.length; i++) {
-                System.out.printf("Class %d: %s\n", i, Arrays.toString(confMatrix[i]));
+                System.out.printf("%d    ", i);
+            }
+            System.out.println();
+            for (int i = 0; i < confMatrix.length; i++) {
+                System.out.printf("  %d | ", i);
+                for (int j = 0; j < confMatrix[i].length; j++) {
+                    System.out.printf("%2d   ", confMatrix[i][j]);
+                }
+                System.out.println();
             }
             
-            // 7. Show some sample predictions
-            System.out.println("\nSample Predictions:");
-            System.out.println("Actual | Predicted | Sample Features");
-            System.out.println("-".repeat(40));
-            for (int i = 0; i < Math.min(10, split.XTest.length); i++) {
-                System.out.printf("  %3.0f  |    %3.0f    | [%.1f, %.1f, %.1f, %.1f]\n",
-                    split.yTest[i], predictions[i],
-                    split.XTest[i][0], split.XTest[i][1], split.XTest[i][2], split.XTest[i][3]);
+            // 7. Show sample predictions
+            System.out.println("\n" + "=".repeat(40));
+            System.out.println("Sample Predictions:");
+            System.out.println("=".repeat(40));
+            System.out.println("Actual | Predicted | Class Name");
+            System.out.println("-".repeat(35));
+            
+            for (int i = 0; i < Math.min(10, predictions.length); i++) {
+                int actual = (int) split.yTest[i];
+                int predicted = (int) predictions[i];
+                String className = classNames[predicted];
+                String status = actual == predicted ? "✓" : "✗";
+                System.out.printf("  %d    |     %d     | %s %s\n", actual, predicted, className, status);
             }
             
             System.out.println("\n✓ Classification example completed successfully!");
+            System.out.println("💡 Try experimenting with different algorithms and parameters!");
             
         } catch (Exception e) {
             System.err.println("❌ Example failed: " + e.getMessage());

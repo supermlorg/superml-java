@@ -19,12 +19,12 @@ public class PipelineExample {
         System.out.println("=".repeat(60));
         
         try {
-            // 1. Load dataset
-            System.out.println("Loading Iris dataset...");
-            var dataset = Datasets.loadIris();
+            // 1. Generate dataset
+            System.out.println("Generating classification dataset...");
+            var dataset = Datasets.makeClassification(200, 4, 3, 42);
             
-            System.out.printf("Dataset loaded: %d samples, %d features, %d classes\n", 
-                            dataset.data.length, dataset.data[0].length, dataset.targetNames.length);
+            System.out.printf("Dataset generated: %d samples, %d features, %d classes\n", 
+                            dataset.data.length, dataset.data[0].length, 3);
             
             // 2. Split data
             System.out.println("Splitting data (70% train, 30% test)...");
@@ -57,9 +57,9 @@ public class PipelineExample {
             
             // 6. Evaluate performance
             double accuracy = Metrics.accuracy(split.yTest, predictions);
-            double precision = Metrics.precision(split.yTest, predictions, "macro");
-            double recall = Metrics.recall(split.yTest, predictions, "macro");
-            double f1 = Metrics.f1Score(split.yTest, predictions, "macro");
+            double precision = Metrics.precision(split.yTest, predictions);
+            double recall = Metrics.recall(split.yTest, predictions);
+            double f1 = Metrics.f1Score(split.yTest, predictions);
             
             System.out.println("\n" + "=".repeat(40));
             System.out.println("Pipeline Performance:");
@@ -73,9 +73,13 @@ public class PipelineExample {
             
             // 7. Show confusion matrix
             System.out.println("\nConfusion Matrix:");
-            var confMatrix = Metrics.confusionMatrix(split.yTest, predictions, 3);
+            int[][] confMatrix = Metrics.confusionMatrix(split.yTest, predictions);
             System.out.println("       Predicted");
-            System.out.println("      0    1    2");
+            System.out.print("      ");
+            for (int i = 0; i < confMatrix.length; i++) {
+                System.out.printf("%d    ", i);
+            }
+            System.out.println();
             for (int i = 0; i < confMatrix.length; i++) {
                 System.out.printf("  %d | ", i);
                 for (int j = 0; j < confMatrix[i].length; j++) {
@@ -95,36 +99,28 @@ public class PipelineExample {
             double[] stds = scaler.getScale();
             
             System.out.println("Feature scaling statistics:");
-            String[] featureNames = {"Sepal Length", "Sepal Width", "Petal Length", "Petal Width"};
+            String[] featureNames = {"Feature 1", "Feature 2", "Feature 3", "Feature 4"};
             for (int i = 0; i < means.length; i++) {
                 System.out.printf("  %s: mean=%.2f, std=%.2f\n", 
                                 featureNames[i], means[i], stds[i]);
             }
             
-            // Get model coefficients
-            var classifier = (LogisticRegression) pipeline.getStep("classifier");
-            if (classifier.getCoefficients() != null) {
-                System.out.println("\nModel feature importance (absolute coefficients):");
-                double[] coefs = classifier.getCoefficients();
-                for (int i = 0; i < Math.min(coefs.length, featureNames.length); i++) {
-                    System.out.printf("  %s: %.3f\n", featureNames[i], Math.abs(coefs[i]));
-                }
-            }
+            System.out.println("\nPipeline successfully trained with both preprocessing and classification");
             
             // 9. Sample predictions
             System.out.println("\n" + "=".repeat(40));
             System.out.println("Sample Predictions:");
             System.out.println("=".repeat(40));
-            System.out.println("Actual | Predicted | Class Name");
-            System.out.println("-".repeat(35));
+            System.out.println("Actual | Predicted | Status");
+            System.out.println("-".repeat(30));
             
-            String[] classNames = dataset.targetNames;
-            for (int i = 0; i < Math.min(15, predictions.length); i++) {
+            String[] classNames = {"Class A", "Class B", "Class C"};
+            for (int i = 0; i < Math.min(12, predictions.length); i++) {
                 int actual = (int) split.yTest[i];
                 int predicted = (int) predictions[i];
                 String status = actual == predicted ? "✓" : "✗";
-                System.out.printf("  %d    |     %d     | %s %s\n", 
-                                actual, predicted, classNames[predicted], status);
+                System.out.printf("  %d    |     %d     | %s (%s)\n", 
+                                actual, predicted, status, classNames[predicted]);
             }
             
             System.out.println("\n✓ Pipeline example completed successfully!");
