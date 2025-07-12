@@ -3,6 +3,8 @@ description: A modular machine learning framework in Java
 remote_theme: pages-themes/cayman@v0.2.0
 plugins:
   - jekyll-remote-theme
+  - jekyll-toc
+  - jekyll-search
   - jekyll-seo-tag
 
 # Markdown settings
