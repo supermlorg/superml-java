@@ -37,7 +37,7 @@ public class BasicClassification {
         double[] predictions = classifier.predict(split.XTest);
         
         // 5. Evaluate performance
-        double accuracy = Metrics.accuracy(split.yTest, predictions);
+        double accuracy = Metrics.(split.yTest, predictions);
         double precision = Metrics.precision(split.yTest, predictions);
         double recall = Metrics.recall(split.yTest, predictions);
         double f1 = Metrics.f1Score(split.yTest, predictions);
@@ -568,3 +568,113 @@ mvn compile exec:java -Dexec.mainClass="examples.BasicClassification"
 6. **Validate Properly**: Use cross-validation for reliable estimates
 
 Each example is self-contained and demonstrates a specific concept. Try modifying parameters, datasets, or algorithms to see how they affect results! 🎯
+
+## 🏭 Production Inference Examples
+
+### Example 10: Production Inference
+
+```java
+import com.superml.inference.InferenceEngine;
+import com.superml.inference.BatchInferenceProcessor;
+import com.superml.inference.InferenceMetrics;
+import java.util.concurrent.CompletableFuture;
+
+public class ProductionInference {
+    public static void main(String[] args) {
+        // Create inference engine
+        InferenceEngine engine = new InferenceEngine();
+        
+        try {
+            // Load pre-trained model
+            var modelInfo = engine.loadModel("production_classifier", "models/classifier.superml");
+            System.out.println("Loaded: " + modelInfo);
+            
+            // Warm up for optimal performance
+            engine.warmUp("production_classifier", 1000);
+            
+            // Single prediction
+            double[] features = {5.1, 3.5, 1.4, 0.2};
+            double prediction = engine.predict("production_classifier", features);
+            System.out.printf("Single prediction: %.0f\n", prediction);
+            
+            // Batch prediction
+            double[][] batchFeatures = {
+                {5.1, 3.5, 1.4, 0.2},
+                {4.9, 3.0, 1.4, 0.2},
+                {6.2, 3.4, 5.4, 2.3},
+                {5.9, 3.0, 5.1, 1.8}
+            };
+            
+            double[] batchPredictions = engine.predict("production_classifier", batchFeatures);
+            System.out.println("Batch predictions: " + Arrays.toString(batchPredictions));
+            
+            // Probability predictions
+            double[][] probabilities = engine.predictProba("production_classifier", batchFeatures);
+            System.out.println("\nClass Probabilities:");
+            for (int i = 0; i < probabilities.length; i++) {
+                System.out.printf("Sample %d: [%.3f, %.3f, %.3f]\n", 
+                                i, probabilities[i][0], probabilities[i][1], probabilities[i][2]);
+            }
+            
+            // Asynchronous prediction
+            CompletableFuture<Double> asyncPrediction = 
+                engine.predictAsync("production_classifier", features);
+            
+            asyncPrediction.thenAccept(result -> 
+                System.out.printf("Async prediction: %.0f\n", result));
+            
+            // Wait for async completion
+            asyncPrediction.get();
+            
+            // Performance monitoring
+            InferenceMetrics metrics = engine.getMetrics("production_classifier");
+            System.out.println("\nPerformance Metrics:");
+            System.out.printf("Total inferences: %d\n", metrics.getTotalInferences());
+            System.out.printf("Average time: %.2f ms\n", metrics.getAverageInferenceTimeMs());
+            System.out.printf("Throughput: %.1f samples/sec\n", metrics.getThroughputSamplesPerSecond());
+            System.out.printf("Error rate: %.2f%%\n", metrics.getErrorRate());
+            
+            // Batch file processing
+            BatchInferenceProcessor processor = new BatchInferenceProcessor(engine);
+            
+            // Configure batch processing
+            var batchConfig = new BatchInferenceProcessor.BatchConfig()
+                .setBatchSize(1000)
+                .setShowProgress(true)
+                .setPredictionColumnName("iris_class");
+            
+            // Process large CSV file (commented out - requires actual file)
+            // BatchInferenceProcessor.BatchResult result = 
+            //     processor.processCSV("large_dataset.csv", "predictions.csv", 
+            //                         "production_classifier", batchConfig);
+            // System.out.println("Batch result: " + result.getSummary());
+            
+        } catch (Exception e) {
+            System.err.println("Inference failed: " + e.getMessage());
+        } finally {
+            engine.shutdown();
+        }
+    }
+}
+```
+
+Expected Output:
+```
+Loaded: ModelInfo{id='production_classifier', class='LogisticRegression', description='Iris classifier'}
+Single prediction: 0
+Batch predictions: [0.0, 0.0, 2.0, 2.0]
+
+Class Probabilities:
+Sample 0: [0.967, 0.033, 0.000]
+Sample 1: [0.952, 0.048, 0.000]
+Sample 2: [0.000, 0.023, 0.977]
+Sample 3: [0.000, 0.089, 0.911]
+
+Async prediction: 0
+
+Performance Metrics:
+Total inferences: 4
+Average time: 0.25 ms
+Throughput: 16000.0 samples/sec
+Error rate: 0.00%
+```

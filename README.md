@@ -12,6 +12,7 @@ SuperML Java is a comprehensive machine learning library for Java that provides:
 - **Model Selection**: Cross-validation, train-test split, and automated hyperparameter tuning
 - **Pipeline System**: Chain preprocessing and models like scikit-learn
 - **Kaggle Integration**: One-line training on any Kaggle dataset with automated workflows
+- **Inference Layer**: High-performance model inference with caching, monitoring, and batch processing
 - **Metrics**: Comprehensive evaluation metrics for classification and regression
 - **Professional Logging**: Configurable Logback/SLF4J logging framework
 - **Production Ready**: Enterprise-grade error handling and validation
@@ -26,13 +27,13 @@ import com.superml.preprocessing.StandardScaler;
 import com.superml.model_selection.ModelSelection;
 
 // Load data and create pipeline
-var dataset = Datasets.loadIris();
-var pipeline = new Pipeline()
+Datasets.Dataset dataset = Datasets.loadIris();
+Pipeline pipeline = new Pipeline()
     .addStep("scaler", new StandardScaler())
     .addStep("classifier", new LogisticRegression());
 
 // Train and evaluate
-var split = ModelSelection.trainTestSplit(dataset.X, dataset.y, 0.2, 42);
+ModelSelection.TrainTestSplit split = ModelSelection.trainTestSplit(dataset.X, dataset.y, 0.2, 42);
 pipeline.fit(split.XTrain, split.yTrain);
 double[] predictions = pipeline.predict(split.XTest);
 ```
@@ -45,10 +46,51 @@ Train on any Kaggle dataset with one line:
 import com.superml.datasets.KaggleTrainingManager;
 import com.superml.datasets.KaggleIntegration.KaggleCredentials;
 
-var credentials = KaggleCredentials.fromDefaultLocation();
-var trainer = new KaggleTrainingManager(credentials);
-var results = trainer.trainOnDataset("titanic", "titanic", "survived");
+KaggleCredentials credentials = KaggleCredentials.fromDefaultLocation();
+KaggleTrainingManager trainer = new KaggleTrainingManager(credentials);
+
+// Configure training with model saving
+KaggleTrainingManager.TrainingConfig config = new KaggleTrainingManager.TrainingConfig()
+    .setSaveModels(true)
+    .setModelsDirectory("kaggle_models")
+    .setAlgorithms("logistic", "ridge")
+    .setGridSearch(true);
+
+List<KaggleTrainingManager.TrainingResult> results = trainer.trainOnDataset("titanic", "titanic", "survived", config);
 System.out.println("Best model: " + results.get(0).algorithm);
+System.out.println("Model saved to: " + results.get(0).modelFilePath);
+```
+
+## 💾 Model Persistence
+
+Save and load trained models with automatic training statistics capture:
+
+```java
+import com.superml.persistence.ModelPersistence;
+import com.superml.persistence.ModelManager;
+
+// Train a model
+LogisticRegression model = new LogisticRegression().setMaxIter(1000);
+model.fit(X_train, y_train);
+
+// Save with automatic performance evaluation and statistics
+ModelPersistence.saveWithStats(model, "my_model", 
+                               "Production iris classifier", 
+                               X_test, y_test);
+
+// Load model with type safety
+LogisticRegression loadedModel = ModelPersistence.load("my_model", LogisticRegression.class);
+double[] predictions = loadedModel.predict(X_test);
+
+// The framework automatically captures:
+// - Performance metrics (accuracy, precision, recall, F1)
+// - Dataset statistics and hyperparameters
+// - System information and timestamps
+
+// Manage multiple models with automatic statistics
+ModelManager manager = new ModelManager("models");
+String savedPath = manager.saveModel(model, "iris");
+List<String> allModels = manager.listModels();
 ```
 
 ## 🎯 Features
@@ -70,6 +112,7 @@ System.out.println("Best model: " + results.get(0).algorithm);
 
 ### Enterprise Features
 - **Kaggle Integration**: Direct dataset download and automated training workflows
+- **Model Persistence**: Save and load trained models with automatic training statistics capture and metadata
 - **Professional Logging**: Structured logging with Logback and SLF4J
 - **Error Handling**: Comprehensive validation and informative error messages
 - **Thread Safety**: Safe concurrent prediction after model training
@@ -90,7 +133,6 @@ System.out.println("Best model: " + results.get(0).algorithm);
 
 ```bash
 git clone https://github.com/superml/superml-java.git
-cd superml-java/ml-framework
 mvn clean install
 ```
 
@@ -105,11 +147,11 @@ import com.superml.metrics.Metrics;
 import com.superml.model_selection.ModelSelection;
 
 // Load dataset
-var dataset = Datasets.loadIris();
-var split = ModelSelection.trainTestSplit(dataset.X, dataset.y, 0.2, 42);
+Datasets.Dataset dataset = Datasets.loadIris();
+ModelSelection.TrainTestSplit split = ModelSelection.trainTestSplit(dataset.X, dataset.y, 0.2, 42);
 
 // Train model
-var model = new LogisticRegression()
+LogisticRegression model = new LogisticRegression()
     .setMaxIterations(1000)
     .setLearningRate(0.01);
 model.fit(split.XTrain, split.yTrain);
@@ -128,7 +170,7 @@ import com.superml.preprocessing.StandardScaler;
 import com.superml.model_selection.GridSearchCV;
 
 // Create pipeline
-var pipeline = new Pipeline()
+Pipeline pipeline = new Pipeline()
     .addStep("scaler", new StandardScaler())
     .addStep("classifier", new LogisticRegression());
 
@@ -138,21 +180,88 @@ Map<String, Object[]> paramGrid = Map.of(
     "classifier__learningRate", new Object[]{0.001, 0.01, 0.1}
 );
 
-var gridSearch = new GridSearchCV(pipeline, paramGrid, 5);
+GridSearchCV gridSearch = new GridSearchCV(pipeline, paramGrid, 5);
 gridSearch.fit(X, y);
 
 System.out.println("Best score: " + gridSearch.getBestScore());
 System.out.println("Best params: " + gridSearch.getBestParams());
 ```
 
+### Model Persistence and Management
+
+```java
+import com.superml.persistence.ModelPersistence;
+import com.superml.persistence.ModelManager;
+
+// Train and save a pipeline
+Pipeline pipeline = new Pipeline()
+    .addStep("scaler", new StandardScaler())
+    .addStep("classifier", new LogisticRegression());
+
+pipeline.fit(X_train, y_train);
+
+// Save with rich metadata
+Map<String, Object> metadata = Map.of(
+    "accuracy", Metrics.accuracy(y_test, pipeline.predict(X_test)),
+    "features", X_train[0].length,
+    "samples", X_train.length,
+    "created_by", "SuperML_Demo"
+);
+
+ModelPersistence.save(pipeline, "production_model", "Main classification pipeline", metadata);
+
+// Later, load and use the model
+Pipeline loadedPipeline = ModelPersistence.load("production_model", Pipeline.class);
+double[] predictions = loadedPipeline.predict(X_new);
+
+// Model management
+ModelManager manager = new ModelManager("models");
+List<ModelManager.ModelInfo> models = manager.getModelsInfo();
+for (ModelManager.ModelInfo info : models) {
+    System.out.println(info); // Shows class, size, save time, etc.
+}
+```
+
+### 🚀 Inference Layer
+
+Deploy models in production with high-performance inference capabilities:
+
+```java
+import com.superml.inference.InferenceEngine;
+import com.superml.inference.BatchInferenceProcessor;
+
+// Create inference engine and load model
+InferenceEngine engine = new InferenceEngine();
+engine.loadModel("classifier", "models/trained_model.superml");
+
+// Single prediction
+double prediction = engine.predict("classifier", features);
+
+// Batch prediction with monitoring
+double[] batchPredictions = engine.predict("classifier", batchFeatures);
+
+// Asynchronous inference
+CompletableFuture<Double> future = engine.predictAsync("classifier", features);
+
+// Performance metrics
+InferenceMetrics metrics = engine.getMetrics("classifier");
+System.out.println("Throughput: " + metrics.getThroughputSamplesPerSecond() + " samples/sec");
+
+// Batch processing for large datasets
+BatchInferenceProcessor processor = new BatchInferenceProcessor(engine);
+BatchResult result = processor.processCSV("input.csv", "output.csv", "classifier");
+```
+
 ## 📚 Documentation
 
 - **[Quick Start Guide](docs/quick-start.md)** - Get started in 5 minutes
+- **[Model Persistence](docs/model-persistence.md)** - Save and load trained models
 - **[Kaggle Integration](docs/kaggle-integration.md)** - Train on real datasets
 - **[API Reference](docs/api/core-classes.md)** - Complete API documentation
 - **[Examples](docs/examples/basic-examples.md)** - Comprehensive code examples
 - **[Architecture](docs/architecture.md)** - Framework design and patterns
 - **[Contributing](docs/contributing.md)** - Development guidelines
+- **[Inference Guide](docs/inference-guide.md)** - High-performance model inference and deployment
 
 ## 🤝 Contributing
 
@@ -168,7 +277,6 @@ We welcome contributions to SuperML Java! Please see our [Contributing Guide](do
 
 ```bash
 git clone https://github.com/superml/superml-java.git
-cd superml-java/ml-framework
 mvn clean compile
 mvn test
 ```

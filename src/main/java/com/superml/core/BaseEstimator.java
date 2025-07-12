@@ -1,5 +1,6 @@
 package com.superml.core;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +8,9 @@ import java.util.Map;
  * Base class for all estimators in SuperML.
  * Provides common functionality similar to sklearn.base.BaseEstimator
  */
-public abstract class BaseEstimator implements Estimator {
+public abstract class BaseEstimator implements Estimator, Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     protected Map<String, Object> params = new HashMap<>();
     

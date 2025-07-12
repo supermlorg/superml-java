@@ -5,6 +5,7 @@ import com.superml.core.Estimator;
 import com.superml.core.SupervisedLearner;
 import com.superml.core.UnsupervisedLearner;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.Map;
  */
 public class Pipeline extends BaseEstimator implements SupervisedLearner {
     
+    private static final long serialVersionUID = 1L;
+    
     private List<PipelineStep> steps;
     private Map<String, Estimator> namedSteps;
     private boolean fitted = false;
@@ -23,7 +26,9 @@ public class Pipeline extends BaseEstimator implements SupervisedLearner {
     /**
      * Container for pipeline steps.
      */
-    public static class PipelineStep {
+    public static class PipelineStep implements Serializable {
+        private static final long serialVersionUID = 1L;
+        
         public final String name;
         public final Estimator estimator;
         

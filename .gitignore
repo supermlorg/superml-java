@@ -211,3 +211,6 @@ libs/
 generated/
 target-eclipse/
 target/
+
+demo_models/
+*.superml*
