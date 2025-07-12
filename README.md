@@ -131,7 +131,7 @@ List<String> allModels = manager.listModels();
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-java</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
