@@ -1,4 +1,8 @@
-<img src="docs/logo.png" alt="SuperML Logo" width="100" /> By SuperML.org with SuperML.dev
+<p align="center">
+  <img src="/docs/logo.png" alt="SuperML Logo" width="100" />
+</p>
+
+**By [SuperML.org](https://superml.org) with [SuperML.dev](https://superml.dev)**
 
 # SuperML Java
 
