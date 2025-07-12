@@ -1,36 +1,43 @@
 # Global owners - these users will be requested for review on all PRs
-* @crazyaiml @supermlorg/core-team
+* @crazyaiml
 
 # Core ML algorithms and framework
-/src/main/java/com/superml/core/ @crazyaiml @supermlorg/ml-experts
-/src/main/java/com/superml/linear_model/ @crazyaiml @supermlorg/ml-experts
-/src/main/java/com/superml/cluster/ @crazyaiml @supermlorg/ml-experts
-/src/main/java/com/superml/metrics/ @crazyaiml @supermlorg/ml-experts
+/src/main/java/com/superml/core/ @crazyaiml
+/src/main/java/com/superml/linear_model/ @crazyaiml
+/src/main/java/com/superml/cluster/ @crazyaiml
+/src/main/java/com/superml/metrics/ @crazyaiml
 
 # Infrastructure and system components
-/src/main/java/com/superml/inference/ @crazyaiml @supermlorg/infrastructure-team
-/src/main/java/com/superml/persistence/ @crazyaiml @supermlorg/infrastructure-team
-/src/main/java/com/superml/pipeline/ @crazyaiml @supermlorg/ml-experts
+/src/main/java/com/superml/inference/ @crazyaiml
+/src/main/java/com/superml/persistence/ @crazyaiml
+/src/main/java/com/superml/pipeline/ @crazyaiml
 
 # Data handling and preprocessing
-/src/main/java/com/superml/datasets/ @crazyaiml @supermlorg/data-team
-/src/main/java/com/superml/preprocessing/ @crazyaiml @supermlorg/data-team
-/src/main/java/com/superml/model_selection/ @crazyaiml @supermlorg/ml-experts
+/src/main/java/com/superml/datasets/ @crazyaiml
+/src/main/java/com/superml/preprocessing/ @crazyaiml
+/src/main/java/com/superml/model_selection/ @crazyaiml
 
 # Documentation
-/docs/ @crazyaiml @supermlorg/docs-team
-*.md @crazyaiml @supermlorg/docs-team
-/README.md @crazyaiml @supermlorg/core-team
+/docs/ @crazyaiml
+*.md @crazyaiml
+/README.md @crazyaiml
 
 # Examples and tutorials
-/examples/ @crazyaiml @supermlorg/docs-team @supermlorg/ml-experts
+/examples/ @crazyaiml
 
 # Build and configuration
-/pom.xml @crazyaiml @supermlorg/infrastructure-team
-/.github/ @crazyaiml @supermlorg/infrastructure-team
+/pom.xml @crazyaiml
+/.github/ @crazyaiml
 
 # Tests
-/src/test/ @crazyaiml @supermlorg/qa-team
+/src/test/ @crazyaiml
 
 # CI/CD workflows
-/.github/workflows/ @crazyaiml @supermlorg/infrastructure-team @supermlorg/core-team
+/.github/workflows/ @crazyaiml
+
+# GitHub metadata and repo configs
+/.gitignore @crazyaiml
+/LICENSE @crazyaiml
+
+# Fallback for all files not matched above
+/* @crazyaiml
