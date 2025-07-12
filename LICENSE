@@ -1,0 +1,71 @@
+MIT License
+
+Copyright (c) 2025 SuperML Community (superML.dev, superML.org)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Additional Attribution
+
+This project is part of the SuperML ecosystem:
+
+- **Website**: https://superML.dev
+- **Organization**: https://superML.org
+- **Repository**: https://github.com/superml/superml-java
+
+SuperML Java is inspired by scikit-learn and aims to provide a comprehensive 
+machine learning framework for the Java community. While this project is 
+licensed under MIT, we encourage users to contribute back to the community 
+and acknowledge the SuperML project in their work.
+
+## Third-Party Dependencies
+
+This project uses the following third-party libraries under their respective licenses:
+
+- Apache HttpClient5 (Apache License 2.0)
+- Jackson Databind (Apache License 2.0) 
+- Commons IO (Apache License 2.0)
+- Commons Compress (Apache License 2.0)
+- Logback Classic (Eclipse Public License 1.0, LGPL 2.1)
+- SLF4J API (MIT License)
+
+All third-party licenses are compatible with the MIT License under which this project is distributed.
+
+## Usage Guidelines
+
+While not legally required, we encourage:
+
+1. **Attribution**: Mention SuperML Java in your project documentation
+2. **Community**: Share improvements and contribute back when possible
+3. **Feedback**: Report issues and suggest enhancements
+4. **Respect**: Follow community guidelines and code of conduct
+
+## Trademark Notice
+
+"SuperML" and related marks are trademarks of the SuperML Community. 
+Use of these marks is subject to the SuperML Trademark Policy available 
+at https://superML.org/trademark-policy
+
+## Contact
+
+For licensing questions or permissions beyond the scope of this license:
+- Email: legal@superML.org
+- Website: https://superML.dev/contact
+- GitHub: https://github.com/superml/superml-java/issues

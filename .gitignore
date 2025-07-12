@@ -1,0 +1,213 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+logs/
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Virtual machine crash logs
+hs_err_pid*
+replay_pid*
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle
+**/build/
+!src/**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+.gradletasknamecache
+
+# IDE files
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+.settings/
+.metadata
+.classpath
+.project
+.factorypath
+bin/
+.recommenders/
+
+# Eclipse
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# VS Code
+.vscode/
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Test data files (generated during testing)
+test_data.csv
+train_data.csv
+sample_dataset.csv
+
+# ML model files (if any are generated)
+*.model
+*.pkl
+*.pickle
+
+# Dataset downloads (Kaggle integration)
+datasets/
+kaggle_cache/
+*.zip
+
+# Generated documentation
+javadoc/
+site/
+
+# Backup files
+*.backup
+*.orig
+*.rej
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Application specific
+application-*.properties
+application-*.yml
+application-*.yaml
+
+# Security files
+kaggle.json
+*.pem
+*.p12
+*.jks
+
+# Performance test results
+*.hprof
+*.prof
+
+# Spring Boot
+spring.log
+
+# JaCoCo coverage reports
+jacoco.exec
+jacoco-it.exec
+
+# SonarQube
+.sonar/
+.scannerwork/
+
+# Node modules (if any frontend components)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python cache (if any Python scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Documentation build
+_build/
+_static/
+_templates/
+.buildinfo
+.doctrees
+
+# Local configuration files
+local.properties
+config.local.*
+
+# Dependency directories
+lib/
+libs/
+
+# Generated files
+generated/
+target-eclipse/
+target/
