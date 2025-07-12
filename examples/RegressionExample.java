@@ -1,9 +1,9 @@
 package examples;
 
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LinearRegression;
-import com.superml.model_selection.ModelSelection;
-import com.superml.metrics.Metrics;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LinearRegression;
+import org.superml.model_selection.ModelSelection;
+import org.superml.metrics.Metrics;
 
 /**
  * Regression example demonstrating linear regression.

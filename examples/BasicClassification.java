@@ -1,9 +1,9 @@
 package examples;
 
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.model_selection.ModelSelection;
-import com.superml.metrics.Metrics;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.model_selection.ModelSelection;
+import org.superml.metrics.Metrics;
 
 /**
  * Basic classification example using synthetic data.

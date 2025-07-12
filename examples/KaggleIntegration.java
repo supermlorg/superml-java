@@ -1,10 +1,10 @@
 package examples;
 
-import com.superml.linear_model.LogisticRegression;
-import com.superml.datasets.Datasets;
-import com.superml.model_selection.ModelSelection;
-import com.superml.metrics.Metrics;
-import com.superml.persistence.ModelPersistence;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.datasets.Datasets;
+import org.superml.model_selection.ModelSelection;
+import org.superml.metrics.Metrics;
+import org.superml.persistence.ModelPersistence;
 
 /**
  * Enhanced Kaggle integration example with proper error handling.

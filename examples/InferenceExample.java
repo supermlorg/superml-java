@@ -1,10 +1,10 @@
 package examples;
 
-import com.superml.inference.InferenceEngine;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.datasets.Datasets;
-import com.superml.model_selection.ModelSelection;
-import com.superml.persistence.ModelPersistence;
+import org.superml.inference.InferenceEngine;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.datasets.Datasets;
+import org.superml.model_selection.ModelSelection;
+import org.superml.persistence.ModelPersistence;
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;

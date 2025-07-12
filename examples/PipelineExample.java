@@ -1,11 +1,11 @@
 package examples;
 
-import com.superml.linear_model.LogisticRegression;
-import com.superml.preprocessing.StandardScaler;
-import com.superml.pipeline.Pipeline;
-import com.superml.model_selection.ModelSelection;
-import com.superml.datasets.Datasets;
-import com.superml.metrics.Metrics;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.preprocessing.StandardScaler;
+import org.superml.pipeline.Pipeline;
+import org.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.metrics.Metrics;
 
 /**
  * Pipeline example demonstrating data preprocessing and model training.
