@@ -1,5 +1,7 @@
 title: SuperML.org | Machine Learning Framework
 description: A modular machine learning framework in Java
+url: "http://superml-java.superml.org"
+baseurl: ""
 remote_theme: pages-themes/cayman@v0.2.0
 plugins:
   - jekyll-remote-theme
@@ -22,4 +24,60 @@ kramdown:
 liquid:
   error_mode: warn
   strict_filters: false
-  strict_variables: false 
+  strict_variables: false
+
+# TOC settings
+toc:
+  min_level: 1
+  max_level: 6
+  ordered_list: false
+  no_toc_section_class: no_toc_section
+  list_id: toc
+  list_class: section-nav
+  sublist_class: ""
+  item_class: toc-entry
+  item_prefix: toc-
+
+# Search settings
+search:
+  enabled: true
+  placeholder: "Search documentation..."
+  
+# Navigation and layout
+navigation:
+  - title: Home
+    url: /
+  - title: Quick Start
+    url: /quick-start
+  - title: Guides
+    items:
+      - title: Architecture Overview
+        url: /architecture
+      - title: Tree Algorithms
+        url: /tree-algorithms
+      - title: Multiclass Classification
+        url: /multiclass-guide
+      - title: Kaggle Integration
+        url: /kaggle-integration
+      - title: Model Persistence
+        url: /model-persistence
+      - title: Inference Guide
+        url: /inference-guide
+      - title: Logging Configuration
+        url: /logging-guide
+      - title: Testing Guide
+        url: /testing-guide
+  - title: API Reference
+    items:
+      - title: Core Classes
+        url: /api/core-classes
+  - title: Examples
+    items:
+      - title: Basic Examples
+        url: /examples/basic-examples
+      - title: Advanced Examples
+        url: /examples/advanced-examples
+  - title: Contributing
+    url: /contributing
+  - title: Implementation Summary
+    url: /implementation-summary 

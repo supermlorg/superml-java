@@ -1,3 +1,11 @@
+---
+title: "Core Classes API Reference"
+description: "Comprehensive API documentation for core classes and interfaces in SuperML Java"
+layout: default
+toc: true
+search: true
+---
+
 # Core Classes API Reference
 
 This document provides comprehensive API documentation for the core classes and interfaces in SuperML Java.

@@ -1,3 +1,11 @@
+---
+title: "Multiclass Classification Guide"
+description: "Comprehensive guide to multiclass classification strategies and implementations"
+layout: default
+toc: true
+search: true
+---
+
 # Multiclass Classification Guide
 
 SuperML Java provides comprehensive support for multiclass classification through multiple strategies, including One-vs-Rest (OvR) and direct multinomial approaches. This guide covers all aspects of multiclass classification in the framework.

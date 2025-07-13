@@ -1,6 +1,9 @@
 ---
 title: "Inference Layer Guide"
 description: "Production model deployment and high-performance inference with SuperML Java"
+layout: default
+toc: true
+search: true
 ---
 
 # Inference Layer Guide

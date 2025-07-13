@@ -1,3 +1,11 @@
+---
+title: "Implementation Summary"
+description: "Overview of SuperML Java framework implementation and capabilities"
+layout: default
+toc: true
+search: true
+---
+
 # SuperML Java Framework - Implementation Summary
 
 ## Overview

@@ -2,6 +2,8 @@
 title: "Quick Start Guide"
 description: "Get up and running with SuperML Java in minutes"
 layout: default
+toc: true
+search: true
 ---
 
 # Quick Start Guide

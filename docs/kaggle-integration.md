@@ -1,3 +1,11 @@
+---
+title: "Kaggle Integration Guide"
+description: "Complete guide to using SuperML Java with Kaggle datasets and competitions"
+layout: default
+toc: true
+search: true
+---
+
 # Kaggle Integration Guide
 
 SuperML Java provides seamless integration with Kaggle, allowing you to train machine learning models on any public Kaggle dataset with just a few lines of code. This guide covers everything from setup to advanced usage.

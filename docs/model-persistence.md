@@ -1,3 +1,11 @@
+---
+title: "Model Persistence Guide"
+description: "Complete guide to saving, loading, and managing trained models in SuperML Java"
+layout: default
+toc: true
+search: true
+---
+
 # Model Persistence Guide
 
 Complete guide to saving, loading, and managing trained models in SuperML Java.

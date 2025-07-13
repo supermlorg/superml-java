@@ -1,3 +1,11 @@
+---
+title: "Tree-Based Algorithms Guide"
+description: "Complete guide to Decision Trees, Random Forest, and Gradient Boosting"
+layout: default
+toc: true
+search: true
+---
+
 # Tree-Based Algorithms Guide
 
 SuperML Java provides comprehensive implementations of tree-based machine learning algorithms, including Decision Trees, Random Forest, and Gradient Boosting. These algorithms are among the most popular and effective machine learning methods for both classification and regression tasks.

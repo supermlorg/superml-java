@@ -1,3 +1,11 @@
+---
+title: "Basic Examples"
+description: "Simple, focused examples to get started with SuperML Java"
+layout: default
+toc: true
+search: true
+---
+
 # Basic Examples
 
 This guide provides simple, focused examples to help you get started with SuperML Java. Each example demonstrates one core concept and can be run independently.

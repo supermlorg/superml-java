@@ -2,6 +2,8 @@
 title: "SuperML Java Framework"
 description: "A modular machine learning framework for Java"
 layout: default
+toc: true
+search: true
 ---
 
 # SuperML Java Framework

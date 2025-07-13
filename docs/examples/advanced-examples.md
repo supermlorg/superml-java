@@ -1,3 +1,11 @@
+---
+title: "Advanced Examples"
+description: "Advanced usage patterns, complex workflows, and real-world scenarios"
+layout: default
+toc: true
+search: true
+---
+
 # Advanced Examples
 
 This guide demonstrates advanced usage patterns, complex workflows, and real-world scenarios using SuperML Java.

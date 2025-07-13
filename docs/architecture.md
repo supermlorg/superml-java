@@ -1,3 +1,11 @@
+---
+title: "Architecture Overview"
+description: "Comprehensive overview of SuperML Java framework architecture, design principles, and internal workings"
+layout: default
+toc: true
+search: true
+---
+
 # SuperML Java Framework - Architecture Overview
 
 This document provides a comprehensive overview of the SuperML Java framework architecture, design principles, and internal workings.

@@ -1,3 +1,11 @@
+---
+title: "Contributing Guide"
+description: "How to contribute to SuperML Java - guidelines, setup, and best practices"
+layout: default
+toc: true
+search: true
+---
+
 # Contributing Guide
 
 Thank you for your interest in contributing to SuperML Java! This guide will help you get started with contributing to the project.

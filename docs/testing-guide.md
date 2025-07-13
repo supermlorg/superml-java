@@ -1,3 +1,11 @@
+---
+title: "Testing Guide"
+description: "Comprehensive guide to testing SuperML Java algorithms"
+layout: default
+toc: true
+search: true
+---
+
 # Testing Guide
 
 SuperML Java includes comprehensive unit tests to ensure reliability and correctness of all machine learning algorithms. This guide covers the testing framework, how to run tests, and how to write new tests.

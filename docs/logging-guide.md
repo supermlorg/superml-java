@@ -1,3 +1,11 @@
+---
+title: "Logging Configuration Guide"
+description: "Comprehensive guide to logging configuration and best practices in SuperML Java"
+layout: default
+toc: true
+search: true
+---
+
 # SuperML Java - Logging Configuration
 
 SuperML Java now uses **Logback** with **SLF4J** for professional logging, providing structured, configurable, and production-ready logging capabilities.
