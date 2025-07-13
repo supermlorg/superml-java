@@ -234,10 +234,10 @@ public class TestDatasets {
 ### 1. Algorithm Implementation Template
 
 ```java
-package com.superml.linear_model;
+package org.superml.linear_model;
 
-import com.superml.core.BaseEstimator;
-import com.superml.core.Classifier;
+import org.superml.core.BaseEstimator;
+import org.superml.core.Classifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -461,10 +461,10 @@ public class MyNewAlgorithm extends BaseEstimator implements Classifier {
 ### 2. Algorithm Test Template
 
 ```java
-package com.superml.linear_model;
+package org.superml.linear_model;
 
-import com.superml.datasets.TestDatasets;
-import com.superml.metrics.Metrics;
+import org.superml.datasets.TestDatasets;
+import org.superml.metrics.Metrics;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;

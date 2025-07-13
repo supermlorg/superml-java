@@ -114,7 +114,7 @@ Modify `logback.xml` to change log levels for specific components:
 
 ```xml
 <!-- More verbose Kaggle logging -->
-<logger name="com.superml.datasets.KaggleIntegration" level="TRACE"/>
+<logger name="org.superml.datasets.KaggleIntegration" level="TRACE"/>
 
 <!-- Quiet HTTP client -->
 <logger name="org.apache.hc" level="ERROR"/>
@@ -131,7 +131,7 @@ Add file appenders for specific components:
     </encoder>
 </appender>
 
-<logger name="com.superml.datasets" level="DEBUG" additivity="false">
+<logger name="org.superml.datasets" level="DEBUG" additivity="false">
     <appender-ref ref="KAGGLE_FILE"/>
 </logger>
 ```

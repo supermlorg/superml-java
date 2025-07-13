@@ -52,6 +52,24 @@ gradle-app.setting
 *.ipr
 .vscode/
 .settings/
+.classpath
+.project
+
+# Debug files
+debug_*.java
+debug_*.class
+
+# Coverage reports
+coverage.sh
+*coverage*.md
+
+# OS files
+.DS_Store
+Thumbs.db
+*.iml
+*.ipr
+.vscode/
+.settings/
 .metadata
 .classpath
 .project
@@ -214,3 +232,10 @@ target/
 
 demo_models/
 *.superml*
+
+# Temporary documentation files
+docs/*_REPORT.md
+docs/*_SUMMARY.md
+docs/*_UPDATE*.md
+docs/COVERAGE_*.md
+docs/DOCUMENTATION_*.md

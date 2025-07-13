@@ -24,7 +24,7 @@ The SuperML Java Inference Layer provides a complete solution for deploying trai
 ### Basic Inference
 
 ```java
-import com.superml.inference.InferenceEngine;
+import org.superml.inference.InferenceEngine;
 
 // Create inference engine
 InferenceEngine engine = new InferenceEngine();
@@ -46,6 +46,7 @@ engine.shutdown();
 
 ### Classification with Probabilities
 
+{% raw %}
 ```java
 // Load classification model
 engine.loadModel("classifier", "models/iris_classifier.superml");
@@ -60,6 +61,7 @@ System.out.printf("Predicted class: %.0f\n", prediction);
 System.out.printf("Class probabilities: [%.3f, %.3f, %.3f]\n", 
                   probabilities[0], probabilities[1], probabilities[2]);
 ```
+{% endraw %}
 
 ## 🔧 Core Components
 
@@ -116,7 +118,7 @@ engine.unloadModel("lr");
 For high-throughput processing of large datasets:
 
 ```java
-import com.superml.inference.BatchInferenceProcessor;
+import org.superml.inference.BatchInferenceProcessor;
 
 // Create batch processor
 BatchInferenceProcessor processor = new BatchInferenceProcessor(engine);

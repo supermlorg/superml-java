@@ -9,7 +9,7 @@ This document provides comprehensive API documentation for the core classes and 
 The foundational interface that all ML components implement.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public interface Estimator {
     /**
@@ -39,7 +39,7 @@ model.setParams(Map.of("learningRate", 0.01, "maxIterations", 1000));
 Interface for algorithms that learn from labeled data.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public interface SupervisedLearner extends Estimator {
     /**
@@ -79,7 +79,7 @@ double[] predictions = learner.predict(testX);
 Specialized interface for classification algorithms.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public interface Classifier extends SupervisedLearner {
     /**
@@ -110,7 +110,7 @@ double[] classes = classifier.getClasses();
 Interface for regression algorithms.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public interface Regressor extends SupervisedLearner {
     // Inherits fit() and predict() from SupervisedLearner
@@ -123,7 +123,7 @@ public interface Regressor extends SupervisedLearner {
 Interface for algorithms that learn from unlabeled data.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public interface UnsupervisedLearner extends Estimator {
     /**
@@ -159,7 +159,7 @@ public interface UnsupervisedLearner extends Estimator {
 Abstract base class providing common parameter management functionality.
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public abstract class BaseEstimator implements Estimator {
     protected Map<String, Object> parameters = new HashMap<>();
@@ -320,7 +320,7 @@ public class ValidatedEstimator extends BaseEstimator {
 ### Custom Exceptions
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 /**
  * Base exception for all SuperML errors.
@@ -361,7 +361,7 @@ public class ConvergenceException extends SuperMLException {
 ### Validation Utilities
 
 ```java
-package com.superml.core;
+package org.superml.core;
 
 public class ValidationUtils {
     /**
@@ -536,4 +536,407 @@ public double[] getCoefficients() {
 }
 ```
 
-This API design ensures consistency, safety, and ease of use across all SuperML Java components while following established patterns from the broader Java and ML communities.
+## 🌳 Tree-Based Algorithms
+
+### DecisionTree
+
+A versatile decision tree implementation supporting both classification and regression.
+
+```java
+package org.superml.tree;
+
+public class DecisionTree extends BaseEstimator implements Classifier, Regressor {
+    
+    // Constructors
+    public DecisionTree()
+    public DecisionTree(String criterion, int maxDepth)
+    
+    // Core Methods
+    public DecisionTree fit(double[][] X, double[] y)
+    public double[] predict(double[][] X)
+    public double[][] predictProba(double[][] X)
+    public double score(double[][] X, double[] y)
+    
+    // Configuration Methods
+    public DecisionTree setMinSamplesSplit(int minSamplesSplit)
+    public DecisionTree setMinSamplesLeaf(int minSamplesLeaf)
+    public DecisionTree setMinImpurityDecrease(double minImpurityDecrease)
+    public DecisionTree setMaxFeatures(int maxFeatures)
+    public DecisionTree setRandomState(int randomState)
+    
+    // Getters
+    public String getCriterion()
+    public int getMaxDepth()
+    public int getMinSamplesSplit()
+    public int getMinSamplesLeaf()
+    public double getMinImpurityDecrease()
+    public int getMaxFeatures()
+    public int getRandomState()
+}
+```
+
+**Key Parameters:**
+- `criterion`: Split criterion - "gini", "entropy" (classification) or "mse" (regression)
+- `maxDepth`: Maximum tree depth to prevent overfitting
+- `minSamplesSplit`: Minimum samples required to split a node
+- `minSamplesLeaf`: Minimum samples required in a leaf node
+- `maxFeatures`: Number of features to consider for splits (-1 for all)
+- `randomState`: Random seed for reproducibility
+
+**Usage Example:**
+```java
+DecisionTree dt = new DecisionTree("gini", 10)
+    .setMinSamplesSplit(5)
+    .setMinSamplesLeaf(2)
+    .setRandomState(42);
+
+dt.fit(XTrain, yTrain);
+double[] predictions = dt.predict(XTest);
+double[][] probabilities = dt.predictProba(XTest);
+```
+
+### RandomForest
+
+An ensemble of decision trees using bootstrap sampling and random feature selection.
+
+```java
+package org.superml.tree;
+
+public class RandomForest extends BaseEstimator implements Classifier, Regressor {
+    
+    // Constructors
+    public RandomForest()
+    public RandomForest(int nEstimators, int maxDepth)
+    
+    // Core Methods
+    public RandomForest fit(double[][] X, double[] y)
+    public double[] predict(double[][] X)
+    public double[][] predictProba(double[][] X)
+    public double score(double[][] X, double[] y)
+    
+    // Configuration Methods
+    public RandomForest setNEstimators(int nEstimators)
+    public RandomForest setMaxDepth(int maxDepth)
+    public RandomForest setMinSamplesSplit(int minSamplesSplit)
+    public RandomForest setMinSamplesLeaf(int minSamplesLeaf)
+    public RandomForest setMaxFeatures(int maxFeatures)
+    public RandomForest setBootstrap(boolean bootstrap)
+    public RandomForest setMaxSamples(double maxSamples)
+    public RandomForest setNJobs(int nJobs)
+    public RandomForest setRandomState(int randomState)
+    
+    // Additional Methods
+    public List<DecisionTree> getTrees()
+    public double[] getFeatureImportances()
+}
+```
+
+**Key Parameters:**
+- `nEstimators`: Number of trees in the forest (default: 100)
+- `maxDepth`: Maximum depth of individual trees
+- `maxFeatures`: Features to consider for splits (-1 for sqrt(n_features) in classification)
+- `bootstrap`: Whether to use bootstrap sampling (default: true)
+- `maxSamples`: Fraction of samples to draw for each tree (default: 1.0)
+- `nJobs`: Number of parallel jobs (-1 for all cores)
+
+**Usage Example:**
+```java
+RandomForest rf = new RandomForest(200, 15)
+    .setMaxFeatures(-1)  // Auto-select features
+    .setNJobs(-1)        // Use all cores
+    .setRandomState(42);
+
+rf.fit(XTrain, yTrain);
+double[] predictions = rf.predict(XTest);
+double[] importances = rf.getFeatureImportances();
+```
+
+### GradientBoosting
+
+Sequential ensemble that builds trees to correct previous errors.
+
+```java
+package org.superml.tree;
+
+public class GradientBoosting extends BaseEstimator implements Classifier, Regressor {
+    
+    // Constructors
+    public GradientBoosting()
+    public GradientBoosting(int nEstimators, double learningRate, int maxDepth)
+    
+    // Core Methods
+    public GradientBoosting fit(double[][] X, double[] y)
+    public double[] predict(double[][] X)
+    public double[] predictRaw(double[][] X)
+    public double[][] predictProba(double[][] X)
+    public double[] predictAtIteration(double[][] X, int nEstimators)
+    
+    // Configuration Methods
+    public GradientBoosting setNEstimators(int nEstimators)
+    public GradientBoosting setLearningRate(double learningRate)
+    public GradientBoosting setMaxDepth(int maxDepth)
+    public GradientBoosting setSubsample(double subsample)
+    public GradientBoosting setValidationFraction(double validationFraction)
+    public GradientBoosting setNIterNoChange(int nIterNoChange)
+    public GradientBoosting setTol(double tol)
+    
+    // Training History
+    public List<Double> getTrainScores()
+    public List<Double> getValidationScores()
+    public List<DecisionTree> getTrees()
+}
+```
+
+**Key Parameters:**
+- `nEstimators`: Number of boosting stages (default: 100)
+- `learningRate`: Learning rate for shrinking contribution of each tree (default: 0.1)
+- `maxDepth`: Maximum depth of individual trees (default: 3)
+- `subsample`: Fraction of samples for fitting individual trees (default: 1.0)
+- `validationFraction`: Fraction for early stopping validation (default: 0.1)
+- `nIterNoChange`: Early stopping rounds (-1 to disable)
+- `tol`: Tolerance for early stopping (default: 1e-4)
+
+**Usage Example:**
+```java
+GradientBoosting gb = new GradientBoosting(200, 0.05, 6)
+    .setSubsample(0.8)
+    .setValidationFraction(0.1)
+    .setNIterNoChange(10);
+
+gb.fit(XTrain, yTrain);
+double[] predictions = gb.predict(XTest);
+List<Double> trainScores = gb.getTrainScores();
+```
+
+## 🎯 Multiclass Classification
+
+### OneVsRestClassifier
+
+Meta-classifier that trains one binary classifier per class.
+
+```java
+package org.superml.multiclass;
+
+public class OneVsRestClassifier extends BaseEstimator implements Classifier {
+    
+    // Constructor
+    public OneVsRestClassifier(Classifier baseClassifier)
+    
+    // Core Methods
+    public OneVsRestClassifier fit(double[][] X, double[] y)
+    public double[] predict(double[][] X)
+    public double[][] predictProba(double[][] X)
+    public double[][] predictLogProba(double[][] X)
+    public double score(double[][] X, double[] y)
+    
+    // Access Methods
+    public List<Classifier> getClassifiers()
+    public double[] getClasses()
+    public Classifier getBaseClassifier()
+}
+```
+
+**Usage Example:**
+```java
+// Use with any binary classifier
+LogisticRegression base = new LogisticRegression().setMaxIter(1000);
+OneVsRestClassifier ovr = new OneVsRestClassifier(base);
+
+ovr.fit(XTrain, yTrain);
+double[] predictions = ovr.predict(XTest);
+double[][] probabilities = ovr.predictProba(XTest);
+
+// Access individual binary classifiers
+List<Classifier> classifiers = ovr.getClassifiers();
+```
+
+### SoftmaxRegression
+
+Direct multinomial logistic regression with softmax activation.
+
+```java
+package org.superml.multiclass;
+
+public class SoftmaxRegression extends BaseEstimator implements Classifier {
+    
+    // Constructors
+    public SoftmaxRegression()
+    
+    // Core Methods
+    public SoftmaxRegression fit(double[][] X, double[] y)
+    public double[] predict(double[][] X)
+    public double[][] predictProba(double[][] X)
+    public double[][] predictLogProba(double[][] X)
+    public double score(double[][] X, double[] y)
+    
+    // Configuration Methods
+    public SoftmaxRegression setMaxIter(int maxIter)
+    public SoftmaxRegression setLearningRate(double learningRate)
+    public SoftmaxRegression setTol(double tol)
+    public SoftmaxRegression setRegularization(String regularization)
+    public SoftmaxRegression setC(double C)
+    public SoftmaxRegression setL1Ratio(double l1Ratio)
+    public SoftmaxRegression setRandomState(int randomState)
+    
+    // Access Methods
+    public double[][] getCoefficients()
+    public double[] getIntercept()
+    public double[] getClasses()
+    public int getNIterations()
+}
+```
+
+**Key Parameters:**
+- `maxIter`: Maximum number of iterations (default: 1000)
+- `learningRate`: Step size for gradient descent (default: 0.01)
+- `tol`: Tolerance for stopping criterion (default: 1e-6)
+- `regularization`: Type of regularization - "l1", "l2", "elasticnet", "none"
+- `C`: Inverse regularization strength (default: 1.0)
+- `l1Ratio`: Elastic net mixing parameter (default: 0.5)
+
+**Usage Example:**
+```java
+SoftmaxRegression softmax = new SoftmaxRegression()
+    .setMaxIter(2000)
+    .setLearningRate(0.01)
+    .setRegularization("l2")
+    .setC(0.1);
+
+softmax.fit(XTrain, yTrain);
+double[] predictions = softmax.predict(XTest);
+double[][] coefficients = softmax.getCoefficients();
+```
+
+## 📊 Enhanced Linear Models
+
+### Enhanced LogisticRegression
+
+Extended logistic regression with automatic multiclass support.
+
+```java
+// Additional multiclass methods in LogisticRegression
+public class LogisticRegression extends BaseEstimator implements Classifier {
+    
+    // Enhanced Configuration
+    public LogisticRegression setMultiClass(String multiClass)  // "auto", "ovr", "multinomial"
+    
+    // Automatic Strategy Selection
+    // - Binary problems: standard logistic regression
+    // - Multiclass with multiClass="ovr": One-vs-Rest
+    // - Multiclass with multiClass="multinomial": Softmax
+    // - multiClass="auto": chooses best strategy automatically
+}
+```
+
+**Usage Example:**
+```java
+// Automatic multiclass handling
+LogisticRegression lr = new LogisticRegression()
+    .setMaxIter(1000)
+    .setMultiClass("auto");  // Chooses strategy automatically
+
+lr.fit(XTrain, yTrain);  // Works for binary or multiclass
+double[] predictions = lr.predict(XTest);
+
+// Force specific strategy
+LogisticRegression ovr = new LogisticRegression().setMultiClass("ovr");
+LogisticRegression multinomial = new LogisticRegression().setMultiClass("multinomial");
+```
+
+## 🛠️ Utility Classes
+
+### DataLoaders
+
+Enhanced data loading and splitting utilities.
+
+```java
+package org.superml.datasets;
+
+public class DataLoaders {
+    
+    // Data structures
+    public static class TrainTestSplit {
+        public final double[][] XTrain;
+        public final double[][] XTest;
+        public final double[] yTrain;
+        public final double[] yTest;
+    }
+    
+    public static class CSVData {
+        public final double[][] features;
+        public final double[] targets;
+        public final String[] featureNames;
+    }
+    
+    // Methods
+    public static TrainTestSplit trainTestSplit(double[][] X, double[] y, 
+                                              double testSize, int randomState)
+    
+    public static CSVData loadCSV(String filePath, String targetColumn)
+    public static CSVData loadCSV(String filePath, String targetColumn, 
+                                 String[] featureColumns)
+}
+```
+
+### KaggleTrainingManager
+
+Comprehensive training workflow management for competitions.
+
+```java
+package org.superml.datasets;
+
+public class KaggleTrainingManager {
+    
+    // Configuration
+    public static class TrainingConfig {
+        public TrainingConfig(String competitionName, String datasetPath)
+        public TrainingConfig setValidationSplit(double validationSplit)
+        public TrainingConfig setCrossValidation(boolean crossValidation)
+        public TrainingConfig setCvFolds(int cvFolds)
+        public TrainingConfig setTargetColumn(String targetColumn)
+        public TrainingConfig setFeatureColumns(List<String> featureColumns)
+    }
+    
+    // Result
+    public static class TrainingResult {
+        public double getScore()
+        public double getValidationScore()
+        public String getModelType()
+        public LocalDateTime getTimestamp()
+        public Map<String, Object> getMetrics()
+        public SupervisedLearner getTrainedModel()
+    }
+    
+    // Methods
+    public TrainingResult trainModel(SupervisedLearner model, TrainingConfig config)
+    public TrainingResult crossValidateModel(SupervisedLearner model, TrainingConfig config)
+}
+```
+
+## 🧪 Testing Utilities
+
+All algorithms include comprehensive test coverage:
+
+- **Unit Tests**: Individual algorithm functionality
+- **Integration Tests**: Cross-component compatibility  
+- **Performance Tests**: Training time and memory usage
+- **Correctness Tests**: Mathematical properties validation
+
+**Example Test Pattern:**
+```java
+@Test
+void testAlgorithmCorrectness() {
+    // Arrange
+    var data = Datasets.makeClassification(100, 5, 2);
+    
+    // Act
+    Algorithm algo = new Algorithm();
+    algo.fit(data.X, Arrays.stream(data.y).asDoubleStream().toArray());
+    
+    // Assert
+    double accuracy = algo.score(data.X, Arrays.stream(data.y).asDoubleStream().toArray());
+    assertThat(accuracy).isGreaterThan(0.7);
+}
+```
+
+This comprehensive API provides a robust foundation for machine learning applications with consistent interfaces, extensive configuration options, and seamless integration between components.

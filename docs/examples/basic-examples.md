@@ -7,28 +7,23 @@ This guide provides simple, focused examples to help you get started with SuperM
 ### Example 1: Basic Binary Classification
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.metrics.Metrics;
+import org.superml.datasets.DataLoaders;
 
 public class BasicClassification {
     public static void main(String[] args) {
         // 1. Generate synthetic binary classification data
-        var dataset = Datasets.makeClassification(
-            1000,    // 1000 samples
-            10,      // 10 features
-            2,       // 2 classes
-            42       // random seed
-        );
+        var dataset = Datasets.makeClassification(1000, 10, 2);
         
         // 2. Split into train/test sets
-        var split = ModelSelection.trainTestSplit(
-            dataset.X, dataset.y, 0.2, 42);
+        var split = DataLoaders.trainTestSplit(dataset.X, 
+            Arrays.stream(dataset.y).asDoubleStream().toArray(), 0.2, 42);
         
         // 3. Create and train classifier
         var classifier = new LogisticRegression()
-            .setMaxIterations(1000)
+            .setMaxIter(1000)
             .setLearningRate(0.01);
         
         classifier.fit(split.XTrain, split.yTrain);
@@ -37,7 +32,7 @@ public class BasicClassification {
         double[] predictions = classifier.predict(split.XTest);
         
         // 5. Evaluate performance
-        double accuracy = Metrics.(split.yTest, predictions);
+        double accuracy = Metrics.accuracy(split.yTest, predictions);
         double precision = Metrics.precision(split.yTest, predictions);
         double recall = Metrics.recall(split.yTest, predictions);
         double f1 = Metrics.f1Score(split.yTest, predictions);
@@ -70,78 +65,131 @@ Confusion Matrix:
 [4, 96]
 ```
 
-### Example 2: Multiclass Classification with Iris Dataset
+### Example 2: Multiclass Classification with One-vs-Rest
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.multiclass.OneVsRestClassifier;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.metrics.Metrics;
 
-public class MulticlassClassification {
+public class MulticlassExample {
     public static void main(String[] args) {
-        // 1. Load the famous Iris dataset
-        var dataset = Datasets.loadIris();
+        // 1. Generate 3-class dataset
+        var dataset = Datasets.makeClassification(1000, 15, 3);
+        var split = DataLoaders.trainTestSplit(dataset.X, 
+            Arrays.stream(dataset.y).asDoubleStream().toArray(), 0.2, 42);
         
-        System.out.println("Dataset Info:");
-        System.out.println("Samples: " + dataset.X.length);
-        System.out.println("Features: " + dataset.X[0].length);
-        System.out.println("Classes: " + dataset.targetNames.length);
-        System.out.println("Target names: " + Arrays.toString(dataset.targetNames));
+        // 2. Create One-vs-Rest classifier
+        LogisticRegression base = new LogisticRegression().setMaxIter(1000);
+        OneVsRestClassifier ovr = new OneVsRestClassifier(base);
         
-        // 2. Split data
-        var split = ModelSelection.trainTestSplit(
-            dataset.X, dataset.y, 0.3, 42);
+        // 3. Train and predict
+        ovr.fit(split.XTrain, split.yTrain);
+        double[] predictions = ovr.predict(split.XTest);
+        double[][] probabilities = ovr.predictProba(split.XTest);
         
-        // 3. Train classifier
-        var classifier = new LogisticRegression()
-            .setMaxIterations(1500);  // More iterations for multiclass
-        
-        classifier.fit(split.XTrain, split.yTrain);
-        
-        // 4. Predict and evaluate
-        double[] predictions = classifier.predict(split.XTest);
+        // 4. Evaluate
         double accuracy = Metrics.accuracy(split.yTest, predictions);
+        System.out.printf("Multiclass Accuracy: %.3f\n", accuracy);
         
-        System.out.printf("\nClassification Results:\n");
-        System.out.printf("Accuracy: %.3f\n", accuracy);
-        
-        // 5. Detailed classification report
-        System.out.println("\nPer-class Performance:");
-        for (int classId = 0; classId < dataset.targetNames.length; classId++) {
-            double precision = Metrics.precisionForClass(split.yTest, predictions, classId);
-            double recall = Metrics.recallForClass(split.yTest, predictions, classId);
-            double f1 = Metrics.f1ScoreForClass(split.yTest, predictions, classId);
-            
-            System.out.printf("%s: Precision=%.3f, Recall=%.3f, F1=%.3f\n",
-                dataset.targetNames[classId], precision, recall, f1);
+        // 5. Show probability predictions for first few samples
+        for (int i = 0; i < 3; i++) {
+            System.out.printf("Sample %d: Predicted=%.0f, Probabilities=[%.3f, %.3f, %.3f]\n",
+                i+1, predictions[i], probabilities[i][0], probabilities[i][1], probabilities[i][2]);
         }
+    }
+}
+```
+
+### Example 3: Decision Tree Classification
+
+```java
+import org.superml.datasets.Datasets;
+import org.superml.tree.DecisionTree;
+import org.superml.metrics.Metrics;
+
+public class DecisionTreeExample {
+    public static void main(String[] args) {
+        // 1. Load dataset
+        var dataset = Datasets.loadIris();  // 3-class iris dataset
+        var split = DataLoaders.trainTestSplit(dataset.X, 
+            Arrays.stream(dataset.y).asDoubleStream().toArray(), 0.3, 42);
         
-        // 6. Show some predictions
-        System.out.println("\nSample Predictions:");
-        for (int i = 0; i < Math.min(10, split.XTest.length); i++) {
-            int actual = (int) split.yTest[i];
-            int predicted = (int) predictions[i];
-            String actualName = dataset.targetNames[actual];
-            String predictedName = dataset.targetNames[predicted];
-            String status = actual == predicted ? "✓" : "✗";
-            
-            System.out.printf("%s Actual: %s, Predicted: %s\n", 
-                status, actualName, predictedName);
-        }
+        // 2. Create and configure decision tree
+        DecisionTree dt = new DecisionTree("gini", 5)
+            .setMinSamplesSplit(5)
+            .setMinSamplesLeaf(2)
+            .setRandomState(42);
+        
+        // 3. Train
+        dt.fit(split.XTrain, split.yTrain);
+        
+        // 4. Predict
+        double[] predictions = dt.predict(split.XTest);
+        double[][] probabilities = dt.predictProba(split.XTest);
+        
+        // 5. Evaluate
+        double accuracy = dt.score(split.XTest, split.yTest);
+        System.out.printf("Decision Tree Accuracy: %.3f\n", accuracy);
+        
+        // 6. Show tree characteristics
+        System.out.println("Tree trained successfully");
+        System.out.println("Classes: " + Arrays.toString(dt.getClasses()));
+    }
+}
+```
+
+### Example 4: Random Forest vs Single Tree
+
+```java
+import org.superml.datasets.Datasets;
+import org.superml.tree.DecisionTree;
+import org.superml.tree.RandomForest;
+import org.superml.metrics.Metrics;
+
+public class ForestComparisonExample {
+    public static void main(String[] args) {
+        // 1. Generate challenging dataset
+        var dataset = Datasets.makeClassification(1000, 20, 2);
+        var split = DataLoaders.trainTestSplit(dataset.X, 
+            Arrays.stream(dataset.y).asDoubleStream().toArray(), 0.2, 42);
+        
+        // 2. Train single decision tree
+        DecisionTree dt = new DecisionTree("gini", 10);
+        long start = System.currentTimeMillis();
+        dt.fit(split.XTrain, split.yTrain);
+        long dtTime = System.currentTimeMillis() - start;
+        
+        double dtAccuracy = dt.score(split.XTest, split.yTest);
+        
+        // 3. Train random forest
+        RandomForest rf = new RandomForest(100, 10);
+        start = System.currentTimeMillis();
+        rf.fit(split.XTrain, split.yTrain);
+        long rfTime = System.currentTimeMillis() - start;
+        
+        double rfAccuracy = rf.score(split.XTest, split.yTest);
+        
+        // 4. Compare results
+        System.out.println("=== Comparison Results ===");
+        System.out.printf("Decision Tree: %.3f accuracy, %d ms\n", dtAccuracy, dtTime);
+        System.out.printf("Random Forest: %.3f accuracy, %d ms\n", rfAccuracy, rfTime);
+        System.out.printf("Improvement: %.3f\n", rfAccuracy - dtAccuracy);
+        System.out.printf("Forest has %d trees\n", rf.getTrees().size());
     }
 }
 ```
 
 ## 📈 Regression Examples
 
-### Example 3: Linear Regression
+### Example 5: Linear Regression
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LinearRegression;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LinearRegression;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class BasicRegression {
     public static void main(String[] args) {
@@ -190,13 +238,13 @@ public class BasicRegression {
 }
 ```
 
-### Example 4: Regularized Regression Comparison
+### Example 6: Regularized Regression Comparison
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.*;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.*;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class RegularizedRegression {
     public static void main(String[] args) {
@@ -256,15 +304,15 @@ public class RegularizedRegression {
 
 ## 🔄 Pipeline Examples
 
-### Example 5: Classification Pipeline
+### Example 7: Classification Pipeline
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.pipeline.Pipeline;
-import com.superml.preprocessing.StandardScaler;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.pipeline.Pipeline;
+import org.superml.preprocessing.StandardScaler;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class ClassificationPipeline {
     public static void main(String[] args) {
@@ -307,15 +355,15 @@ public class ClassificationPipeline {
 }
 ```
 
-### Example 6: Regression Pipeline
+### Example 8: Regression Pipeline
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.Ridge;
-import com.superml.pipeline.Pipeline;
-import com.superml.preprocessing.StandardScaler;
-import com.superml.metrics.Metrics;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.Ridge;
+import org.superml.pipeline.Pipeline;
+import org.superml.preprocessing.StandardScaler;
+import org.superml.metrics.Metrics;
+import org.superml.model_selection.ModelSelection;
 
 public class RegressionPipeline {
     public static void main(String[] args) {
@@ -367,11 +415,11 @@ public class RegressionPipeline {
 
 ## 🧮 Clustering Examples
 
-### Example 7: K-Means Clustering
+### Example 9: K-Means Clustering
 
 ```java
-import com.superml.cluster.KMeans;
-import com.superml.datasets.Datasets;
+import org.superml.cluster.KMeans;
+import org.superml.datasets.Datasets;
 
 public class BasicClustering {
     public static void main(String[] args) {
@@ -431,12 +479,12 @@ public class BasicClustering {
 
 ## 📊 Cross-Validation Examples
 
-### Example 8: Model Validation
+### Example 10: Model Validation
 
 ```java
-import com.superml.datasets.Datasets;
-import com.superml.linear_model.LogisticRegression;
-import com.superml.model_selection.ModelSelection;
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.model_selection.ModelSelection;
 
 public class CrossValidation {
     public static void main(String[] args) {
@@ -490,10 +538,10 @@ public class CrossValidation {
 
 ## 🎛️ Parameter Management Examples
 
-### Example 9: Model Parameters
+### Example 11: Model Parameters
 
 ```java
-import com.superml.linear_model.LogisticRegression;
+import org.superml.linear_model.LogisticRegression;
 import java.util.Map;
 
 public class ParameterManagement {
@@ -571,12 +619,12 @@ Each example is self-contained and demonstrates a specific concept. Try modifyin
 
 ## 🏭 Production Inference Examples
 
-### Example 10: Production Inference
+### Example 12: Production Inference
 
 ```java
-import com.superml.inference.InferenceEngine;
-import com.superml.inference.BatchInferenceProcessor;
-import com.superml.inference.InferenceMetrics;
+import org.superml.inference.InferenceEngine;
+import org.superml.inference.BatchInferenceProcessor;
+import org.superml.inference.InferenceMetrics;
 import java.util.concurrent.CompletableFuture;
 
 public class ProductionInference {

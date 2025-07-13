@@ -99,8 +99,14 @@ public class Metrics {
      * @return confusion matrix as 2D array
      */
     public static int[][] confusionMatrix(double[] yTrue, double[] yPred) {
-        // For binary classification
-        int[][] matrix = new int[2][2];
+        // Find number of unique classes
+        int maxClass = 0;
+        for (int i = 0; i < yTrue.length; i++) {
+            maxClass = Math.max(maxClass, Math.max((int) yTrue[i], (int) yPred[i]));
+        }
+        int numClasses = maxClass + 1;
+        
+        int[][] matrix = new int[numClasses][numClasses];
         
         for (int i = 0; i < yTrue.length; i++) {
             int trueLabel = (int) yTrue[i];

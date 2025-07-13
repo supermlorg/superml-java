@@ -18,8 +18,8 @@ SuperML Java provides comprehensive model persistence functionality that allows 
 ### Basic Save and Load
 
 ```java
-import com.superml.persistence.ModelPersistence;
-import com.superml.linear_model.LogisticRegression;
+import org.superml.persistence.ModelPersistence;
+import org.superml.linear_model.LogisticRegression;
 
 // Train your model
 LogisticRegression model = new LogisticRegression().setMaxIter(1000);
@@ -85,8 +85,8 @@ SuperML Model File (.superml)
 ### Pipeline Persistence
 
 ```java
-import com.superml.pipeline.Pipeline;
-import com.superml.preprocessing.StandardScaler;
+import org.superml.pipeline.Pipeline;
+import org.superml.preprocessing.StandardScaler;
 
 // Create and train pipeline
 Pipeline pipeline = new Pipeline()
@@ -155,7 +155,7 @@ For managing collections of models, use the `ModelManager` class:
 ### Basic Model Manager
 
 ```java
-import com.superml.persistence.ModelManager;
+import org.superml.persistence.ModelManager;
 
 // Create manager (uses "models" directory by default)
 ModelManager manager = new ModelManager();
@@ -212,7 +212,7 @@ System.out.println("Deleted " + deletedCount + " old models");
 Enable automatic model saving during Kaggle training:
 
 ```java
-import com.superml.datasets.KaggleTrainingManager;
+import org.superml.datasets.KaggleTrainingManager;
 
 KaggleTrainingManager.TrainingConfig config = new KaggleTrainingManager.TrainingConfig()
     .setSaveModels(true)                    // Enable model saving
@@ -511,7 +511,7 @@ ModelPersistence.saveWithStats(model, "models/iris_classifier",
 ### Enhanced Model Manager
 
 ```java
-import com.superml.persistence.ModelManager;
+import org.superml.persistence.ModelManager;
 
 // Initialize model manager with automatic organization
 ModelManager manager = new ModelManager("./trained_models");
