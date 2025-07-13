@@ -276,7 +276,7 @@ class NewAlgorithmTest {
     void testEdgeCases() {
         // Test with minimal data
         double[][] X = {{0, 0}, {0, 1}};
-        double[] y = `{1, 2}`;
+        double[] y = {1, 2};
         
         assertThatCode(() -> algorithm.fit(X, y))
             .doesNotThrowAnyException();
