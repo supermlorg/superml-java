@@ -275,8 +275,8 @@ class NewAlgorithmTest {
     @DisplayName("Should handle edge cases gracefully")
     void testEdgeCases() {
         // Test with minimal data
-        double[][] X = {{1, 2}, {3, 4}};
-        double[] y = {0, 1};
+        double[][] X = {{0, 0}, {0, 1}};
+        double[] y = `{1, 2}`;
         
         assertThatCode(() -> algorithm.fit(X, y))
             .doesNotThrowAnyException();
