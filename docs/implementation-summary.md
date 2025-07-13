@@ -42,25 +42,73 @@ org.superml/
 
 ### Linear Models (org.superml.linear_model)
 1. **LogisticRegression**: Enhanced binary/multiclass classification with automatic strategy selection
+   - Supports L1/L2 regularization
+   - Automatic multiclass handling (One-vs-Rest and Softmax strategies)
+   - Gradient descent optimization with convergence monitoring
+   - Probability prediction capabilities
+
 2. **LinearRegression**: Ordinary least squares regression with normal equation
+   - Closed-form solution using matrix operations
+   - Supports both fitted intercept and without intercept
+   - R² score evaluation
+
 3. **Ridge**: L2 regularized regression with closed-form solution
+   - Ridge regularization (L2 penalty) to prevent overfitting
+   - Closed-form solution with regularization parameter
+   - Cross-validation compatible
+
 4. **Lasso**: L1 regularized regression with coordinate descent algorithm
+   - L1 regularization for feature selection
+   - Coordinate descent optimization
+   - Sparse solution capabilities
 
-### Tree-Based Models (org.superml.tree) 🌳 **NEW**
-1. **DecisionTree**: Complete CART implementation with gini/entropy/mse criteria
-2. **RandomForest**: Bootstrap aggregating with parallel training and feature randomization
-3. **GradientBoosting**: Sequential ensemble with early stopping and validation monitoring
+5. **SoftmaxRegression**: Direct multinomial logistic regression with softmax activation
+   - Native multiclass classification support
+   - Softmax activation for probability normalization
+   - Cross-entropy loss optimization
 
-### Multiclass Classification (org.superml.multiclass) 🎯 **NEW**
-1. **OneVsRestClassifier**: Meta-classifier using One-vs-Rest strategy for any binary classifier
-2. **SoftmaxRegression**: Direct multinomial logistic regression with softmax activation
-3. **Enhanced LogisticRegression**: Automatic multiclass handling with strategy selection
+6. **OneVsRestClassifier**: Meta-classifier using One-vs-Rest strategy for any binary classifier
+   - Converts any binary classifier to multiclass
+   - Supports all binary algorithms in the framework
+   - Probability calibration and normalization
+
+### Tree-Based Models (org.superml.tree) 🌳
+1. **DecisionTree**: Complete CART implementation for classification and regression
+   - **Splitting Criteria**: Gini impurity, entropy (classification), MSE (regression)
+   - **Pruning Controls**: Min samples split/leaf, min impurity decrease, max depth
+   - **Feature Selection**: Random feature subset selection support
+   - **Handles Both**: Classification and regression in single implementation
+
+2. **RandomForest**: Bootstrap aggregating ensemble method
+   - **Bootstrap Sampling**: Random sampling with replacement for each tree
+   - **Feature Randomization**: Random feature subset at each split
+   - **Parallel Training**: Multi-threaded tree construction
+   - **Ensemble Prediction**: Majority voting (classification) / averaging (regression)
+   - **Feature Importance**: Impurity-based feature ranking
+   - **Out-of-bag Error**: OOB score estimation
+
+3. **GradientBoosting**: Sequential ensemble with advanced features
+   - **Sequential Learning**: Trees trained to correct previous errors
+   - **Early Stopping**: Validation-based stopping with tolerance monitoring
+   - **Subsampling**: Stochastic gradient boosting with configurable sample fraction
+   - **Learning Rate**: Configurable shrinkage parameter
+   - **Regularization**: Multiple regularization techniques (depth, samples, impurity)
+   - **Monitoring**: Training and validation score tracking per iteration
 
 ### Clustering (org.superml.cluster)
-1. **KMeans**: K-means clustering with k-means++ initialization, multiple restarts, and inertia calculation
+1. **KMeans**: Advanced K-means clustering implementation
+   - **K-means++ Initialization**: Smart centroid initialization for better convergence
+   - **Multiple Restarts**: Multiple random initializations to avoid local minima
+   - **Inertia Calculation**: Within-cluster sum of squares computation
+   - **Convergence Monitoring**: Tolerance-based stopping criteria
+   - **Cluster Assignment**: Efficient distance-based assignment
 
 ### Preprocessing (org.superml.preprocessing)
-1. **StandardScaler**: Feature standardization (z-score normalization)
+1. **StandardScaler**: Feature standardization and normalization
+   - **Z-score Normalization**: Mean=0, Standard Deviation=1
+   - **Fit/Transform Pattern**: Consistent with scikit-learn API
+   - **Feature-wise Scaling**: Independent scaling for each feature
+   - **Inverse Transform**: Ability to reverse the scaling
 
 ## ✅ Advanced Framework Features
 
@@ -312,21 +360,22 @@ Random Forest:        Accuracy = 0.812
 ## 🎯 Framework Statistics
 
 ### Code Metrics (As of Latest Update)
-- **Total Classes**: 35+ core classes
-- **Lines of Code**: 8,000+ lines of production code
+- **Total Classes**: 40+ core classes
+- **Lines of Code**: 10,000+ lines of production code
 - **Test Coverage**: 70+ comprehensive unit tests
-- **Documentation**: 15+ detailed guides and examples
-- **Algorithms**: 10+ machine learning algorithms
+- **Documentation**: 20+ detailed guides and examples
+- **Algorithms**: 11 machine learning algorithms implemented
 - **Examples**: 25+ working code examples
 
-### Package Distribution
+### Algorithm Distribution
 ```
-Tree Algorithms:        3 classes (DecisionTree, RandomForest, GradientBoosting)
-Multiclass Support:     2 classes (OneVsRestClassifier, SoftmaxRegression)
-Linear Models:          4 classes (LogisticRegression, LinearRegression, Ridge, Lasso)
-Data Utilities:         5 classes (Datasets, DataLoaders, KaggleTrainingManager, etc.)
-Core Framework:         6 interfaces + BaseEstimator
-Testing:               15+ test classes with comprehensive coverage
+Linear Models:          6 algorithms (LogisticRegression, LinearRegression, Ridge, Lasso, SoftmaxRegression, OneVsRestClassifier)
+Tree Algorithms:        3 algorithms (DecisionTree, RandomForest, GradientBoosting)
+Clustering:            1 algorithm (KMeans)
+Preprocessing:         1 transformer (StandardScaler)
+Meta-Learning:         1 meta-algorithm (OneVsRestClassifier)
+Core Framework:        6 interfaces + BaseEstimator
+Testing:              15+ test classes with comprehensive coverage
 ```
 
 ## Conclusion

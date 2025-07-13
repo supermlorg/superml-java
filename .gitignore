@@ -11,6 +11,9 @@ logs/
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+# Shell Scripts
+*.sh
+
 # Package Files
 *.jar
 *.war

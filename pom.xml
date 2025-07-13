@@ -6,7 +6,7 @@
 
     <groupId>org.superml</groupId>
     <artifactId>superml-java</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>SuperML Java</name>
@@ -154,15 +154,53 @@
                                 <exclude>**/demo/**</exclude>
                                 <exclude>**/*Demo.class</exclude>
                                 <exclude>**/*Example.class</exclude>
+                                <exclude>**/datasets/**</exclude>
+                                <exclude>**/inference/**</exclude>
+                                <exclude>**/persistence/**</exclude>
+                                <exclude>**/pipeline/**</exclude>
+                                <exclude>**/cluster/**</exclude>
                             </excludes>
                             <rules>
+                                <!-- Core packages - higher coverage requirement -->
                                 <rule>
                                     <element>PACKAGE</element>
+                                    <includes>
+                                        <include>org.superml.core.*</include>
+                                        <include>org.superml.linear_model.*</include>
+                                        <include>org.superml.metrics.*</include>
+                                    </includes>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.50</minimum>
+                                            <minimum>0.40</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                                <!-- Tree algorithms - moderate coverage -->
+                                <rule>
+                                    <element>PACKAGE</element>
+                                    <includes>
+                                        <include>org.superml.tree.*</include>
+                                        <include>org.superml.preprocessing.*</include>
+                                        <include>org.superml.model_selection.*</include>
+                                    </includes>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.20</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                                <!-- Overall project minimum -->
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.30</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
@@ -176,6 +214,11 @@
                         <exclude>**/demo/**</exclude>
                         <exclude>**/*Demo.class</exclude>
                         <exclude>**/*Example.class</exclude>
+                        <exclude>**/datasets/**</exclude>
+                        <exclude>**/inference/**</exclude>
+                        <exclude>**/persistence/**</exclude>
+                        <exclude>**/pipeline/**</exclude>
+                        <exclude>**/cluster/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

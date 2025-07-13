@@ -13,11 +13,10 @@ A comprehensive machine learning library for Java, inspired by scikit-learn and 
 ## 🚀 Features
 
 ### Core Machine Learning
-- **Linear Models**: Logistic Regression, Linear Regression, Ridge, Lasso
+- **Linear Models**: Logistic Regression, Linear Regression, Ridge, Lasso, Softmax Regression
 - **Tree-Based Models**: Decision Trees, Random Forest, Gradient Boosting
-- **Support Vector Machines**: SVM for classification and regression *(coming soon)*
-- **Nearest Neighbors**: k-NN for classification and regression *(coming soon)*
-- **Clustering**: K-Means, DBSCAN, Hierarchical clustering *(coming soon)*
+- **Multiclass Strategies**: One-vs-Rest Classifier and native multiclass support
+- **Clustering**: K-Means with k-means++ initialization
 
 ### Advanced Features  
 - **Multiclass Classification**: One-vs-Rest and Softmax/Multinomial approaches
@@ -36,6 +35,8 @@ A comprehensive machine learning library for Java, inspired by scikit-learn and 
 ## 📚 Documentation
 
 - [**Quick Start Guide**](quick-start.md) - Get started in 5 minutes
+- [**Algorithms Reference**](algorithms-reference.md) - Complete guide to all 11 implemented algorithms
+- [**Implementation Status**](implementation-status.md) - Detailed status of all algorithms and features
 - [**Tree Algorithms Guide**](tree-algorithms.md) - Decision Trees, Random Forest, Gradient Boosting
 - [**Multiclass Classification**](multiclass-guide.md) - One-vs-Rest and Softmax approaches
 - [**Inference Guide**](inference-guide.md) - Production model deployment
@@ -45,6 +46,7 @@ A comprehensive machine learning library for Java, inspired by scikit-learn and 
 - [**Examples**](examples/basic-examples.md) - Practical code examples
 - [**Test Guide**](testing-guide.md) - Unit tests and validation
 - [**Architecture**](architecture.md) - Framework design and internals
+- [**Logging Guide**](logging-guide.md) - Structured logging configuration
 - [**Contributing**](contributing.md) - How to contribute to the project
 
 ## 🔗 Quick Links

@@ -102,8 +102,21 @@ List<String> allModels = manager.listModels();
 ## 🎯 Features
 
 ### Algorithms
-- **Linear Models**: Logistic Regression, Linear Regression, Ridge, Lasso with L1/L2 regularization
-- **Clustering**: K-Means with k-means++ initialization and multiple restarts
+- **Linear Models**: 
+  - Logistic Regression with automatic multiclass support and L1/L2 regularization
+  - Linear Regression with normal equation and closed-form solution
+  - Ridge Regression with L2 regularization
+  - Lasso Regression with L1 regularization and coordinate descent
+  - Softmax Regression for direct multiclass classification
+  - One-vs-Rest Classifier for converting binary to multiclass algorithms
+
+- **Tree-Based Models**: 
+  - Decision Tree with CART implementation (classification & regression)
+  - Random Forest with bootstrap aggregating and parallel training
+  - Gradient Boosting with early stopping and validation monitoring
+
+- **Clustering**: 
+  - K-Means with k-means++ initialization and multiple restarts
 
 ### Data Processing
 - **StandardScaler**: Feature standardization and normalization
@@ -150,23 +163,38 @@ mvn clean install
 ```java
 import org.superml.datasets.Datasets;
 import org.superml.linear_model.LogisticRegression;
+import org.superml.tree.RandomForest;
+import org.superml.tree.GradientBoosting;
 import org.superml.metrics.Metrics;
 import org.superml.model_selection.ModelSelection;
+import org.superml.preprocessing.StandardScaler;
 
 // Load dataset
 Datasets.Dataset dataset = Datasets.loadIris();
 ModelSelection.TrainTestSplit split = ModelSelection.trainTestSplit(dataset.X, dataset.y, 0.2, 42);
 
-// Train model
-LogisticRegression model = new LogisticRegression()
-    .setMaxIterations(1000)
-    .setLearningRate(0.01);
-model.fit(split.XTrain, split.yTrain);
+// Preprocessing
+StandardScaler scaler = new StandardScaler();
+double[][] XTrainScaled = scaler.fitTransform(split.XTrain);
+double[][] XTestScaled = scaler.transform(split.XTest);
 
-// Evaluate
-double[] predictions = model.predict(split.XTest);
-double accuracy = Metrics.accuracy(split.yTest, predictions);
-System.out.printf("Accuracy: %.3f\n", accuracy);
+// Train multiple models
+LogisticRegression lr = new LogisticRegression().setMaxIterations(1000);
+RandomForest rf = new RandomForest().setNEstimators(100);
+GradientBoosting gb = new GradientBoosting().setNEstimators(100).setLearningRate(0.1);
+
+lr.fit(XTrainScaled, split.yTrain);
+rf.fit(XTrainScaled, split.yTrain);
+gb.fit(XTrainScaled, split.yTrain);
+
+// Compare performance
+double lrAccuracy = Metrics.accuracy(split.yTest, lr.predict(XTestScaled));
+double rfAccuracy = Metrics.accuracy(split.yTest, rf.predict(XTestScaled));
+double gbAccuracy = Metrics.accuracy(split.yTest, gb.predict(XTestScaled));
+
+System.out.printf("Logistic Regression: %.3f\n", lrAccuracy);
+System.out.printf("Random Forest: %.3f\n", rfAccuracy);
+System.out.printf("Gradient Boosting: %.3f\n", gbAccuracy);
 ```
 
 ### Cross-Validation and Model Evaluation
