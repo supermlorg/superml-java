@@ -13,11 +13,17 @@ public class LogisticRegressionTest {
     @Test
     public void testFitAndPredict() {
         // Generate a simple classification dataset
-        Datasets.Dataset dataset = Datasets.makeClassification(100, 2, 2, 42);
+        Datasets.ClassificationData dataset = Datasets.makeClassification(100, 2, 2);
+        
+        // Convert int array to double array
+        double[] target = new double[dataset.y.length];
+        for (int i = 0; i < dataset.y.length; i++) {
+            target[i] = dataset.y[i];
+        }
         
         // Split the data
         ModelSelection.TrainTestSplit split = ModelSelection.trainTestSplit(
-            dataset.data, dataset.target, 0.2, 42);
+            dataset.X, target, 0.2, 42);
         
         // Create and train the model
         LogisticRegression lr = new LogisticRegression(0.1, 1000);
@@ -107,5 +113,75 @@ public class LogisticRegressionTest {
         assertThrows(IllegalStateException.class, () -> lr.predict(X));
         assertThrows(IllegalStateException.class, () -> lr.predictProba(X));
         assertThrows(IllegalStateException.class, () -> lr.getClasses());
+    }
+    
+    @Test
+    void testFitAndPredictBinaryClassification() {
+        LogisticRegression model = new LogisticRegression(0.01, 1000);
+
+        // Training data for binary classification
+        double[][] X = {
+            {1.0, 2.0},
+            {2.0, 3.0},
+            {3.0, 4.0},
+            {4.0, 5.0}
+        };
+        double[] y = {0, 0, 1, 1};
+
+        // Fit the model
+        model.fit(X, y);
+
+        // Test predictions
+        double[] testFeatures = {2.5, 3.5};
+        double prediction = model.predict(new double[][]{testFeatures})[0];
+
+        assertEquals(1.0, prediction, "Prediction should match the expected class");
+    }
+
+    @Test
+    void testPredictProbabilities() {
+        LogisticRegression model = new LogisticRegression(0.01, 1000);
+
+        // Training data for binary classification
+        double[][] X = {
+            {1.0, 2.0},
+            {2.0, 3.0},
+            {3.0, 4.0},
+            {4.0, 5.0}
+        };
+        double[] y = {0, 0, 1, 1};
+
+        // Fit the model
+        model.fit(X, y);
+
+        // Test probabilities
+        double[] testFeatures = {2.5, 3.5};
+        double[] probabilities = model.predictProba(new double[][]{testFeatures})[0];
+
+        assertEquals(2, probabilities.length, "There should be two probabilities for binary classification");
+        assertTrue(probabilities[0] >= 0 && probabilities[0] <= 1, "Probability of class 0 should be valid");
+        assertTrue(probabilities[1] >= 0 && probabilities[1] <= 1, "Probability of class 1 should be valid");
+        assertEquals(1.0, probabilities[0] + probabilities[1], 1e-6, "Probabilities should sum to 1");
+    }
+
+    @Test
+    void testScore() {
+        LogisticRegression model = new LogisticRegression(0.1, 1000); // Increased learning rate for better convergence
+
+        // Training data for binary classification
+        double[][] X = {
+            {1.0, 2.0},
+            {2.0, 3.0},
+            {3.0, 4.0},
+            {4.0, 5.0}
+        };
+        double[] y = {0, 0, 1, 1};
+
+        // Fit the model
+        model.fit(X, y);
+
+        // Test score
+        double score = model.score(X, y);
+        assertEquals(1.0, score, "Score should be 1.0 for perfectly classified training data");
     }
 }

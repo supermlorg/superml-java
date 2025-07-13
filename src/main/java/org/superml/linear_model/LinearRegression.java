@@ -76,6 +76,12 @@ public class LinearRegression extends BaseEstimator implements Regressor {
         // X^T * X
         double[][] XTX = matrixMultiply(transpose(X), X);
         
+        // Add small regularization to diagonal to handle numerical instability
+        int n = XTX.length;
+        for (int i = 0; i < n; i++) {
+            XTX[i][i] += 1e-8; // Small regularization term
+        }
+        
         // (X^T * X)^-1
         double[][] XTXInv = invertMatrix(XTX);
         
@@ -156,6 +162,9 @@ public class LinearRegression extends BaseEstimator implements Regressor {
             
             // Make diagonal element 1
             double pivot = augmented[i][i];
+            if (Math.abs(pivot) < 1e-10) {
+                throw new RuntimeException("Matrix is singular or near-singular, cannot invert");
+            }
             for (int j = 0; j < 2 * n; j++) {
                 augmented[i][j] /= pivot;
             }

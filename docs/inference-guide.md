@@ -46,6 +46,7 @@ engine.shutdown();
 
 ### Classification with Probabilities
 
+{% raw %}
 ```java
 // Load classification model
 engine.loadModel("classifier", "models/iris_classifier.superml");
@@ -60,6 +61,7 @@ System.out.printf("Predicted class: %.0f\n", prediction);
 System.out.printf("Class probabilities: [%.3f, %.3f, %.3f]\n", 
                   probabilities[0], probabilities[1], probabilities[2]);
 ```
+{% endraw %}
 
 ## 🔧 Core Components
 

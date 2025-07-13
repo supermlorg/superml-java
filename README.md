@@ -104,17 +104,17 @@ List<String> allModels = manager.listModels();
 ### Algorithms
 - **Linear Models**: Logistic Regression, Linear Regression, Ridge, Lasso with L1/L2 regularization
 - **Clustering**: K-Means with k-means++ initialization and multiple restarts
-- **Grid Search**: Automated hyperparameter tuning with cross-validation
 
 ### Data Processing
 - **StandardScaler**: Feature standardization and normalization
 - **DataLoaders**: CSV loading, synthetic data generation, and built-in datasets
 - **Pipeline System**: Chain preprocessing steps and models seamlessly
 
-### Evaluation & Selection
-- **Metrics**: Accuracy, Precision, Recall, F1-Score, MSE, MAE, R² and confusion matrices
-- **Cross-Validation**: K-fold validation and train/test splitting
-- **Model Comparison**: Automated algorithm benchmarking
+### Model Selection & Evaluation
+- **Cross-Validation**: K-fold validation with comprehensive metrics (accuracy, precision, recall, F1, MSE, MAE, R²)
+- **Hyperparameter Tuning**: Grid Search and Random Search with parallel execution and custom configurations
+- **Parameter Specifications**: Discrete, continuous, and integer parameter spaces for systematic optimization
+- **Performance Metrics**: Complete evaluation suite with statistical analysis and confidence intervals
 
 ### Enterprise Features
 - **Kaggle Integration**: Direct dataset download and automated training workflows
@@ -122,6 +122,7 @@ List<String> allModels = manager.listModels();
 - **Professional Logging**: Structured logging with Logback and SLF4J
 - **Error Handling**: Comprehensive validation and informative error messages
 - **Thread Safety**: Safe concurrent prediction after model training
+- **Parallel Processing**: Multi-threaded hyperparameter tuning and cross-validation
 
 ## 📦 Installation
 
@@ -168,29 +169,91 @@ double accuracy = Metrics.accuracy(split.yTest, predictions);
 System.out.printf("Accuracy: %.3f\n", accuracy);
 ```
 
-### Advanced Pipeline with Hyperparameter Tuning
+### Cross-Validation and Model Evaluation
 
 ```java
-import org.superml.pipeline.Pipeline;
-import org.superml.preprocessing.StandardScaler;
-import org.superml.model_selection.GridSearchCV;
+import org.superml.model_selection.CrossValidation;
 
-// Create pipeline
-Pipeline pipeline = new Pipeline()
-    .addStep("scaler", new StandardScaler())
-    .addStep("classifier", new LogisticRegression());
+// Basic cross-validation
+LogisticRegression classifier = new LogisticRegression();
+CrossValidation.CrossValidationResults results = 
+    CrossValidation.crossValidate(classifier, X, y);
 
-// Grid search
-Map<String, Object[]> paramGrid = Map.of(
-    "classifier__maxIterations", new Object[]{500, 1000, 1500},
-    "classifier__learningRate", new Object[]{0.001, 0.01, 0.1}
+System.out.println("Accuracy: " + results.getMeanScore("accuracy") + 
+                   " ± " + results.getStdScore("accuracy"));
+
+// Custom cross-validation configuration
+CrossValidation.CrossValidationConfig config = 
+    new CrossValidation.CrossValidationConfig()
+        .setFolds(10)
+        .setShuffle(true)
+        .setRandomSeed(42L)
+        .setMetrics("accuracy", "precision", "recall", "f1");
+
+CrossValidation.CrossValidationResults detailedResults = 
+    CrossValidation.crossValidate(classifier, X, y, config);
+
+// Regression cross-validation
+Ridge regressor = new Ridge();
+CrossValidation.CrossValidationResults regressionResults = 
+    CrossValidation.crossValidateRegression(regressor, X, y, 
+        new CrossValidation.CrossValidationConfig());
+```
+
+### Advanced Hyperparameter Tuning
+
+```java
+import org.superml.model_selection.HyperparameterTuning;
+
+// Grid Search for Classification
+HyperparameterTuning.TuningResults gridResults = HyperparameterTuning.gridSearch(
+    new LogisticRegression(),
+    X, y,
+    HyperparameterTuning.ParameterSpec.discrete("learningRate", 0.01, 0.1, 0.5),
+    HyperparameterTuning.ParameterSpec.discrete("maxIter", 500, 1000, 1500)
 );
 
-GridSearchCV gridSearch = new GridSearchCV(pipeline, paramGrid, 5);
-gridSearch.fit(X, y);
+System.out.println("Best parameters: " + gridResults.getBestParameters());
+System.out.println("Best score: " + gridResults.getBestScore());
 
-System.out.println("Best score: " + gridSearch.getBestScore());
-System.out.println("Best params: " + gridSearch.getBestParams());
+// Grid Search for Regression
+HyperparameterTuning.TuningResults regressionGrid = 
+    HyperparameterTuning.gridSearchRegressor(
+        new Ridge(),
+        X, y,
+        HyperparameterTuning.ParameterSpec.discrete("alpha", 0.1, 1.0, 10.0),
+        HyperparameterTuning.ParameterSpec.continuous("tolerance", 1e-6, 1e-3, 5)
+    );
+
+// Random Search with Custom Configuration
+HyperparameterTuning.TuningConfig advancedConfig = 
+    new HyperparameterTuning.TuningConfig()
+        .setScoringMetric("f1")
+        .setCvFolds(5)
+        .setParallel(true)
+        .setVerbose(true)
+        .setRandomSeed(123L);
+
+HyperparameterTuning.TuningResults randomResults = 
+    HyperparameterTuning.RandomSearch.search(
+        new LogisticRegression(),
+        X, y,
+        Arrays.asList(
+            HyperparameterTuning.ParameterSpec.discrete("learningRate", 0.001, 0.01, 0.1, 0.5),
+            HyperparameterTuning.ParameterSpec.integer("maxIter", 100, 2000)
+        ),
+        advancedConfig
+    );
+
+// Parameter Specifications
+// Discrete values
+HyperparameterTuning.ParameterSpec.discrete("param", "A", "B", "C");
+
+// Continuous range with specified steps
+HyperparameterTuning.ParameterSpec.continuous("learning_rate", 0.001, 0.1, 10);
+
+// Integer range
+HyperparameterTuning.ParameterSpec.integer("max_depth", 1, 20);
 ```
 
 ### Model Persistence and Management
@@ -288,6 +351,29 @@ git clone https://github.com/superml/superml-java.git
 mvn clean compile
 mvn test
 ```
+
+### Code Coverage
+
+SuperML Java includes comprehensive code coverage analysis using JaCoCo:
+
+```bash
+# Run tests and generate coverage report
+mvn clean test jacoco:report
+
+# Use the provided coverage script for detailed analysis
+./coverage.sh --summary    # Show coverage summary
+./coverage.sh --open       # Open HTML report in browser
+```
+
+**Coverage Reports:**
+- **HTML Report**: `target/site/jacoco/index.html` (visual coverage report)
+- **Coverage Summary**: Use `./coverage.sh --summary` for quick overview
+- **Detailed Analysis**: See [docs/CODE_COVERAGE_REPORT.md](docs/CODE_COVERAGE_REPORT.md)
+
+**Current Status:**
+- ✅ **Multiclass Classification**: 85%+ coverage (LogisticRegression, SoftmaxRegression)
+- ⚠️ **Tree Algorithms**: 0% coverage (new v2.0 features needing tests)
+- ⚠️ **Linear Models**: 0% coverage (LinearRegression, Ridge, Lasso need tests)
 
 ## 🌟 Community & Support
 
