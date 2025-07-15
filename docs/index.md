@@ -98,7 +98,6 @@ double[][] probabilities = forest.predictProba(split.XTest);
 // Evaluate
 double accuracy = Metrics.accuracy(split.yTest, predictions);
 System.out.println("Accuracy: " + accuracy);
-```
 
 // Train model
 var classifier = new LogisticRegression().setMaxIter(1000);
