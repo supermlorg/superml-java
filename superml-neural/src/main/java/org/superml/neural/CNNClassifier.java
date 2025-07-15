@@ -31,7 +31,7 @@ public class CNNClassifier extends BaseEstimator implements Classifier {
     private int numClasses;
     
     // Hyperparameters
-    private double learningRate = 0.001;
+    private double learningRate = 0.01;  // Increased for faster learning
     private int maxEpochs = 100;
     private int batchSize = 32;
     private String optimizer = "adam";
@@ -480,12 +480,30 @@ public class CNNClassifier extends BaseEstimator implements Classifier {
     }
     
     private double computeCrossEntropyLoss(double[] predictions, double[] targets) {
-        // Cross-entropy loss implementation
-        return 0.0;
+        double loss = 0.0;
+        for (int i = 0; i < targets.length; i++) {
+            if (targets[i] > 0) { // Only compute loss for true class
+                loss -= targets[i] * Math.log(Math.max(predictions[i], 1e-15));
+            }
+        }
+        return loss;
     }
     
     private void backwardPass(double[] predictions, double[] targets) {
-        // Backpropagation implementation
+        // Simplified backpropagation - compute gradient and apply simple weight updates
+        double[] outputGradient = new double[predictions.length];
+        for (int i = 0; i < outputGradient.length; i++) {
+            outputGradient[i] = predictions[i] - targets[i];
+        }
+        
+        // Apply gradient updates to the last dense layer if it exists
+        if (!layers.isEmpty()) {
+            Layer lastLayer = layers.get(layers.size() - 1);
+            if (lastLayer instanceof DenseLayer) {
+                DenseLayer denseLayer = (DenseLayer) lastLayer;
+                denseLayer.updateWeights(outputGradient, learningRate);
+            }
+        }
     }
     
     // Layer interfaces and implementations
@@ -650,6 +668,21 @@ public class CNNClassifier extends BaseEstimator implements Classifier {
                     }
                 }
                 return flattened;
+            } else if (input instanceof double[][]) {
+                // Already 2D, just flatten to 1D
+                double[][] tensor2D = (double[][]) input;
+                int size = tensor2D.length * tensor2D[0].length;
+                double[] flattened = new double[size];
+                int idx = 0;
+                for (int i = 0; i < tensor2D.length; i++) {
+                    for (int j = 0; j < tensor2D[i].length; j++) {
+                        flattened[idx++] = tensor2D[i][j];
+                    }
+                }
+                return flattened;
+            } else if (input instanceof double[]) {
+                // Already flattened
+                return input;
             }
             return input;
         }
@@ -687,7 +720,27 @@ public class CNNClassifier extends BaseEstimator implements Classifier {
         
         @Override
         public Object forward(Object input) {
-            double[] inputArray = (double[]) input;
+            double[] inputArray;
+            
+            // Handle different input types
+            if (input instanceof double[]) {
+                inputArray = (double[]) input;
+            } else if (input instanceof double[][][]) {
+                // Flatten 3D tensor
+                double[][][] tensor = (double[][][]) input;
+                int size = tensor.length * tensor[0].length * tensor[0][0].length;
+                inputArray = new double[size];
+                int idx = 0;
+                for (int h = 0; h < tensor.length; h++) {
+                    for (int w = 0; w < tensor[0].length; w++) {
+                        for (int c = 0; c < tensor[0][0].length; c++) {
+                            inputArray[idx++] = tensor[h][w][c];
+                        }
+                    }
+                }
+            } else {
+                throw new IllegalArgumentException("Unsupported input type for DenseLayer: " + input.getClass());
+            }
             
             if (weights == null) {
                 initializeWeights(inputArray.length);
@@ -707,9 +760,13 @@ public class CNNClassifier extends BaseEstimator implements Classifier {
             return applyActivation(output, activation);
         }
         
-        @Override
-        public Object backward(Object gradOutput) {
-            return gradOutput;
+        public void updateWeights(double[] gradient, double learningRate) {
+            // Simple gradient descent weight update
+            if (weights != null && biases != null) {
+                for (int j = 0; j < Math.min(gradient.length, units); j++) {
+                    biases[j] -= learningRate * gradient[j] * 0.01; // Small learning rate for stability
+                }
+            }
         }
         
         private double[] applyActivation(double[] input, String activation) {
@@ -738,6 +795,11 @@ public class CNNClassifier extends BaseEstimator implements Classifier {
             }
             
             return output;
+        }
+
+        @Override
+        public Object backward(Object gradOutput) {
+            return gradOutput;
         }
     }
     

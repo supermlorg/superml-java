@@ -35,7 +35,7 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
     
     // Training parameters
     private int maxIter = 200;
-    private double learningRate = 0.001;
+    private double learningRate = 0.01;  // Increased from 0.001 for faster learning
     private int batchSize = 32;
     private double dropoutRate = 0.0;
     private boolean earlyStopping = false;
@@ -450,9 +450,87 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
     // Helper classes and methods would be implemented here...
     // (Activation functions, gradient computation, utility methods, etc.)
     
-    /**
-     * Placeholder implementations - these would be fully implemented
-     */
+    private void updateParametersAdam(Gradients gradients, List<RealMatrix> m_weights, List<double[]> m_biases,
+                                     List<RealMatrix> v_weights, List<double[]> v_biases,
+                                     int iteration, double beta1, double beta2, double epsilon) {
+        
+        double beta1Corrected = 1.0 - Math.pow(beta1, iteration);
+        double beta2Corrected = 1.0 - Math.pow(beta2, iteration);
+        
+        for (int layer = 0; layer < weights.size(); layer++) {
+            RealMatrix weightGrad = gradients.weightGradients.get(layer);
+            double[] biasGrad = gradients.biasGradients.get(layer);
+            
+            // Update weight moments
+            RealMatrix mW = m_weights.get(layer);
+            RealMatrix vW = v_weights.get(layer);
+            
+            for (int i = 0; i < weightGrad.getRowDimension(); i++) {
+                for (int j = 0; j < weightGrad.getColumnDimension(); j++) {
+                    double grad = weightGrad.getEntry(i, j);
+                    
+                    // Update first moment
+                    double m = beta1 * mW.getEntry(i, j) + (1 - beta1) * grad;
+                    mW.setEntry(i, j, m);
+                    
+                    // Update second moment
+                    double v = beta2 * vW.getEntry(i, j) + (1 - beta2) * grad * grad;
+                    vW.setEntry(i, j, v);
+                    
+                    // Bias correction and parameter update
+                    double mHat = m / beta1Corrected;
+                    double vHat = v / beta2Corrected;
+                    
+                    double currentWeight = weights.get(layer).getEntry(i, j);
+                    double newWeight = currentWeight - learningRate * mHat / (Math.sqrt(vHat) + epsilon);
+                    weights.get(layer).setEntry(i, j, newWeight);
+                }
+            }
+            
+            // Update bias moments
+            double[] mB = m_biases.get(layer);
+            double[] vB = v_biases.get(layer);
+            
+            for (int j = 0; j < biasGrad.length; j++) {
+                double grad = biasGrad[j];
+                
+                // Update first moment
+                mB[j] = beta1 * mB[j] + (1 - beta1) * grad;
+                
+                // Update second moment
+                vB[j] = beta2 * vB[j] + (1 - beta2) * grad * grad;
+                
+                // Bias correction and parameter update
+                double mHat = mB[j] / beta1Corrected;
+                double vHat = vB[j] / beta2Corrected;
+                
+                biases.get(layer)[j] -= learningRate * mHat / (Math.sqrt(vHat) + epsilon);
+            }
+        }
+    }
+    
+    private double[] softmax(double[] logits) {
+        if (logits.length == 0) return new double[0];
+        
+        // Find max for numerical stability
+        double max = Arrays.stream(logits).max().orElse(0.0);
+        
+        // Compute exponentials
+        double[] exp = new double[logits.length];
+        double sum = 0.0;
+        for (int i = 0; i < logits.length; i++) {
+            exp[i] = Math.exp(logits[i] - max);
+            sum += exp[i];
+        }
+        
+        // Normalize
+        if (sum == 0.0) sum = 1.0; // Avoid division by zero
+        for (int i = 0; i < exp.length; i++) {
+            exp[i] /= sum;
+        }
+        
+        return exp;
+    }
     private void trainSGD(double[][] X, double[][] y, TrainValidationSplit split) {
         // SGD implementation
     }
@@ -462,39 +540,146 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
     }
     
     private Gradients computeGradients(double[][] X, double[][] y) {
-        // Backpropagation implementation
-        return new Gradients();
+        Gradients gradients = new Gradients();
+        gradients.weightGradients = new ArrayList<>();
+        gradients.biasGradients = new ArrayList<>();
+        
+        // Initialize gradient accumulators
+        for (int layer = 0; layer < weights.size(); layer++) {
+            RealMatrix weightGrad = new Array2DRowRealMatrix(weights.get(layer).getRowDimension(), 
+                                                            weights.get(layer).getColumnDimension());
+            double[] biasGrad = new double[biases.get(layer).length];
+            gradients.weightGradients.add(weightGrad);
+            gradients.biasGradients.add(biasGrad);
+        }
+        
+        // Compute gradients for each sample in batch
+        for (int sample = 0; sample < X.length; sample++) {
+            computeSampleGradients(X[sample], y[sample], gradients);
+        }
+        
+        // Average gradients over batch
+        for (int layer = 0; layer < gradients.weightGradients.size(); layer++) {
+            RealMatrix weightGrad = gradients.weightGradients.get(layer);
+            double[] biasGrad = gradients.biasGradients.get(layer);
+            
+            // Scale by 1/batch_size
+            weightGrad = weightGrad.scalarMultiply(1.0 / X.length);
+            for (int i = 0; i < biasGrad.length; i++) {
+                biasGrad[i] /= X.length;
+            }
+            
+            gradients.weightGradients.set(layer, weightGrad);
+        }
+        
+        return gradients;
+    }
+    
+    private void computeSampleGradients(double[] x, double[] yTrue, Gradients gradients) {
+        // Forward pass with activations storage
+        List<double[]> activations = new ArrayList<>();
+        List<double[]> zValues = new ArrayList<>();
+        
+        double[] current = Arrays.copyOf(x, x.length);
+        activations.add(current);
+        
+        for (int layer = 0; layer < weights.size(); layer++) {
+            // Linear transformation
+            double[] z = new double[weights.get(layer).getColumnDimension()];
+            for (int j = 0; j < z.length; j++) {
+                z[j] = biases.get(layer)[j];
+                for (int i = 0; i < current.length; i++) {
+                    z[j] += current[i] * weights.get(layer).getEntry(i, j);
+                }
+            }
+            zValues.add(Arrays.copyOf(z, z.length));
+            
+            // Apply activation
+            if (layer < weights.size() - 1) {
+                ActivationFunction activationFunc = getActivationFunction();
+                current = new double[z.length];
+                for (int i = 0; i < z.length; i++) {
+                    current[i] = activationFunc.forward(z[i]);
+                }
+            } else {
+                current = Arrays.copyOf(z, z.length); // No activation for output layer
+            }
+            activations.add(Arrays.copyOf(current, current.length));
+        }
+        
+        // Backward pass
+        double[] delta = computeOutputDelta(current, yTrue);
+        
+        for (int layer = weights.size() - 1; layer >= 0; layer--) {
+            // Compute gradients for this layer
+            RealMatrix weightGrad = gradients.weightGradients.get(layer);
+            double[] biasGrad = gradients.biasGradients.get(layer);
+            
+            double[] prevActivation = activations.get(layer);
+            
+            // Update weight gradients
+            for (int i = 0; i < weightGrad.getRowDimension(); i++) {
+                for (int j = 0; j < weightGrad.getColumnDimension(); j++) {
+                    double grad = weightGrad.getEntry(i, j) + prevActivation[i] * delta[j];
+                    weightGrad.setEntry(i, j, grad);
+                }
+            }
+            
+            // Update bias gradients  
+            for (int j = 0; j < biasGrad.length; j++) {
+                biasGrad[j] += delta[j];
+            }
+            
+            // Compute delta for previous layer
+            if (layer > 0) {
+                double[] nextDelta = new double[prevActivation.length];
+                for (int i = 0; i < nextDelta.length; i++) {
+                    for (int j = 0; j < delta.length; j++) {
+                        nextDelta[i] += weights.get(layer).getEntry(i, j) * delta[j];
+                    }
+                }
+                
+                // Apply activation derivative
+                ActivationFunction activationFunc = getActivationFunction();
+                for (int i = 0; i < nextDelta.length; i++) {
+                    nextDelta[i] *= activationFunc.backward(zValues.get(layer - 1)[i]);
+                }
+                
+                delta = nextDelta;
+            }
+        }
+    }
+    
+    private double[] computeOutputDelta(double[] output, double[] yTrue) {
+        // For classification, compute softmax cross-entropy gradient
+        double[] softmaxOutput = softmax(output);
+        double[] delta = new double[output.length];
+        
+        for (int i = 0; i < delta.length; i++) {
+            delta[i] = softmaxOutput[i] - yTrue[i];
+        }
+        
+        return delta;
     }
     
     private double computeLoss(double[][] X, double[][] y) {
-        // Cross-entropy loss computation
-        return 0.0;
-    }
-    
-    private void updateParametersAdam(Gradients gradients, List<RealMatrix> m_w, 
-                                    List<double[]> m_b, List<RealMatrix> v_w, 
-                                    List<double[]> v_b, int t, double beta1, 
-                                    double beta2, double epsilon) {
-        // Adam parameter update
-    }
-    
-    private double[] softmax(double[] logits) {
-        double[] exp = new double[logits.length];
-        double sum = 0.0;
+        double totalLoss = 0.0;
         
-        // Numerical stability: subtract max
-        double max = Arrays.stream(logits).max().orElse(0.0);
-        
-        for (int i = 0; i < logits.length; i++) {
-            exp[i] = Math.exp(logits[i] - max);
-            sum += exp[i];
+        for (int i = 0; i < X.length; i++) {
+            double[] output = forwardPass(X[i]);
+            double[] probabilities = softmax(output);
+            
+            // Cross-entropy loss
+            double sampleLoss = 0.0;
+            for (int j = 0; j < y[i].length; j++) {
+                if (y[i][j] > 0) { // Only compute loss for true class
+                    sampleLoss -= y[i][j] * Math.log(Math.max(probabilities[j], 1e-15));
+                }
+            }
+            totalLoss += sampleLoss;
         }
         
-        for (int i = 0; i < exp.length; i++) {
-            exp[i] /= sum;
-        }
-        
-        return exp;
+        return totalLoss / X.length;
     }
     
     private double[][] encodeLabels(double[] y) {
@@ -642,6 +827,19 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
         public double backward(double x) {
             double s = 1.0 / (1.0 + Math.exp(-x));
             return s + x * s * (1.0 - s);
+        }
+    }
+    
+    private ActivationFunction getActivationFunction() {
+        switch (activation.toLowerCase()) {
+            case "relu":
+                return new ReLU();
+            case "sigmoid":
+                return new Sigmoid();
+            case "tanh":
+                return new Tanh();
+            default:
+                return new ReLU();
         }
     }
 }
