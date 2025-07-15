@@ -86,6 +86,11 @@
             <artifactId>superml-metrics</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.superml</groupId>
+            <artifactId>superml-neural</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         
         <!-- Advanced modules -->
         <dependency>
