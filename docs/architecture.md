@@ -8,59 +8,112 @@ search: true
 
 # SuperML Java Framework - Architecture Overview
 
-This document provides a comprehensive overview of the SuperML Java framework architecture, design principles, and internal workings.
+This document provides a comprehensive overview of the SuperML Java 2.0.0 framework architecture, design principles, and internal workings of the 21-module system.
 
 ## 🏗️ High-Level Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    SuperML Java Framework                   │
-│                 (11 Algorithms Implemented)                 │
-├─────────────────────────────────────────────────────────────┤
-│  📱 User API Layer                                         │
-│  ├── Estimator Interface                                   │
-│  ├── Pipeline System                                       │
-│  ├── High-Level APIs (KaggleTrainingManager)               │
-│  └── Inference Engine & Model Persistence                  │
-├─────────────────────────────────────────────────────────────┤
-│  🧠 Algorithm Layer (11 Implementations)                   │
-│  ├── Linear Models (6)        ├── Tree-Based Models (3)    │
-│  │   ├── LogisticRegression   │   ├── DecisionTree         │
-│  │   ├── LinearRegression     │   ├── RandomForest         │
-│  │   ├── Ridge               │   └── GradientBoosting     │
-│  │   ├── Lasso               │                             │
-│  │   ├── SoftmaxRegression    ├── Clustering (1)           │
-│  │   └── OneVsRestClassifier  │   └── KMeans               │
-│  │                            │                             │
-│  └── Preprocessing (1)        │                             │
-│      └── StandardScaler       │                             │
-├─────────────────────────────────────────────────────────────┤
-│  🔧 Core Framework                                         │
-│  ├── Base Classes             ├── Model Selection          │
-│  │   ├── BaseEstimator        │   ├── GridSearchCV         │
-│  │   ├── Interfaces           │   ├── CrossValidation      │
-│  │   └── Parameter Mgmt       │   └── HyperparamTuning     │
-│  ├── Metrics & Evaluation     ├── Inference & Persistence  │
-│  │   ├── Classification       │   ├── InferenceEngine      │
-│  │   ├── Regression           │   ├── ModelPersistence     │
-│  │   └── Statistical          │   └── BatchProcessing      │
-│  └── Data Structures          └── Validation               │
-├─────────────────────────────────────────────────────────────┤
-│  🌐 External Integration                                   │
-│  ├── Kaggle API Client        ├── HTTP Client              │
-│  ├── JSON Processing          ├── File I/O                 │
-│  ├── Compression/Archive      ├── Logging Framework        │
-│  └── Model Deployment         └── Security                 │
-├─────────────────────────────────────────────────────────────┤
-│  📊 Data Layer                                            │
-│  ├── Dataset Loading          ├── CSV Processing           │
-│  ├── Synthetic Generation     ├── Train/Test Splitting     │
-│  ├── Feature Engineering      ├── Data Validation          │
-│  └── Kaggle Integration       └── Caching                  │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         SuperML Java 2.0.0 Framework                       │
+│                    (21 Modules, 12+ Algorithms Implemented)                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  📱 User API Layer                                                         │
+│  ├── Estimator Interface & Base Classes                                    │
+│  ├── Pipeline System & Workflow Management                                 │
+│  ├── AutoML Framework (AutoTrainer)                                        │
+│  ├── High-Level APIs (KaggleTrainingManager, ModelManager)                 │
+│  └── Dual-Mode Visualization (XChart GUI + ASCII)                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  🧠 Algorithm Layer (12+ Implementations)                                  │
+│  ├── Linear Models (6)          ├── Tree-Based Models (5)                  │
+│  │   ├── LogisticRegression     │   ├── DecisionTreeClassifier             │
+│  │   ├── LinearRegression       │   ├── DecisionTreeRegressor              │
+│  │   ├── Ridge                  │   ├── RandomForestClassifier             │
+│  │   ├── Lasso                  │   ├── RandomForestRegressor              │
+│  │   ├── SGDClassifier          │   └── GradientBoostingClassifier         │
+│  │   └── SGDRegressor           │                                           │
+│  │                              ├── Clustering (1)                         │
+│  └── Preprocessing (Multiple)   │   └── KMeans (k-means++)                │
+│      ├── StandardScaler         │                                           │
+│      ├── MinMaxScaler           │                                           │
+│      ├── RobustScaler           │                                           │
+│      └── LabelEncoder           │                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  🔧 Core Framework & Infrastructure                                        │
+│  ├── Core Foundation            ├── Model Selection & AutoML               │
+│  │   ├── BaseEstimator          │   ├── GridSearchCV                       │
+│  │   ├── Interfaces             │   ├── RandomizedSearchCV                 │
+│  │   ├── Parameter Mgmt         │   ├── CrossValidation                    │
+│  │   └── Validation             │   ├── AutoTrainer                        │
+│  │                              │   └── HyperparameterOptimizer            │
+│  ├── Metrics & Evaluation       ├── Inference & Production                 │
+│  │   ├── Classification         │   ├── InferenceEngine                    │
+│  │   ├── Regression             │   ├── ModelPersistence                   │
+│  │   ├── Clustering             │   ├── BatchInferenceProcessor            │
+│  │   └── Statistical            │   └── ModelCache                         │
+│  │                              │                                           │
+│  └── Data Management            └── Monitoring & Drift                     │
+│      ├── Datasets               │   ├── DriftDetector                      │
+│      ├── CSV Loading            │   ├── DataDriftMonitor                   │
+│      └── Synthetic Data         │   └── ModelPerformanceTracker            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  🌐 External Integration & Export                                          │
+│  ├── Kaggle Integration         ├── Cross-Platform Export                  │
+│  │   ├── KaggleClient           │   ├── ONNX Export                        │
+│  │   ├── DatasetDownloader      │   └── PMML Export                        │
+│  │   └── AutoWorkflows          │                                           │
+│  │                              ├── Visualization Engine                   │
+│  └── Production Infrastructure  │   ├── XChart GUI (Professional)          │
+│      ├── Logging (Logback)      │   └── ASCII Fallback                     │
+│      ├── HTTP Client            │                                           │
+│      └── JSON Serialization     │                                           │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## 🎯 Design Principles
+## �️ 21-Module Architecture
+
+SuperML Java 2.0.0 is built on a sophisticated modular architecture with 21 specialized modules:
+
+### **Core Foundation** (2 modules)
+- `superml-core`: Base interfaces and estimator hierarchy
+- `superml-utils`: Shared utilities and mathematical functions
+
+### **Algorithm Implementation** (3 modules)  
+- `superml-linear-models`: 6 linear algorithms (Logistic/Linear Regression, Ridge, Lasso, SGD)
+- `superml-tree-models`: 5 tree algorithms (Decision Trees, Random Forest, Gradient Boosting)
+- `superml-clustering`: K-Means with advanced initialization
+
+### **Data Processing** (3 modules)
+- `superml-preprocessing`: Feature scaling and encoding (StandardScaler, MinMaxScaler, etc.)
+- `superml-datasets`: Built-in datasets and synthetic data generation
+- `superml-model-selection`: Cross-validation and hyperparameter tuning
+
+### **Workflow Management** (2 modules)
+- `superml-pipeline`: ML pipelines and workflow automation
+- `superml-autotrainer`: AutoML framework with algorithm selection
+
+### **Evaluation & Visualization** (2 modules)
+- `superml-metrics`: Comprehensive evaluation metrics
+- `superml-visualization`: Dual-mode visualization (XChart GUI + ASCII)
+
+### **Production** (2 modules)
+- `superml-inference`: High-performance model serving
+- `superml-persistence`: Model saving/loading with statistics
+
+### **External Integration** (4 modules)
+- `superml-kaggle`: Kaggle competition automation
+- `superml-onnx`: ONNX model export
+- `superml-pmml`: PMML model exchange
+- `superml-drift`: Model drift detection
+
+### **Distribution** (3 modules)
+- `superml-bundle-all`: Complete framework package
+- `superml-examples`: 11 comprehensive examples
+- `superml-java-parent`: Maven build coordination
+
+This modular design allows users to include only the components they need, creating lightweight applications or comprehensive ML pipelines.
+
+## �🎯 Design Principles
 
 ### 1. Consistency (scikit-learn API Compatibility)
 - **Unified Interface**: All estimators implement the same `fit()`, `predict()` pattern
@@ -1076,22 +1129,22 @@ public class SuperMLConfig {
 
 ```
 📈 Algorithm Implementation Status
-├── Total Algorithms: 11 ✅
-├── Linear Models: 6/6 ✅
-│   ├── LogisticRegression ✅
-│   ├── LinearRegression ✅
-│   ├── Ridge ✅
-│   ├── Lasso ✅
-│   ├── SoftmaxRegression ✅
-│   └── OneVsRestClassifier ✅
-├── Tree-Based Models: 3/3 ✅
-│   ├── DecisionTree ✅
-│   ├── RandomForest ✅
-│   └── GradientBoosting ✅
-├── Clustering: 1/1 ✅
-│   └── KMeans ✅
-└── Preprocessing: 1/1 ✅
-    └── StandardScaler ✅
+├── Total Algorithms: 11 ->
+├── Linear Models: 6/6 ->
+│   ├── LogisticRegression ->
+│   ├── LinearRegression ->
+│   ├── Ridge ->
+│   ├── Lasso ->
+│   ├── SoftmaxRegression ->
+│   └── OneVsRestClassifier ->
+├── Tree-Based Models: 3/3 ->
+│   ├── DecisionTree ->
+│   ├── RandomForest ->
+│   └── GradientBoosting ->
+├── Clustering: 1/1 ->
+│   └── KMeans ->
+└── Preprocessing: 1/1 ->
+    └── StandardScaler ->
 ```
 
 ### Codebase Metrics
@@ -1161,17 +1214,17 @@ src/main/java/org/superml/
 
 | Algorithm | Classification | Regression | Multiclass | Probability | Feature Importance | Parallel | Memory Efficient |
 |-----------|---------------|------------|------------|-------------|-------------------|----------|------------------|
-| **LogisticRegression** | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ |
-| **LinearRegression** | ❌ | ✅ | ❌ | ❌ | ✅ | ❌ | ✅ |
-| **Ridge** | ❌ | ✅ | ❌ | ❌ | ✅ | ❌ | ✅ |
-| **Lasso** | ❌ | ✅ | ❌ | ❌ | ✅ | ❌ | ✅ |
-| **SoftmaxRegression** | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ |
-| **OneVsRestClassifier** | ✅ | ❌ | ✅ | ✅ | Inherited | ✅ | ✅ |
-| **DecisionTree** | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
-| **RandomForest** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **GradientBoosting** | ✅ | ✅ | ⚠️* | ✅ | ✅ | ❌ | ✅ |
-| **KMeans** | ❌ | ❌ | N/A | ❌ | ❌ | ❌ | ✅ |
-| **StandardScaler** | N/A | N/A | N/A | N/A | ❌ | ❌ | ✅ |
+| **LogisticRegression** | -> | ❌ | -> | -> | -> | ❌ | -> |
+| **LinearRegression** | ❌ | -> | ❌ | ❌ | -> | ❌ | -> |
+| **Ridge** | ❌ | -> | ❌ | ❌ | -> | ❌ | -> |
+| **Lasso** | ❌ | -> | ❌ | ❌ | -> | ❌ | -> |
+| **SoftmaxRegression** | -> | ❌ | -> | -> | -> | ❌ | -> |
+| **OneVsRestClassifier** | -> | ❌ | -> | -> | Inherited | -> | -> |
+| **DecisionTree** | -> | -> | -> | -> | -> | ❌ | -> |
+| **RandomForest** | -> | -> | -> | -> | -> | -> | -> |
+| **GradientBoosting** | -> | -> | ⚠️* | -> | -> | ❌ | -> |
+| **KMeans** | ❌ | ❌ | N/A | ❌ | ❌ | ❌ | -> |
+| **StandardScaler** | N/A | N/A | N/A | N/A | ❌ | ❌ | -> |
 
 *Note: GradientBoosting currently supports binary classification (multiclass planned for future release)
 

@@ -1,6 +1,6 @@
 ---
 title: "Core Classes API Reference"
-description: "Comprehensive API documentation for core classes and interfaces in SuperML Java"
+description: "Comprehensive API documentation for SuperML Java 2.0.0 - 21 modules and 12+ algorithms"
 layout: default
 toc: true
 search: true
@@ -8,13 +8,13 @@ search: true
 
 # Core Classes API Reference
 
-This document provides comprehensive API documentation for the core classes and interfaces in SuperML Java.
+This document provides comprehensive API documentation for the core classes and interfaces in SuperML Java 2.0.0, covering all 21 modules and 12+ algorithms.
 
-## 🏗️ Base Interfaces
+## 🏗️ Foundation Interfaces (superml-core)
 
 ### Estimator
 
-The foundational interface that all ML components implement.
+The foundational interface that all ML components implement - provides consistent parameter management across the framework.
 
 ```java
 package org.superml.core;
@@ -32,6 +32,18 @@ public interface Estimator {
      * @return This estimator for method chaining
      */
     Estimator setParams(Map<String, Object> params);
+    
+    /**
+     * Check if this estimator has been fitted.
+     * @return true if fitted, false otherwise
+     */
+    boolean isFitted();
+    
+    /**
+     * Validate parameters before training.
+     * @throws IllegalArgumentException if parameters are invalid
+     */
+    void validateParameters();
 }
 ```
 
@@ -44,47 +56,47 @@ model.setParams(Map.of("learningRate", 0.01, "maxIterations", 1000));
 
 ### SupervisedLearner
 
-Interface for algorithms that learn from labeled data.
+Interface for algorithms that learn from labeled data - the foundation for all classification and regression algorithms.
 
 ```java
 package org.superml.core;
 
 public interface SupervisedLearner extends Estimator {
     /**
-     * Train the model on training data.
-     * @param X Feature matrix (samples x features)
-     * @param y Target values
+     * Fit the model to training data.
+     * @param X Training features matrix (n_samples x n_features)
+     * @param y Training target values (n_samples)
      * @return This estimator for method chaining
      */
     SupervisedLearner fit(double[][] X, double[] y);
     
     /**
      * Make predictions on new data.
-     * @param X Feature matrix (samples x features)
-     * @return Predicted values
+     * @param X Features matrix (n_samples x n_features) 
+     * @return Predictions array (n_samples)
      */
     double[] predict(double[][] X);
     
     /**
-     * Check if the model has been fitted.
-     * @return true if fit() has been called
+     * Predict single sample.
+     * @param sample Single feature vector (n_features)
+     * @return Single prediction
      */
-    default boolean isFitted() {
-        return true; // Implementations should override
-    }
+    double predict(double[] sample);
+    
+    /**
+     * Calculate prediction score on test data.
+     * @param X Test features matrix
+     * @param y True target values
+     * @return Model score (higher is better)
+     */
+    double score(double[][] X, double[] y);
 }
-```
-
-**Usage Example:**
-```java
-SupervisedLearner learner = new LogisticRegression();
-learner.fit(trainingX, trainingY);
-double[] predictions = learner.predict(testX);
 ```
 
 ### Classifier
 
-Specialized interface for classification algorithms.
+Specialized interface for classification algorithms with probability prediction capabilities.
 
 ```java
 package org.superml.core;
@@ -92,79 +104,107 @@ package org.superml.core;
 public interface Classifier extends SupervisedLearner {
     /**
      * Predict class probabilities.
-     * @param X Feature matrix (samples x features)
-     * @return Probability matrix (samples x classes)
+     * @param X Features matrix (n_samples x n_features)
+     * @return Probability matrix (n_samples x n_classes)
      */
     double[][] predictProba(double[][] X);
     
     /**
-     * Get the classes this classifier can predict.
+     * Predict class probabilities for single sample.
+     * @param sample Single feature vector (n_features) 
+     * @return Probability vector (n_classes)
+     */
+    double[] predictProba(double[] sample);
+    
+    /**
+     * Get decision function values.
+     * @param X Features matrix
+     * @return Decision function values
+     */
+    double[][] decisionFunction(double[][] X);
+    
+    /**
+     * Get unique class labels.
      * @return Array of class labels
      */
     double[] getClasses();
+    
+    /**
+     * Get number of classes.
+     * @return Number of classes
+     */
+    int getNumClasses();
 }
 ```
 
-**Usage Example:**
-```java
-Classifier classifier = new LogisticRegression();
-classifier.fit(X, y);
-double[][] probabilities = classifier.predictProba(X_test);
-double[] classes = classifier.getClasses();
-```
+### Regressor  
 
-### Regressor
-
-Interface for regression algorithms.
+Specialized interface for regression algorithms.
 
 ```java
 package org.superml.core;
 
 public interface Regressor extends SupervisedLearner {
-    // Inherits fit() and predict() from SupervisedLearner
-    // No additional methods required for basic regression
+    /**
+     * Calculate R² coefficient of determination.
+     * @param X Test features matrix
+     * @param y True target values
+     * @return R² score
+     */
+    double r2Score(double[][] X, double[] y);
+    
+    /**
+     * Calculate mean squared error.
+     * @param X Test features matrix
+     * @param y True target values
+     * @return MSE value
+     */
+    double meanSquaredError(double[][] X, double[] y);
+    
+    /**
+     * Calculate mean absolute error.
+     * @param X Test features matrix  
+     * @param y True target values
+     * @return MAE value
+     */
+    double meanAbsoluteError(double[][] X, double[] y);
 }
 ```
 
 ### UnsupervisedLearner
 
-Interface for algorithms that learn from unlabeled data.
+Interface for unsupervised learning algorithms like clustering.
 
 ```java
 package org.superml.core;
 
 public interface UnsupervisedLearner extends Estimator {
     /**
-     * Learn patterns from unlabeled data.
-     * @param X Feature matrix (samples x features)
+     * Fit the model to data.
+     * @param X Training data matrix (n_samples x n_features)
      * @return This estimator for method chaining
      */
     UnsupervisedLearner fit(double[][] X);
     
     /**
-     * Transform or predict on new data.
-     * @param X Feature matrix (samples x features)
-     * @return Transformed data or cluster assignments
+     * Transform data using the fitted model.
+     * @param X Data matrix to transform
+     * @return Transformed data
      */
-    double[] transform(double[][] X);
+    double[][] transform(double[][] X);
     
     /**
-     * Fit and transform in one step.
-     * @param X Feature matrix (samples x features)
-     * @return Transformed data or cluster assignments
+     * Fit model and transform data in one step.
+     * @param X Data matrix
+     * @return Transformed data
      */
-    default double[] fitTransform(double[][] X) {
-        fit(X);
-        return transform(X);
-    }
+    double[][] fitTransform(double[][] X);
 }
 ```
 
-## 🎯 Abstract Base Classes
-
 ### BaseEstimator
 
-Abstract base class providing common parameter management functionality.
+Abstract base class providing common functionality for all estimators.
 
 ```java
 package org.superml.core;
@@ -172,779 +212,1064 @@ package org.superml.core;
 public abstract class BaseEstimator implements Estimator {
     protected Map<String, Object> parameters = new HashMap<>();
     protected boolean fitted = false;
+    protected long trainingTime = 0;
     
     @Override
     public Map<String, Object> getParams() {
         return new HashMap<>(parameters);
     }
     
-    @Override
+    @Override  
     public Estimator setParams(Map<String, Object> params) {
         this.parameters.putAll(params);
-        updateInternalParameters();
+        validateParameters();
+        return this;
+    }
+    
+    @Override
+    public boolean isFitted() {
+        return fitted;
+    }
+    
+    /**
+     * Get training time in milliseconds.
+     * @return Training time
+     */
+    public long getTrainingTime() {
+        return trainingTime;
+    }
+    
+    /**
+     * Set parameter with type checking.
+     * @param name Parameter name
+     * @param value Parameter value
+     * @param type Expected type
+     * @return This estimator for chaining
+     */
+    protected <T> BaseEstimator setParameter(String name, T value, Class<T> type) {
+        if (value != null && !type.isInstance(value)) {
+            throw new IllegalArgumentException("Parameter " + name + " must be of type " + type.getSimpleName());
+        }
+        parameters.put(name, value);
         return this;
     }
     
     /**
-     * Update internal state when parameters change.
-     * Subclasses should override to sync parameters.
+     * Get parameter with type safety.
+     * @param name Parameter name
+     * @param type Expected type
+     * @param defaultValue Default value if not set
+     * @return Parameter value
      */
-    protected void updateInternalParameters() {
-        // Default implementation does nothing
-    }
-    
-    /**
-     * Validate that the model has been fitted.
-     * @throws ModelNotFittedException if not fitted
-     */
-    protected void checkFitted() {
-        if (!fitted) {
-            throw new ModelNotFittedException(
-                "Model must be fitted before making predictions");
+    protected <T> T getParameter(String name, Class<T> type, T defaultValue) {
+        Object value = parameters.get(name);
+        if (value == null) return defaultValue;
+        if (!type.isInstance(value)) {
+            throw new ClassCastException("Parameter " + name + " is not of type " + type.getSimpleName());
         }
+        return type.cast(value);
     }
     
     /**
-     * Validate input data dimensions and content.
+     * Validate input data dimensions.
      * @param X Feature matrix
-     * @throws IllegalArgumentException if invalid
-     */
-    protected void validateInput(double[][] X) {
-        if (X == null || X.length == 0) {
-            throw new IllegalArgumentException("Input data cannot be null or empty");
-        }
-        
-        int features = X[0].length;
-        for (int i = 1; i < X.length; i++) {
-            if (X[i].length != features) {
-                throw new IllegalArgumentException(
-                    "All samples must have the same number of features");
-            }
-        }
-    }
-    
-    /**
-     * Validate training data.
-     * @param X Feature matrix
-     * @param y Target values
-     * @throws IllegalArgumentException if invalid
+     * @param y Target vector (can be null for unsupervised)
      */
     protected void validateInput(double[][] X, double[] y) {
-        validateInput(X);
-        if (y == null || y.length != X.length) {
-            throw new IllegalArgumentException(
-                "Target values must have same length as number of samples");
+        if (X == null || X.length == 0) {
+            throw new IllegalArgumentException("Input data X cannot be null or empty");
+        }
+        if (y != null && X.length != y.length) {
+            throw new IllegalArgumentException("X and y must have same number of samples");
+        }
+        if (X[0].length == 0) {
+            throw new IllegalArgumentException("Input data must have at least one feature");
         }
     }
 }
 ```
 
-**Usage Example:**
+## 🧮 Linear Models API (superml-linear-models)
+
+### LogisticRegression
+
+Advanced logistic regression with automatic multiclass support and regularization.
+
 ```java
-public class MyAlgorithm extends BaseEstimator implements Regressor {
-    private double learningRate = 0.01;
+package org.superml.linear_model;
+
+public class LogisticRegression extends BaseEstimator implements Classifier {
+    
+    /**
+     * Constructor with default parameters.
+     */
+    public LogisticRegression() {
+        setDefaults();
+    }
+    
+    /**
+     * Set learning rate for gradient descent.
+     * @param learningRate Learning rate (default: 0.01)
+     * @return This instance for chaining
+     */
+    public LogisticRegression setLearningRate(double learningRate) {
+        return (LogisticRegression) setParameter("learningRate", learningRate, Double.class);
+    }
+    
+    /**
+     * Set maximum number of iterations.
+     * @param maxIter Maximum iterations (default: 1000)
+     * @return This instance for chaining
+     */
+    public LogisticRegression setMaxIter(int maxIter) {
+        return (LogisticRegression) setParameter("maxIter", maxIter, Integer.class);
+    }
+    
+    /**
+     * Set regularization parameter.
+     * @param C Inverse regularization strength (default: 1.0)
+     * @return This instance for chaining
+     */
+    public LogisticRegression setC(double C) {
+        return (LogisticRegression) setParameter("C", C, Double.class);
+    }
+    
+    /**
+     * Set penalty type.
+     * @param penalty "l1", "l2", or "elasticnet" (default: "l2")
+     * @return This instance for chaining
+     */
+    public LogisticRegression setPenalty(String penalty) {
+        return (LogisticRegression) setParameter("penalty", penalty, String.class);
+    }
+    
+    /**
+     * Set solver algorithm.
+     * @param solver "newton-cg", "lbfgs", "liblinear", "sag", "saga" (default: "lbfgs")
+     * @return This instance for chaining
+     */
+    public LogisticRegression setSolver(String solver) {
+        return (LogisticRegression) setParameter("solver", solver, String.class);
+    }
+    
+    /**
+     * Set multiclass strategy.
+     * @param multiClass "auto", "ovr", "multinomial" (default: "auto")
+     * @return This instance for chaining
+     */
+    public LogisticRegression setMultiClass(String multiClass) {
+        return (LogisticRegression) setParameter("multiClass", multiClass, String.class);
+    }
+    
+    /**
+     * Get model coefficients.
+     * @return Coefficient matrix (n_classes x n_features) for multiclass, (n_features,) for binary
+     */
+    public double[][] getCoef() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return coef.clone();
+    }
+    
+    /**
+     * Get intercept terms.
+     * @return Intercept array (n_classes,) for multiclass, single value for binary
+     */
+    public double[] getIntercept() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return intercept.clone();
+    }
+    
+    // Implementation methods
+    @Override
+    public LogisticRegression fit(double[][] X, double[] y) { /* ... */ }
     
     @Override
-    protected void updateInternalParameters() {
-        Object lr = parameters.get("learningRate");
-        if (lr != null) {
-            this.learningRate = ((Number) lr).doubleValue();
-        }
+    public double[] predict(double[][] X) { /* ... */ }
+    
+    @Override
+    public double[][] predictProba(double[][] X) { /* ... */ }
+    
+    @Override
+    public double[][] decisionFunction(double[][] X) { /* ... */ }
+}
+```
+
+**Usage Example:**
+```java
+// Binary classification
+var lr = new LogisticRegression()
+    .setLearningRate(0.01)
+    .setMaxIter(1000)
+    .setC(1.0)
+    .setPenalty("l2");
+
+lr.fit(X_train, y_train);
+double[] predictions = lr.predict(X_test);
+double[][] probabilities = lr.predictProba(X_test);
+
+// Multiclass automatically detected
+var dataset = Datasets.loadIris();
+lr.fit(dataset.X, dataset.y);  // Automatically uses multinomial
+```
+
+### LinearRegression
+
+Ordinary least squares linear regression with multiple solver options.
+
+```java
+package org.superml.linear_model;
+
+public class LinearRegression extends BaseEstimator implements Regressor {
+    
+    /**
+     * Constructor with default parameters.
+     */
+    public LinearRegression() {
+        setDefaults();
+    }
+    
+    /**
+     * Set whether to fit intercept.
+     * @param fitIntercept Whether to fit intercept (default: true)
+     * @return This instance for chaining
+     */
+    public LinearRegression setFitIntercept(boolean fitIntercept) {
+        return (LinearRegression) setParameter("fitIntercept", fitIntercept, Boolean.class);
+    }
+    
+    /**
+     * Set solver method.
+     * @param solver "normal" for normal equation, "svd" for SVD (default: "normal")
+     * @return This instance for chaining
+     */
+    public LinearRegression setSolver(String solver) {
+        return (LinearRegression) setParameter("solver", solver, String.class);
+    }
+    
+    /**
+     * Get model coefficients.
+     * @return Coefficient array (n_features,)
+     */
+    public double[] getCoef() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return coef.clone();
+    }
+    
+    /**
+     * Get intercept term.
+     * @return Intercept value
+     */
+    public double getIntercept() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return intercept;
     }
     
     @Override
-    public MyAlgorithm fit(double[][] X, double[] y) {
-        validateInput(X, y);
-        // Training logic here
-        this.fitted = true;
+    public LinearRegression fit(double[][] X, double[] y) { /* ... */ }
+    
+    @Override
+    public double[] predict(double[][] X) { /* ... */ }
+}
+```
+
+### Ridge
+
+L2 regularized linear regression with closed-form solution.
+
+```java
+package org.superml.linear_model;
+
+public class Ridge extends BaseEstimator implements Regressor {
+    
+    /**
+     * Set regularization strength.
+     * @param alpha Regularization strength (default: 1.0)
+     * @return This instance for chaining
+     */
+    public Ridge setAlpha(double alpha) {
+        return (Ridge) setParameter("alpha", alpha, Double.class);
+    }
+    
+    /**
+     * Set solver method.
+     * @param solver "auto", "svd", "cholesky", "saga" (default: "auto")
+     * @return This instance for chaining  
+     */
+    public Ridge setSolver(String solver) {
+        return (Ridge) setParameter("solver", solver, String.class);
+    }
+    
+    @Override
+    public Ridge fit(double[][] X, double[] y) { /* ... */ }
+}
+```
+
+### Lasso
+
+L1 regularized linear regression with coordinate descent optimization.
+
+```java
+package org.superml.linear_model;
+
+public class Lasso extends BaseEstimator implements Regressor {
+    
+    /**
+     * Set regularization strength.
+     * @param alpha Regularization strength (default: 1.0)
+     * @return This instance for chaining
+     */
+    public Lasso setAlpha(double alpha) {
+        return (Lasso) setParameter("alpha", alpha, Double.class);
+    }
+    
+    /**
+     * Set maximum iterations for coordinate descent.
+     * @param maxIter Maximum iterations (default: 1000)
+     * @return This instance for chaining
+     */
+    public Lasso setMaxIter(int maxIter) {
+        return (Lasso) setParameter("maxIter", maxIter, Integer.class);
+    }
+    
+    /**
+     * Set convergence tolerance.
+     * @param tol Tolerance for convergence (default: 1e-4)
+     * @return This instance for chaining
+     */
+    public Lasso setTol(double tol) {
+        return (Lasso) setParameter("tol", tol, Double.class);
+    }
+    
+    /**
+     * Get number of non-zero coefficients (sparsity).
+     * @return Number of non-zero coefficients
+     */
+    public int getNumNonZeroCoef() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return (int) Arrays.stream(coef).filter(c -> Math.abs(c) > 1e-10).count();
+    }
+    
+    @Override
+    public Lasso fit(double[][] X, double[] y) { /* ... */ }
+}
+```
+
+## 🌳 Tree Models API (superml-tree-models)
+
+### DecisionTreeClassifier
+
+CART implementation for classification with comprehensive configuration options.
+
+```java
+package org.superml.tree;
+
+public class DecisionTreeClassifier extends BaseEstimator implements Classifier {
+    
+    /**
+     * Set splitting criterion.
+     * @param criterion "gini" or "entropy" (default: "gini")
+     * @return This instance for chaining
+     */
+    public DecisionTreeClassifier setCriterion(String criterion) {
+        return (DecisionTreeClassifier) setParameter("criterion", criterion, String.class);
+    }
+    
+    /**
+     * Set maximum tree depth.
+     * @param maxDepth Maximum depth (default: null for unlimited)
+     * @return This instance for chaining
+     */
+    public DecisionTreeClassifier setMaxDepth(Integer maxDepth) {
+        return (DecisionTreeClassifier) setParameter("maxDepth", maxDepth, Integer.class);
+    }
+    
+    /**
+     * Set minimum samples required to split a node.
+     * @param minSamplesSplit Minimum samples to split (default: 2)
+     * @return This instance for chaining
+     */
+    public DecisionTreeClassifier setMinSamplesSplit(int minSamplesSplit) {
+        return (DecisionTreeClassifier) setParameter("minSamplesSplit", minSamplesSplit, Integer.class);
+    }
+    
+    /**
+     * Set minimum samples required in a leaf node.
+     * @param minSamplesLeaf Minimum samples in leaf (default: 1)
+     * @return This instance for chaining
+     */
+    public DecisionTreeClassifier setMinSamplesLeaf(int minSamplesLeaf) {
+        return (DecisionTreeClassifier) setParameter("minSamplesLeaf", minSamplesLeaf, Integer.class);
+    }
+    
+    /**
+     * Get feature importances.
+     * @return Feature importance array (n_features,)
+     */
+    public double[] getFeatureImportances() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return featureImportances.clone();
+    }
+    
+    /**
+     * Get tree depth.
+     * @return Actual tree depth
+     */
+    public int getDepth() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return calculateDepth(root);
+    }
+    
+    /**
+     * Get number of leaves.
+     * @return Number of leaf nodes
+     */
+    public int getNumLeaves() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return countLeaves(root);
+    }
+    
+    @Override
+    public DecisionTreeClassifier fit(double[][] X, double[] y) { /* ... */ }
+}
+```
+
+### RandomForestClassifier
+
+Bootstrap aggregating ensemble with parallel training capabilities.
+
+```java
+package org.superml.tree;
+
+public class RandomForestClassifier extends BaseEstimator implements Classifier {
+    
+    /**
+     * Set number of trees in the forest.
+     * @param nEstimators Number of trees (default: 100)
+     * @return This instance for chaining
+     */
+    public RandomForestClassifier setNEstimators(int nEstimators) {
+        return (RandomForestClassifier) setParameter("nEstimators", nEstimators, Integer.class);
+    }
+    
+    /**
+     * Set number of features to consider for best split.
+     * @param maxFeatures "auto", "sqrt", "log2", or integer (default: "auto")
+     * @return This instance for chaining
+     */
+    public RandomForestClassifier setMaxFeatures(Object maxFeatures) {
+        return (RandomForestClassifier) setParameter("maxFeatures", maxFeatures, Object.class);
+    }
+    
+    /**
+     * Set bootstrap sampling.
+     * @param bootstrap Whether to use bootstrap sampling (default: true)
+     * @return This instance for chaining
+     */
+    public RandomForestClassifier setBootstrap(boolean bootstrap) {
+        return (RandomForestClassifier) setParameter("bootstrap", bootstrap, Boolean.class);
+    }
+    
+    /**
+     * Set out-of-bag score calculation.
+     * @param oobScore Whether to calculate OOB score (default: false)
+     * @return This instance for chaining
+     */
+    public RandomForestClassifier setOobScore(boolean oobScore) {
+        return (RandomForestClassifier) setParameter("oobScore", oobScore, Boolean.class);
+    }
+    
+    /**
+     * Set number of parallel jobs.
+     * @param nJobs Number of parallel jobs (default: 1, -1 for all cores)
+     * @return This instance for chaining
+     */
+    public RandomForestClassifier setNJobs(int nJobs) {
+        return (RandomForestClassifier) setParameter("nJobs", nJobs, Integer.class);
+    }
+    
+    /**
+     * Get feature importances aggregated across all trees.
+     * @return Feature importance array (n_features,)
+     */
+    public double[] getFeatureImportances() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return featureImportances.clone();
+    }
+    
+    /**
+     * Get out-of-bag score if calculated.
+     * @return OOB score
+     */
+    public double getOobScore() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        if (!getParameter("oobScore", Boolean.class, false)) {
+            throw new IllegalStateException("OOB score not calculated. Set oobScore=true");
+        }
+        return oobScore;
+    }
+    
+    /**
+     * Get individual tree estimators.
+     * @return List of fitted decision trees
+     */
+    public List<DecisionTreeClassifier> getEstimators() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return new ArrayList<>(trees);
+    }
+    
+    @Override
+    public RandomForestClassifier fit(double[][] X, double[] y) { /* ... */ }
+}
+```
+
+## 🔗 Clustering API (superml-clustering)
+
+### KMeans
+
+K-means clustering with k-means++ initialization and advanced convergence monitoring.
+
+```java
+package org.superml.cluster;
+
+public class KMeans extends BaseEstimator implements UnsupervisedLearner {
+    
+    /**
+     * Constructor with number of clusters.
+     * @param k Number of clusters
+     */
+    public KMeans(int k) {
+        setParameter("k", k, Integer.class);
+        setDefaults();
+    }
+    
+    /**
+     * Set initialization method.
+     * @param init "k-means++", "random" (default: "k-means++")
+     * @return This instance for chaining
+     */
+    public KMeans setInit(String init) {
+        return (KMeans) setParameter("init", init, String.class);
+    }
+    
+    /**
+     * Set number of random restarts.
+     * @param nInit Number of initializations (default: 10)
+     * @return This instance for chaining
+     */
+    public KMeans setNInit(int nInit) {
+        return (KMeans) setParameter("nInit", nInit, Integer.class);
+    }
+    
+    /**
+     * Set maximum iterations.
+     * @param maxIter Maximum iterations (default: 300)
+     * @return This instance for chaining
+     */
+    public KMeans setMaxIter(int maxIter) {
+        return (KMeans) setParameter("maxIter", maxIter, Integer.class);
+    }
+    
+    /**
+     * Set convergence tolerance.
+     * @param tol Tolerance for convergence (default: 1e-4)
+     * @return This instance for chaining
+     */
+    public KMeans setTol(double tol) {
+        return (KMeans) setParameter("tol", tol, Double.class);
+    }
+    
+    /**
+     * Get cluster centers.
+     * @return Cluster centers matrix (k x n_features)
+     */
+    public double[][] getClusterCenters() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return clusterCenters.clone();
+    }
+    
+    /**
+     * Get final inertia (within-cluster sum of squared distances).
+     * @return Inertia value
+     */
+    public double getInertia() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return inertia;
+    }
+    
+    /**
+     * Get number of iterations until convergence.
+     * @return Number of iterations
+     */
+    public int getNumIter() {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return numIter;
+    }
+    
+    /**
+     * Predict cluster labels for new data.
+     * @param X Data matrix (n_samples x n_features)
+     * @return Cluster labels (n_samples,)
+     */
+    public int[] predict(double[][] X) {
+        if (!fitted) throw new IllegalStateException("Model must be fitted first");
+        return assignToClusters(X);
+    }
+    
+    @Override
+    public KMeans fit(double[][] X) { /* ... */ }
+    
+    @Override
+    public double[][] transform(double[][] X) { /* ... */ }
+}
+```
+
+## 🎯 AutoML API (superml-autotrainer)
+
+### AutoTrainer
+
+Automated machine learning with intelligent algorithm selection and hyperparameter optimization.
+
+```java
+package org.superml.autotrainer;
+
+public class AutoTrainer {
+    
+    /**
+     * Automated ML for classification or regression with default configuration.
+     * @param X Feature matrix
+     * @param y Target values
+     * @param taskType "classification" or "regression"
+     * @return AutoML result with best model and performance
+     */
+    public static AutoMLResult autoML(double[][] X, double[] y, String taskType) {
+        return autoMLWithConfig(X, y, new Config().setTaskType(taskType));
+    }
+    
+    /**
+     * Automated ML with custom configuration.
+     * @param X Feature matrix
+     * @param y Target values  
+     * @param config AutoML configuration
+     * @return AutoML result
+     */
+    public static AutoMLResult autoMLWithConfig(double[][] X, double[] y, Config config) {
+        /* Implementation */
+    }
+    
+    /**
+     * Configuration class for AutoML.
+     */
+    public static class Config {
+        private String taskType = "classification";
+        private List<String> algorithms = Arrays.asList("logistic", "randomforest", "gradientboosting");
+        private String searchStrategy = "grid";
+        private int crossValidationFolds = 5;
+        private int maxEvaluationTime = 300; // seconds
+        private boolean ensembleMethods = false;
+        private double testSize = 0.2;
+        private int randomState = 42;
+        
+        public Config setTaskType(String taskType) {
+            this.taskType = taskType;
+            return this;
+        }
+        
+        public Config setAlgorithms(String... algorithms) {
+            this.algorithms = Arrays.asList(algorithms);
+            return this;
+        }
+        
+        public Config setSearchStrategy(String strategy) {
+            this.searchStrategy = strategy;
+            return this;
+        }
+        
+        public Config setCrossValidationFolds(int folds) {
+            this.crossValidationFolds = folds;
+            return this;
+        }
+        
+        public Config setMaxEvaluationTime(int seconds) {
+            this.maxEvaluationTime = seconds;
+            return this;
+        }
+        
+        public Config setEnsembleMethods(boolean ensemble) {
+            this.ensembleMethods = ensemble;
+            return this;
+        }
+        
+        // ... getters
+    }
+    
+    /**
+     * AutoML result containing best model and performance metrics.
+     */
+    public static class AutoMLResult {
+        private final String bestAlgorithm;
+        private final SupervisedLearner bestModel;
+        private final double bestScore;
+        private final Map<String, Object> bestParams;
+        private final Map<String, Double> allScores;
+        private final SupervisedLearner ensembleModel;
+        private final double ensembleScore;
+        
+        public String getBestAlgorithm() { return bestAlgorithm; }
+        public SupervisedLearner getBestModel() { return bestModel; }
+        public double getBestScore() { return bestScore; }
+        public Map<String, Object> getBestParams() { return bestParams; }
+        public Map<String, Double> getAllScores() { return allScores; }
+        public boolean hasEnsemble() { return ensembleModel != null; }
+        public SupervisedLearner getEnsembleModel() { return ensembleModel; }
+        public double getEnsembleScore() { return ensembleScore; }
+    }
+}
+```
+
+## 📊 Visualization API (superml-visualization)
+
+### VisualizationFactory
+
+Factory for creating dual-mode visualizations (XChart GUI + ASCII fallback).
+
+```java
+package org.superml.visualization;
+
+public class VisualizationFactory {
+    
+    /**
+     * Create dual-mode confusion matrix visualization.
+     * @param yTrue True labels
+     * @param yPred Predicted labels
+     * @param classNames Class names for display
+     * @return Dual-mode visualization
+     */
+    public static DualModeVisualization createDualModeConfusionMatrix(
+            double[] yTrue, double[] yPred, String[] classNames) {
+        return new DualModeConfusionMatrix(yTrue, yPred, classNames);
+    }
+    
+    /**
+     * Create professional XChart confusion matrix.
+     * @param yTrue True labels
+     * @param yPred Predicted labels
+     * @param classNames Class names
+     * @return XChart visualization
+     */
+    public static XChartVisualization createXChartConfusionMatrix(
+            double[] yTrue, double[] yPred, String[] classNames) {
+        return new XChartConfusionMatrix(yTrue, yPred, classNames);
+    }
+    
+    /**
+     * Create scatter plot with cluster highlighting.
+     * @param X Data matrix
+     * @param labels Cluster or class labels
+     * @param title Chart title
+     * @param xLabel X-axis label
+     * @param yLabel Y-axis label
+     * @return XChart scatter plot
+     */
+    public static XChartVisualization createXChartScatterPlot(
+            double[][] X, double[] labels, String title, String xLabel, String yLabel) {
+        return new XChartScatterPlot(X, labels, title, xLabel, yLabel);
+    }
+    
+    /**
+     * Create regression plot with predictions vs actual.
+     * @param yTrue True values
+     * @param yPred Predicted values
+     * @param title Chart title
+     * @return Regression plot visualization
+     */
+    public static DualModeVisualization createRegressionPlot(
+            double[] yTrue, double[] yPred, String title) {
+        return new RegressionPlot(yTrue, yPred, title);
+    }
+    
+    /**
+     * Create model performance comparison chart.
+     * @param modelNames List of model names
+     * @param scores List of model scores
+     * @param title Chart title
+     * @return Model comparison chart
+     */
+    public static XChartVisualization createModelComparisonChart(
+            List<String> modelNames, List<Double> scores, String title) {
+        return new ModelComparisonChart(modelNames, scores, title);
+    }
+}
+```
+
+## ⚡ Inference API (superml-inference)
+
+### InferenceEngine
+
+High-performance production inference engine with caching and monitoring.
+
+```java
+package org.superml.inference;
+
+public class InferenceEngine {
+    
+    /**
+     * Constructor with default configuration.
+     */
+    public InferenceEngine() {
+        this.modelCache = new ModelCache();
+        this.metricsCollector = new InferenceMetrics();
+    }
+    
+    /**
+     * Enable model caching.
+     * @param enabled Whether to enable caching
+     * @return This instance for chaining
+     */
+    public InferenceEngine setModelCache(boolean enabled) {
+        this.cacheEnabled = enabled;
         return this;
     }
     
-    @Override
-    public double[] predict(double[][] X) {
-        checkFitted();
-        validateInput(X);
-        // Prediction logic here
-        return predictions;
-    }
-}
-```
-
-## 🔧 Parameter Management Patterns
-
-### Fluent Interface Pattern
-
-All estimators support method chaining for easy configuration:
-
-```java
-var model = new LogisticRegression()
-    .setMaxIterations(1000)
-    .setLearningRate(0.01)
-    .setTolerance(1e-6)
-    .setRandomState(42);
-```
-
-### Parameter Dictionary Pattern
-
-Parameters can be set from maps for programmatic configuration:
-
-```java
-Map<String, Object> config = Map.of(
-    "maxIterations", 1500,
-    "learningRate", 0.001,
-    "tolerance", 1e-8
-);
-
-model.setParams(config);
-```
-
-### Parameter Validation
-
-Implementing custom parameter validation:
-
-```java
-public class ValidatedEstimator extends BaseEstimator {
-    @Override
-    protected void updateInternalParameters() {
-        super.updateInternalParameters();
-        validateParameters();
-    }
-    
-    private void validateParameters() {
-        Object lr = parameters.get("learningRate");
-        if (lr != null) {
-            double learningRate = ((Number) lr).doubleValue();
-            if (learningRate <= 0 || learningRate > 1) {
-                throw new IllegalArgumentException(
-                    "Learning rate must be between 0 and 1");
-            }
-        }
-    }
-}
-```
-
-## 🛡️ Error Handling
-
-### Custom Exceptions
-
-```java
-package org.superml.core;
-
-/**
- * Base exception for all SuperML errors.
- */
-public class SuperMLException extends RuntimeException {
-    public SuperMLException(String message) {
-        super(message);
-    }
-    
-    public SuperMLException(String message, Throwable cause) {
-        super(message, cause);
-    }
-}
-
-/**
- * Thrown when operations are attempted on unfitted models.
- */
-public class ModelNotFittedException extends SuperMLException {
-    public ModelNotFittedException() {
-        super("Model must be fitted before making predictions");
-    }
-    
-    public ModelNotFittedException(String message) {
-        super(message);
-    }
-}
-
-/**
- * Thrown when model convergence fails.
- */
-public class ConvergenceException extends SuperMLException {
-    public ConvergenceException(String message) {
-        super(message);
-    }
-}
-```
-
-### Validation Utilities
-
-```java
-package org.superml.core;
-
-public class ValidationUtils {
     /**
-     * Validate feature matrix.
+     * Set batch size for batch processing.
+     * @param batchSize Batch size (default: 100)
+     * @return This instance for chaining
      */
-    public static void validateFeatureMatrix(double[][] X) {
-        if (X == null || X.length == 0) {
-            throw new IllegalArgumentException("Feature matrix cannot be null or empty");
+    public InferenceEngine setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
+        return this;
+    }
+    
+    /**
+     * Enable performance monitoring.
+     * @param enabled Whether to enable monitoring
+     * @return This instance for chaining
+     */
+    public InferenceEngine setPerformanceMonitoring(boolean enabled) {
+        this.monitoringEnabled = enabled;
+        return this;
+    }
+    
+    /**
+     * Register a model for inference.
+     * @param modelId Unique model identifier
+     * @param model Trained model
+     */
+    public void registerModel(String modelId, SupervisedLearner model) {
+        if (cacheEnabled) {
+            modelCache.put(modelId, new LoadedModel(model, System.currentTimeMillis()));
         }
+        metricsCollector.registerModel(modelId);
+    }
+    
+    /**
+     * Make predictions on batch data.
+     * @param modelId Model identifier
+     * @param X Feature matrix
+     * @return Predictions array
+     */
+    public double[] predict(String modelId, double[][] X) {
+        long startTime = System.nanoTime();
         
-        int features = X[0].length;
-        if (features == 0) {
-            throw new IllegalArgumentException("Feature matrix must have at least one feature");
-        }
-        
-        for (int i = 0; i < X.length; i++) {
-            if (X[i].length != features) {
-                throw new IllegalArgumentException(
-                    String.format("Sample %d has %d features, expected %d", 
-                        i, X[i].length, features));
+        try {
+            LoadedModel loadedModel = getLoadedModel(modelId);
+            double[] predictions = loadedModel.model.predict(X);
+            
+            if (monitoringEnabled) {
+                long inferenceTime = System.nanoTime() - startTime;
+                metricsCollector.recordInference(modelId, X.length, inferenceTime);
             }
             
-            for (int j = 0; j < features; j++) {
-                if (Double.isNaN(X[i][j]) || Double.isInfinite(X[i][j])) {
-                    throw new IllegalArgumentException(
-                        String.format("Invalid value at position [%d,%d]: %f", 
-                            i, j, X[i][j]));
-                }
+            return predictions;
+        } catch (Exception e) {
+            if (monitoringEnabled) {
+                metricsCollector.recordError(modelId);
             }
+            throw new InferenceException("Prediction failed for model " + modelId, e);
         }
     }
     
     /**
-     * Validate target values.
+     * Make asynchronous prediction for single sample.
+     * @param modelId Model identifier
+     * @param sample Feature vector
+     * @return Future containing prediction
      */
-    public static void validateTargetValues(double[] y) {
-        if (y == null || y.length == 0) {
-            throw new IllegalArgumentException("Target values cannot be null or empty");
+    public CompletableFuture<Double> predictAsync(String modelId, double[] sample) {
+        return CompletableFuture.supplyAsync(() -> {
+            double[][] batchX = {sample};
+            double[] predictions = predict(modelId, batchX);
+            return predictions[0];
+        });
+    }
+    
+    /**
+     * Get inference metrics for a model.
+     * @param modelId Model identifier
+     * @return Inference metrics
+     */
+    public InferenceMetrics.ModelMetrics getMetrics(String modelId) {
+        return metricsCollector.getModelMetrics(modelId);
+    }
+    
+    /**
+     * Get last inference time in microseconds.
+     * @return Last inference time
+     */
+    public long getLastInferenceTime() {
+        return metricsCollector.getLastInferenceTime();
+    }
+}
+```
+
+## 💾 Persistence API (superml-persistence)
+
+### ModelPersistence
+
+Advanced model serialization with automatic statistics capture.
+
+```java
+package org.superml.persistence;
+
+public class ModelPersistence {
+    
+    /**
+     * Save model with automatic performance statistics.
+     * @param model Trained model to save
+     * @param modelName Model name/identifier
+     * @param description Model description
+     * @param X_test Test features for evaluation
+     * @param y_test Test targets for evaluation
+     * @return Path to saved model file
+     */
+    public static String saveWithStats(SupervisedLearner model, String modelName, 
+                                     String description, double[][] X_test, double[] y_test) {
+        ModelMetadata metadata = new ModelMetadata(modelName, description, model.getClass().getSimpleName());
+        
+        // Calculate performance statistics
+        if (model instanceof Classifier) {
+            Classifier classifier = (Classifier) model;
+            double[] predictions = classifier.predict(X_test);
+            var metrics = Metrics.classificationReport(y_test, predictions);
+            metadata.addPerformanceMetric("accuracy", metrics.accuracy);
+            metadata.addPerformanceMetric("f1_score", metrics.f1Score);
         }
         
-        for (int i = 0; i < y.length; i++) {
-            if (Double.isNaN(y[i]) || Double.isInfinite(y[i])) {
-                throw new IllegalArgumentException(
-                    String.format("Invalid target value at position %d: %f", i, y[i]));
-            }
+        return save(model, modelName, metadata);
+    }
+    
+    /**
+     * Save model with metadata.
+     * @param model Model to save
+     * @param modelName Model name
+     * @param metadata Model metadata
+     * @return Path to saved model file
+     */
+    public static String save(SupervisedLearner model, String modelName, ModelMetadata metadata) {
+        /* Implementation */
+    }
+    
+    /**
+     * Load model from file.
+     * @param modelPath Path to model file
+     * @return Loaded model
+     */
+    public static SupervisedLearner load(String modelPath) {
+        /* Implementation */
+    }
+    
+    /**
+     * Load model with type safety.
+     * @param modelPath Path to model file
+     * @param modelClass Expected model class
+     * @return Loaded model of specified type
+     */
+    public static <T extends SupervisedLearner> T load(String modelPath, Class<T> modelClass) {
+        SupervisedLearner model = load(modelPath);
+        if (!modelClass.isInstance(model)) {
+            throw new ClassCastException("Loaded model is not of type " + modelClass.getSimpleName());
+        }
+        return modelClass.cast(model);
+    }
+}
+```
+
+## 📈 Metrics API (superml-metrics)
+
+### Metrics
+
+Comprehensive evaluation metrics for all ML tasks.
+
+```java
+package org.superml.metrics;
+
+public class Metrics {
+    
+    /**
+     * Calculate comprehensive classification metrics.
+     * @param yTrue True labels
+     * @param yPred Predicted labels
+     * @return Classification metrics report
+     */
+    public static ClassificationReport classificationReport(double[] yTrue, double[] yPred) {
+        return new ClassificationReport(yTrue, yPred);
+    }
+    
+    /**
+     * Calculate regression metrics.
+     * @param yTrue True values
+     * @param yPred Predicted values
+     * @return Regression metrics report
+     */
+    public static RegressionReport regressionReport(double[] yTrue, double[] yPred) {
+        return new RegressionReport(yTrue, yPred);
+    }
+    
+    /**
+     * Calculate confusion matrix.
+     * @param yTrue True labels
+     * @param yPred Predicted labels
+     * @return Confusion matrix
+     */
+    public static int[][] confusionMatrix(double[] yTrue, double[] yPred) {
+        /* Implementation */
+    }
+    
+    /**
+     * Classification metrics container.
+     */
+    public static class ClassificationReport {
+        public final double accuracy;
+        public final double precision;
+        public final double recall;
+        public final double f1Score;
+        public final double[] precisionPerClass;
+        public final double[] recallPerClass;
+        public final double[] f1ScorePerClass;
+        
+        public ClassificationReport(double[] yTrue, double[] yPred) {
+            /* Calculate metrics */
         }
     }
     
     /**
-     * Validate that X and y have compatible dimensions.
+     * Regression metrics container.
      */
-    public static void validateXy(double[][] X, double[] y) {
-        validateFeatureMatrix(X);
-        validateTargetValues(y);
+    public static class RegressionReport {
+        public final double mse;
+        public final double rmse;
+        public final double mae;
+        public final double r2Score;
+        public final double adjustedR2;
+        public final double mape;
         
-        if (X.length != y.length) {
-            throw new IllegalArgumentException(
-                String.format("Number of samples in X (%d) must match length of y (%d)", 
-                    X.length, y.length));
+        public RegressionReport(double[] yTrue, double[] yPred) {
+            /* Calculate metrics */
         }
     }
 }
 ```
 
-## 🔄 Lifecycle Management
+---
 
-### Model State
-
-Models follow a clear lifecycle:
-
-1. **Created**: Model is instantiated with default parameters
-2. **Configured**: Parameters are set via fluent interface or parameter maps
-3. **Fitted**: Model is trained on data via `fit()`
-4. **Ready**: Model can make predictions via `predict()`
-
-```java
-// 1. Created
-var model = new LogisticRegression();
-
-// 2. Configured  
-model.setMaxIterations(1000).setLearningRate(0.01);
-
-// 3. Fitted
-model.fit(X_train, y_train);
-
-// 4. Ready
-double[] predictions = model.predict(X_test);
-```
-
-### Thread Safety
-
-- **Parameter Management**: Not thread-safe during configuration
-- **Training**: Not thread-safe during `fit()`
-- **Prediction**: Thread-safe for `predict()` after fitting
-- **Recommendation**: Create separate instances for concurrent use
-
-```java
-// Thread-safe prediction usage
-var model = new LogisticRegression();
-model.fit(X_train, y_train);  // Single-threaded training
-
-// Now safe for concurrent prediction
-CompletableFuture<double[]> future1 = CompletableFuture.supplyAsync(
-    () -> model.predict(X_test1));
-CompletableFuture<double[]> future2 = CompletableFuture.supplyAsync(
-    () -> model.predict(X_test2));
-```
-
-## 🎯 Best Practices
-
-### 1. Always Validate Input
-
-```java
-@Override
-public MyEstimator fit(double[][] X, double[] y) {
-    ValidationUtils.validateXy(X, y);
-    // Training logic
-    return this;
-}
-```
-
-### 2. Use Fluent Interfaces
-
-```java
-// Good: Method chaining
-var model = new Algorithm()
-    .setParam1(value1)
-    .setParam2(value2)
-    .fit(X, y);
-
-// Less preferred: Separate calls
-var model = new Algorithm();
-model.setParam1(value1);
-model.setParam2(value2);
-model.fit(X, y);
-```
-
-### 3. Implement Proper toString()
-
-```java
-@Override
-public String toString() {
-    return String.format("%s(learningRate=%.3f, maxIterations=%d)", 
-        getClass().getSimpleName(), learningRate, maxIterations);
-}
-```
-
-### 4. Handle Edge Cases
-
-```java
-@Override
-public double[] predict(double[][] X) {
-    checkFitted();
-    validateInput(X);
-    
-    if (X.length == 0) {
-        return new double[0];  // Empty input, empty output
-    }
-    
-    // Normal prediction logic
-    return predictions;
-}
-```
-
-### 5. Use Defensive Copying
-
-```java
-@Override
-public double[] getCoefficients() {
-    checkFitted();
-    return Arrays.copyOf(coefficients, coefficients.length);
-}
-```
-
-## 🌳 Tree-Based Algorithms
-
-### DecisionTree
-
-A versatile decision tree implementation supporting both classification and regression.
-
-```java
-package org.superml.tree;
-
-public class DecisionTree extends BaseEstimator implements Classifier, Regressor {
-    
-    // Constructors
-    public DecisionTree()
-    public DecisionTree(String criterion, int maxDepth)
-    
-    // Core Methods
-    public DecisionTree fit(double[][] X, double[] y)
-    public double[] predict(double[][] X)
-    public double[][] predictProba(double[][] X)
-    public double score(double[][] X, double[] y)
-    
-    // Configuration Methods
-    public DecisionTree setMinSamplesSplit(int minSamplesSplit)
-    public DecisionTree setMinSamplesLeaf(int minSamplesLeaf)
-    public DecisionTree setMinImpurityDecrease(double minImpurityDecrease)
-    public DecisionTree setMaxFeatures(int maxFeatures)
-    public DecisionTree setRandomState(int randomState)
-    
-    // Getters
-    public String getCriterion()
-    public int getMaxDepth()
-    public int getMinSamplesSplit()
-    public int getMinSamplesLeaf()
-    public double getMinImpurityDecrease()
-    public int getMaxFeatures()
-    public int getRandomState()
-}
-```
-
-**Key Parameters:**
-- `criterion`: Split criterion - "gini", "entropy" (classification) or "mse" (regression)
-- `maxDepth`: Maximum tree depth to prevent overfitting
-- `minSamplesSplit`: Minimum samples required to split a node
-- `minSamplesLeaf`: Minimum samples required in a leaf node
-- `maxFeatures`: Number of features to consider for splits (-1 for all)
-- `randomState`: Random seed for reproducibility
-
-**Usage Example:**
-```java
-DecisionTree dt = new DecisionTree("gini", 10)
-    .setMinSamplesSplit(5)
-    .setMinSamplesLeaf(2)
-    .setRandomState(42);
-
-dt.fit(XTrain, yTrain);
-double[] predictions = dt.predict(XTest);
-double[][] probabilities = dt.predictProba(XTest);
-```
-
-### RandomForest
-
-An ensemble of decision trees using bootstrap sampling and random feature selection.
-
-```java
-package org.superml.tree;
-
-public class RandomForest extends BaseEstimator implements Classifier, Regressor {
-    
-    // Constructors
-    public RandomForest()
-    public RandomForest(int nEstimators, int maxDepth)
-    
-    // Core Methods
-    public RandomForest fit(double[][] X, double[] y)
-    public double[] predict(double[][] X)
-    public double[][] predictProba(double[][] X)
-    public double score(double[][] X, double[] y)
-    
-    // Configuration Methods
-    public RandomForest setNEstimators(int nEstimators)
-    public RandomForest setMaxDepth(int maxDepth)
-    public RandomForest setMinSamplesSplit(int minSamplesSplit)
-    public RandomForest setMinSamplesLeaf(int minSamplesLeaf)
-    public RandomForest setMaxFeatures(int maxFeatures)
-    public RandomForest setBootstrap(boolean bootstrap)
-    public RandomForest setMaxSamples(double maxSamples)
-    public RandomForest setNJobs(int nJobs)
-    public RandomForest setRandomState(int randomState)
-    
-    // Additional Methods
-    public List<DecisionTree> getTrees()
-    public double[] getFeatureImportances()
-}
-```
-
-**Key Parameters:**
-- `nEstimators`: Number of trees in the forest (default: 100)
-- `maxDepth`: Maximum depth of individual trees
-- `maxFeatures`: Features to consider for splits (-1 for sqrt(n_features) in classification)
-- `bootstrap`: Whether to use bootstrap sampling (default: true)
-- `maxSamples`: Fraction of samples to draw for each tree (default: 1.0)
-- `nJobs`: Number of parallel jobs (-1 for all cores)
-
-**Usage Example:**
-```java
-RandomForest rf = new RandomForest(200, 15)
-    .setMaxFeatures(-1)  // Auto-select features
-    .setNJobs(-1)        // Use all cores
-    .setRandomState(42);
-
-rf.fit(XTrain, yTrain);
-double[] predictions = rf.predict(XTest);
-double[] importances = rf.getFeatureImportances();
-```
-
-### GradientBoosting
-
-Sequential ensemble that builds trees to correct previous errors.
-
-```java
-package org.superml.tree;
-
-public class GradientBoosting extends BaseEstimator implements Classifier, Regressor {
-    
-    // Constructors
-    public GradientBoosting()
-    public GradientBoosting(int nEstimators, double learningRate, int maxDepth)
-    
-    // Core Methods
-    public GradientBoosting fit(double[][] X, double[] y)
-    public double[] predict(double[][] X)
-    public double[] predictRaw(double[][] X)
-    public double[][] predictProba(double[][] X)
-    public double[] predictAtIteration(double[][] X, int nEstimators)
-    
-    // Configuration Methods
-    public GradientBoosting setNEstimators(int nEstimators)
-    public GradientBoosting setLearningRate(double learningRate)
-    public GradientBoosting setMaxDepth(int maxDepth)
-    public GradientBoosting setSubsample(double subsample)
-    public GradientBoosting setValidationFraction(double validationFraction)
-    public GradientBoosting setNIterNoChange(int nIterNoChange)
-    public GradientBoosting setTol(double tol)
-    
-    // Training History
-    public List<Double> getTrainScores()
-    public List<Double> getValidationScores()
-    public List<DecisionTree> getTrees()
-}
-```
-
-**Key Parameters:**
-- `nEstimators`: Number of boosting stages (default: 100)
-- `learningRate`: Learning rate for shrinking contribution of each tree (default: 0.1)
-- `maxDepth`: Maximum depth of individual trees (default: 3)
-- `subsample`: Fraction of samples for fitting individual trees (default: 1.0)
-- `validationFraction`: Fraction for early stopping validation (default: 0.1)
-- `nIterNoChange`: Early stopping rounds (-1 to disable)
-- `tol`: Tolerance for early stopping (default: 1e-4)
-
-**Usage Example:**
-```java
-GradientBoosting gb = new GradientBoosting(200, 0.05, 6)
-    .setSubsample(0.8)
-    .setValidationFraction(0.1)
-    .setNIterNoChange(10);
-
-gb.fit(XTrain, yTrain);
-double[] predictions = gb.predict(XTest);
-List<Double> trainScores = gb.getTrainScores();
-```
-
-## 🎯 Multiclass Classification
-
-### OneVsRestClassifier
-
-Meta-classifier that trains one binary classifier per class.
-
-```java
-package org.superml.multiclass;
-
-public class OneVsRestClassifier extends BaseEstimator implements Classifier {
-    
-    // Constructor
-    public OneVsRestClassifier(Classifier baseClassifier)
-    
-    // Core Methods
-    public OneVsRestClassifier fit(double[][] X, double[] y)
-    public double[] predict(double[][] X)
-    public double[][] predictProba(double[][] X)
-    public double[][] predictLogProba(double[][] X)
-    public double score(double[][] X, double[] y)
-    
-    // Access Methods
-    public List<Classifier> getClassifiers()
-    public double[] getClasses()
-    public Classifier getBaseClassifier()
-}
-```
-
-**Usage Example:**
-```java
-// Use with any binary classifier
-LogisticRegression base = new LogisticRegression().setMaxIter(1000);
-OneVsRestClassifier ovr = new OneVsRestClassifier(base);
-
-ovr.fit(XTrain, yTrain);
-double[] predictions = ovr.predict(XTest);
-double[][] probabilities = ovr.predictProba(XTest);
-
-// Access individual binary classifiers
-List<Classifier> classifiers = ovr.getClassifiers();
-```
-
-### SoftmaxRegression
-
-Direct multinomial logistic regression with softmax activation.
-
-```java
-package org.superml.multiclass;
-
-public class SoftmaxRegression extends BaseEstimator implements Classifier {
-    
-    // Constructors
-    public SoftmaxRegression()
-    
-    // Core Methods
-    public SoftmaxRegression fit(double[][] X, double[] y)
-    public double[] predict(double[][] X)
-    public double[][] predictProba(double[][] X)
-    public double[][] predictLogProba(double[][] X)
-    public double score(double[][] X, double[] y)
-    
-    // Configuration Methods
-    public SoftmaxRegression setMaxIter(int maxIter)
-    public SoftmaxRegression setLearningRate(double learningRate)
-    public SoftmaxRegression setTol(double tol)
-    public SoftmaxRegression setRegularization(String regularization)
-    public SoftmaxRegression setC(double C)
-    public SoftmaxRegression setL1Ratio(double l1Ratio)
-    public SoftmaxRegression setRandomState(int randomState)
-    
-    // Access Methods
-    public double[][] getCoefficients()
-    public double[] getIntercept()
-    public double[] getClasses()
-    public int getNIterations()
-}
-```
-
-**Key Parameters:**
-- `maxIter`: Maximum number of iterations (default: 1000)
-- `learningRate`: Step size for gradient descent (default: 0.01)
-- `tol`: Tolerance for stopping criterion (default: 1e-6)
-- `regularization`: Type of regularization - "l1", "l2", "elasticnet", "none"
-- `C`: Inverse regularization strength (default: 1.0)
-- `l1Ratio`: Elastic net mixing parameter (default: 0.5)
-
-**Usage Example:**
-```java
-SoftmaxRegression softmax = new SoftmaxRegression()
-    .setMaxIter(2000)
-    .setLearningRate(0.01)
-    .setRegularization("l2")
-    .setC(0.1);
-
-softmax.fit(XTrain, yTrain);
-double[] predictions = softmax.predict(XTest);
-double[][] coefficients = softmax.getCoefficients();
-```
-
-## 📊 Enhanced Linear Models
-
-### Enhanced LogisticRegression
-
-Extended logistic regression with automatic multiclass support.
-
-```java
-// Additional multiclass methods in LogisticRegression
-public class LogisticRegression extends BaseEstimator implements Classifier {
-    
-    // Enhanced Configuration
-    public LogisticRegression setMultiClass(String multiClass)  // "auto", "ovr", "multinomial"
-    
-    // Automatic Strategy Selection
-    // - Binary problems: standard logistic regression
-    // - Multiclass with multiClass="ovr": One-vs-Rest
-    // - Multiclass with multiClass="multinomial": Softmax
-    // - multiClass="auto": chooses best strategy automatically
-}
-```
-
-**Usage Example:**
-```java
-// Automatic multiclass handling
-LogisticRegression lr = new LogisticRegression()
-    .setMaxIter(1000)
-    .setMultiClass("auto");  // Chooses strategy automatically
-
-lr.fit(XTrain, yTrain);  // Works for binary or multiclass
-double[] predictions = lr.predict(XTest);
-
-// Force specific strategy
-LogisticRegression ovr = new LogisticRegression().setMultiClass("ovr");
-LogisticRegression multinomial = new LogisticRegression().setMultiClass("multinomial");
-```
-
-## 🛠️ Utility Classes
-
-### DataLoaders
-
-Enhanced data loading and splitting utilities.
-
-```java
-package org.superml.datasets;
-
-public class DataLoaders {
-    
-    // Data structures
-    public static class TrainTestSplit {
-        public final double[][] XTrain;
-        public final double[][] XTest;
-        public final double[] yTrain;
-        public final double[] yTest;
-    }
-    
-    public static class CSVData {
-        public final double[][] features;
-        public final double[] targets;
-        public final String[] featureNames;
-    }
-    
-    // Methods
-    public static TrainTestSplit trainTestSplit(double[][] X, double[] y, 
-                                              double testSize, int randomState)
-    
-    public static CSVData loadCSV(String filePath, String targetColumn)
-    public static CSVData loadCSV(String filePath, String targetColumn, 
-                                 String[] featureColumns)
-}
-```
-
-### KaggleTrainingManager
-
-Comprehensive training workflow management for competitions.
-
-```java
-package org.superml.datasets;
-
-public class KaggleTrainingManager {
-    
-    // Configuration
-    public static class TrainingConfig {
-        public TrainingConfig(String competitionName, String datasetPath)
-        public TrainingConfig setValidationSplit(double validationSplit)
-        public TrainingConfig setCrossValidation(boolean crossValidation)
-        public TrainingConfig setCvFolds(int cvFolds)
-        public TrainingConfig setTargetColumn(String targetColumn)
-        public TrainingConfig setFeatureColumns(List<String> featureColumns)
-    }
-    
-    // Result
-    public static class TrainingResult {
-        public double getScore()
-        public double getValidationScore()
-        public String getModelType()
-        public LocalDateTime getTimestamp()
-        public Map<String, Object> getMetrics()
-        public SupervisedLearner getTrainedModel()
-    }
-    
-    // Methods
-    public TrainingResult trainModel(SupervisedLearner model, TrainingConfig config)
-    public TrainingResult crossValidateModel(SupervisedLearner model, TrainingConfig config)
-}
-```
-
-## 🧪 Testing Utilities
-
-All algorithms include comprehensive test coverage:
-
-- **Unit Tests**: Individual algorithm functionality
-- **Integration Tests**: Cross-component compatibility  
-- **Performance Tests**: Training time and memory usage
-- **Correctness Tests**: Mathematical properties validation
-
-**Example Test Pattern:**
-```java
-@Test
-void testAlgorithmCorrectness() {
-    // Arrange
-    var data = Datasets.makeClassification(100, 5, 2);
-    
-    // Act
-    Algorithm algo = new Algorithm();
-    algo.fit(data.X, Arrays.stream(data.y).asDoubleStream().toArray());
-    
-    // Assert
-    double accuracy = algo.score(data.X, Arrays.stream(data.y).asDoubleStream().toArray());
-    assertThat(accuracy).isGreaterThan(0.7);
-}
-```
-
-This comprehensive API provides a robust foundation for machine learning applications with consistent interfaces, extensive configuration options, and seamless integration between components.
+This comprehensive API reference covers all major components of SuperML Java 2.0.0's 21-module architecture. Each class provides consistent, type-safe APIs with extensive configuration options and comprehensive functionality for building production-ready machine learning applications.

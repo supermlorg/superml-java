@@ -179,7 +179,7 @@ logger.debug("Feature preprocessing took {} ms", duration);  // Debug details
 
 ### 2. Use Parameterized Messages
 ```java
-// ✅ Good: Parameterized
+// -> Good: Parameterized
 logger.info("Processing dataset {} with {} samples", name, count);
 
 // ❌ Avoid: String concatenation  

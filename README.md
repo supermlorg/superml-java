@@ -6,31 +6,38 @@
 
 # SuperML Java
 
-A comprehensive Java Machine Learning Framework inspired by scikit-learn, developed by the SuperML community.
+A comprehensive, modular Java Machine Learning Framework inspired by scikit-learn, developed by the SuperML community.
 
 ## Overview
 
-SuperML Java is a comprehensive machine learning library for Java that provides:
+SuperML Java 2.0.0 is a sophisticated 21-module machine learning library for Java that provides:
 
-- **Supervised Learning**: Classification and regression algorithms (Logistic Regression, Linear Regression, Ridge, Lasso)
-- **Unsupervised Learning**: Clustering algorithms (K-Means with k-means++ initialization)
-- **Data Preprocessing**: Feature scaling, normalization, and transformation utilities
-- **Model Selection**: Cross-validation, train-test split, and automated hyperparameter tuning
-- **Pipeline System**: Chain preprocessing and models like scikit-learn
-- **Kaggle Integration**: One-line training on any Kaggle dataset with automated workflows
-- **Inference Layer**: High-performance model inference with caching, monitoring, and batch processing
-- **Metrics**: Comprehensive evaluation metrics for classification and regression
-- **Professional Logging**: Configurable Logback/SLF4J logging framework
-- **Production Ready**: Enterprise-grade error handling and validation
+- **🎯 Supervised Learning**: 11+ algorithms including Logistic Regression, Linear Regression, Ridge, Lasso, Decision Trees, Random Forest, Gradient Boosting
+- **🔍 Unsupervised Learning**: K-Means clustering with k-means++ initialization and advanced convergence criteria
+- **⚙️ Data Preprocessing**: Feature scaling, normalization, encoding, and comprehensive transformation utilities
+- **🔧 Model Selection**: Cross-validation, hyperparameter tuning (Grid/Random Search), and automated optimization
+- **🚀 Pipeline System**: Seamless chaining of preprocessing and models like scikit-learn
+- **🤖 AutoML Framework**: Automated algorithm selection and hyperparameter optimization with ensemble methods
+- **📊 Dual-Mode Visualization**: Professional XChart GUI with ASCII terminal fallback
+- **🌐 Kaggle Integration**: One-line training on any Kaggle dataset with automated workflows
+- **⚡ Inference Engine**: High-performance model serving with caching, monitoring, and microsecond predictions
+- **📈 Comprehensive Metrics**: Complete evaluation suite for classification, regression, and clustering
+- **💾 Model Persistence**: Save/load models with automatic statistics capture and version management
+- **🔄 Cross-Platform Export**: ONNX and PMML support for enterprise deployment
+- **📱 Drift Detection**: Real-time model and data drift monitoring with automated alerts
+- **📚 Professional Logging**: Configurable Logback/SLF4J logging framework
+- **🏭 Production Ready**: Enterprise-grade error handling, validation, and concurrent processing
 
 ## 🚀 Quick Start
 
+### Basic Classification with Visualization
 ```java
 import org.superml.datasets.Datasets;
 import org.superml.linear_model.LogisticRegression;
 import org.superml.pipeline.Pipeline;
 import org.superml.preprocessing.StandardScaler;
 import org.superml.model_selection.ModelSelection;
+import org.superml.visualization.VisualizationFactory;
 
 // Load data and create pipeline
 Datasets.Dataset dataset = Datasets.loadIris();
@@ -42,6 +49,20 @@ Pipeline pipeline = new Pipeline()
 ModelSelection.TrainTestSplit split = ModelSelection.trainTestSplit(dataset.X, dataset.y, 0.2, 42);
 pipeline.fit(split.XTrain, split.yTrain);
 double[] predictions = pipeline.predict(split.XTest);
+
+// Professional visualization (GUI + ASCII fallback)
+VisualizationFactory.createDualModeConfusionMatrix(split.yTest, predictions, 
+    new String[]{"Setosa", "Versicolor", "Virginica"}).display();
+```
+
+### AutoML - One Line Training
+```java
+import org.superml.autotrainer.AutoTrainer;
+
+// Automated algorithm selection and optimization
+AutoTrainer.AutoMLResult result = AutoTrainer.autoML(dataset.X, dataset.y, "classification");
+System.out.println("Best Algorithm: " + result.getBestAlgorithm());
+System.out.println("Best Score: " + result.getBestScore());
 ```
 
 ## 🌐 Kaggle Integration
@@ -101,51 +122,90 @@ List<String> allModels = manager.listModels();
 
 ## 🎯 Features
 
-### Algorithms
-- **Linear Models**: 
+### Algorithms (12+ Implementations)
+- **Linear Models** (6 algorithms): 
   - Logistic Regression with automatic multiclass support and L1/L2 regularization
   - Linear Regression with normal equation and closed-form solution
   - Ridge Regression with L2 regularization
   - Lasso Regression with L1 regularization and coordinate descent
-  - Softmax Regression for direct multiclass classification
-  - One-vs-Rest Classifier for converting binary to multiclass algorithms
+  - SGD Classifier/Regressor with stochastic optimization
+  - Advanced regularization and convergence strategies
 
-- **Tree-Based Models**: 
+- **Tree-Based Models** (5 algorithms): 
   - Decision Tree with CART implementation (classification & regression)
   - Random Forest with bootstrap aggregating and parallel training
   - Gradient Boosting with early stopping and validation monitoring
+  - Advanced ensemble methods with feature importance
+  - Optimized splitting criteria and pruning strategies
 
-- **Clustering**: 
-  - K-Means with k-means++ initialization and multiple restarts
+- **Clustering** (1 algorithm): 
+  - K-Means with k-means++ initialization, multiple restarts, and convergence monitoring
 
-### Data Processing
-- **StandardScaler**: Feature standardization and normalization
-- **DataLoaders**: CSV loading, synthetic data generation, and built-in datasets
-- **Pipeline System**: Chain preprocessing steps and models seamlessly
+### Data Processing & Pipeline
+- **Advanced Preprocessing**: StandardScaler, MinMaxScaler, RobustScaler, LabelEncoder
+- **Data Management**: CSV loading, synthetic data generation, built-in datasets (Iris, Wine, etc.)
+- **Pipeline System**: Seamless chaining of preprocessing steps and models
+- **Feature Engineering**: Comprehensive transformation utilities
 
-### Model Selection & Evaluation
-- **Cross-Validation**: K-fold validation with comprehensive metrics (accuracy, precision, recall, F1, MSE, MAE, R²)
-- **Hyperparameter Tuning**: Grid Search and Random Search with parallel execution and custom configurations
-- **Parameter Specifications**: Discrete, continuous, and integer parameter spaces for systematic optimization
-- **Performance Metrics**: Complete evaluation suite with statistical analysis and confidence intervals
+### Model Selection & AutoML
+- **Hyperparameter Optimization**: Grid Search and Random Search with parallel execution
+- **Cross-Validation**: K-fold validation with comprehensive metrics and statistical analysis
+- **AutoML Framework**: Automated algorithm selection, hyperparameter tuning, and ensemble building
+- **Parameter Spaces**: Discrete, continuous, and integer parameter configurations
 
-### Enterprise Features
-- **Kaggle Integration**: Direct dataset download and automated training workflows
-- **Model Persistence**: Save and load trained models with automatic training statistics capture and metadata
+### Visualization & Monitoring
+- **Dual-Mode Visualization**: Professional XChart GUI with ASCII terminal fallback
+- **Interactive Charts**: Confusion matrices, scatter plots, cluster visualizations
+- **Performance Monitoring**: Real-time inference metrics and model performance tracking
+- **Drift Detection**: Automated data and model drift monitoring with statistical tests
+
+### Production & Enterprise
+- **High-Performance Inference**: Microsecond predictions with intelligent caching and batch processing
+- **Model Persistence**: Save/load models with automatic training statistics and metadata capture
+- **Cross-Platform Export**: ONNX and PMML support for enterprise deployment
+- **Kaggle Integration**: Direct dataset download and automated competition workflows
 - **Professional Logging**: Structured logging with Logback and SLF4J
-- **Error Handling**: Comprehensive validation and informative error messages
-- **Thread Safety**: Safe concurrent prediction after model training
-- **Parallel Processing**: Multi-threaded hyperparameter tuning and cross-validation
+- **Thread Safety**: Concurrent prediction capabilities after model training
 
 ## 📦 Installation
 
-### Maven Dependency
+### Maven Dependency (Complete Framework)
 
 ```xml
 <dependency>
     <groupId>org.superml</groupId>
-    <artifactId>superml-java</artifactId>
-    <version>1.0.0</version>
+    <artifactId>superml-bundle-all</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+### Modular Installation (Select Components)
+
+```xml
+<!-- Core + Linear Models (Minimal) -->
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-core</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-linear-models</artifactId>
+    <version>2.0.0</version>
+</dependency>
+
+<!-- Add Visualization -->
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-visualization</artifactId>
+    <version>2.0.0</version>
+</dependency>
+
+<!-- Add AutoML -->
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-autotrainer</artifactId>
+    <version>2.0.0</version>
 </dependency>
 ```
 
@@ -399,7 +459,7 @@ mvn clean test jacoco:report
 - **Detailed Analysis**: See [docs/CODE_COVERAGE_REPORT.md](docs/CODE_COVERAGE_REPORT.md)
 
 **Current Status:**
-- ✅ **Multiclass Classification**: 85%+ coverage (LogisticRegression, SoftmaxRegression)
+- -> **Multiclass Classification**: 85%+ coverage (LogisticRegression, SoftmaxRegression)
 - ⚠️ **Tree Algorithms**: 0% coverage (new v2.0 features needing tests)
 - ⚠️ **Linear Models**: 0% coverage (LinearRegression, Ridge, Lasso need tests)
 
@@ -427,10 +487,10 @@ This project is inspired by scikit-learn and aims to bring the same ease of use 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ### MIT License Summary
-- ✅ **Commercial use** - Use in commercial projects
-- ✅ **Modification** - Modify and distribute
-- ✅ **Distribution** - Distribute original or modified
-- ✅ **Private use** - Use for private projects
+- -> **Commercial use** - Use in commercial projects
+- -> **Modification** - Modify and distribute
+- -> **Distribution** - Distribute original or modified
+- -> **Private use** - Use for private projects
 - ❗ **License and copyright notice** - Include in all copies
 - ❌ **Liability** - No warranty provided
 - ❌ **Trademark use** - SuperML trademarks not included

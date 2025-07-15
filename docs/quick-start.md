@@ -1,6 +1,6 @@
 ---
 title: "Quick Start Guide"
-description: "Get up and running with SuperML Java in minutes"
+description: "Get up and running with SuperML Java 2.0.0 in minutes with AutoML and visualization"
 layout: default
 toc: true
 search: true
@@ -8,59 +8,117 @@ search: true
 
 # Quick Start Guide
 
-Get up and running with SuperML Java in just a few minutes! This guide will walk you through setting up the framework and training your first machine learning model.
+Get up and running with SuperML Java 2.0.0 in just a few minutes! This guide will walk you through setting up the framework, training your first model with AutoML, and creating professional visualizations.
 
-## 🚀 5-Minute Quickstart
+## 🚀 5-Minute Quickstart with AutoML & Visualization
 
 ### Step 1: Add Dependency
 
-Add SuperML Java to your Maven project:
-
+#### Complete Framework (Recommended)
 ```xml
 <dependency>
     <groupId>org.superml</groupId>
-    <artifactId>superml-java</artifactId>
-    <version>1.0.0</version>
+    <artifactId>superml-bundle-all</artifactId>
+    <version>2.0.0</version>
 </dependency>
 ```
 
-### Step 2: Your First Model
+#### Modular Installation (Advanced)
+```xml
+<!-- Core + Linear Models + Visualization -->
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-core</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-linear-models</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-visualization</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+### Step 2: AutoML - Your First Model (One Line!)
 
 ```java
 import org.superml.datasets.Datasets;
-import org.superml.tree.RandomForest;
-import org.superml.metrics.Metrics;
-import org.superml.datasets.DataLoaders;
+import org.superml.autotrainer.AutoTrainer;
+import org.superml.visualization.VisualizationFactory;
 
-public class QuickStart {
+public class QuickStartAutoML {
     public static void main(String[] args) {
         // 1. Load a dataset
         var dataset = Datasets.loadIris();
         
-        // 2. Split into train/test
-        var split = DataLoaders.trainTestSplit(dataset.X, 
-            Arrays.stream(dataset.y).asDoubleStream().toArray(), 0.2, 42);
+        // 2. AutoML - One line training!
+        var result = AutoTrainer.autoML(dataset.X, dataset.y, "classification");
         
-        // 3. Create and train a model
-        var model = new RandomForest(100, 10)  // 100 trees, max depth 10
-            .setRandomState(42);
+        System.out.println("🎯 Best Algorithm: " + result.getBestAlgorithm());
+        System.out.println("📊 Best Score: " + result.getBestScore());
+        System.out.println("⚙️ Best Parameters: " + result.getBestParams());
         
-        model.fit(split.XTrain, split.yTrain);
+        // 3. Professional visualization (GUI + ASCII fallback)
+        VisualizationFactory.createDualModeConfusionMatrix(
+            dataset.y, 
+            result.getBestModel().predict(dataset.X),
+            new String[]{"Setosa", "Versicolor", "Virginica"}
+        ).display();
+    }
+}
+```
+
+### Step 3: Traditional ML Pipeline with Visualization
+
+```java
+import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.preprocessing.StandardScaler;
+import org.superml.pipeline.Pipeline;
+import org.superml.model_selection.ModelSelection;
+import org.superml.visualization.VisualizationFactory;
+
+public class QuickStartPipeline {
+    public static void main(String[] args) {
+        // 1. Load and split data
+        var dataset = Datasets.loadIris();
+        var split = ModelSelection.trainTestSplit(dataset.X, dataset.y, 0.2, 42);
+        
+        // 2. Create ML pipeline
+        var pipeline = new Pipeline()
+            .addStep("scaler", new StandardScaler())
+            .addStep("classifier", new LogisticRegression().setMaxIter(1000));
+        
+        // 3. Train the pipeline
+        pipeline.fit(split.XTrain, split.yTrain);
         
         // 4. Make predictions
+        double[] predictions = pipeline.predict(split.XTest);
         double[] predictions = model.predict(split.XTest);
         double[][] probabilities = model.predictProba(split.XTest);
         
         // 5. Evaluate performance
-        double accuracy = Metrics.accuracy(split.yTest, predictions);
-        System.out.printf("Accuracy: %.2f%%\n", accuracy * 100);
+        var metrics = Metrics.classificationReport(split.yTest, predictions);
+        System.out.println("📈 Accuracy: " + String.format("%.3f", metrics.accuracy));
+        System.out.println("📊 F1-Score: " + String.format("%.3f", metrics.f1Score));
         
-        // 6. Show probability predictions
-        System.out.println("\nClass probabilities for first 3 samples:");
-        for (int i = 0; i < 3; i++) {
-            System.out.printf("Sample %d: [%.3f, %.3f, %.3f]\n", 
-                i+1, probabilities[i][0], probabilities[i][1], probabilities[i][2]);
-        }
+        // 6. Create professional confusion matrix (GUI or ASCII)
+        VisualizationFactory.createDualModeConfusionMatrix(
+            split.yTest, 
+            predictions,
+            new String[]{"Setosa", "Versicolor", "Virginica"}
+        ).display();
+        
+        // 7. Feature importance visualization
+        VisualizationFactory.createRegressionPlot(
+            split.yTest, 
+            predictions,
+            "Iris Classification Results"
+        ).display();
     }
 }
 ```
@@ -355,3 +413,278 @@ GradientBoosting gb = new GradientBoosting(100, 0.05, 6);
 gb.fit(split.XTrain, split.yTrain);
 System.out.println("R² Score: " + gb.score(split.XTest, split.yTest));
 ```
+
+## 🎯 Advanced Features Showcase
+
+### AutoML with Hyperparameter Optimization
+
+```java
+import org.superml.datasets.Datasets;
+import org.superml.autotrainer.AutoTrainer;
+import org.superml.model_selection.GridSearchCV;
+
+public class AdvancedAutoML {
+    public static void main(String[] args) {
+        // Load dataset
+        var dataset = Datasets.makeClassification(1000, 20, 5, 42);
+        
+        // Advanced AutoML with custom configuration
+        var config = new AutoTrainer.Config()
+            .setAlgorithms("logistic", "randomforest", "gradientboosting")
+            .setSearchStrategy("random")  // or "grid", "bayesian"
+            .setCrossValidationFolds(5)
+            .setMaxEvaluationTime(300)  // 5 minutes max
+            .setEnsembleMethods(true);
+        
+        var result = AutoTrainer.autoMLWithConfig(dataset.X, dataset.y, config);
+        
+        System.out.println("🏆 Best Model Performance:");
+        System.out.println("   Algorithm: " + result.getBestAlgorithm());
+        System.out.println("   CV Score: " + String.format("%.4f", result.getBestScore()));
+        System.out.println("   Parameters: " + result.getBestParams());
+        
+        // Get ensemble if available
+        if (result.hasEnsemble()) {
+            System.out.println("🤖 Ensemble Performance: " + 
+                String.format("%.4f", result.getEnsembleScore()));
+        }
+    }
+}
+```
+
+### Production Inference with Monitoring
+
+```java
+import org.superml.inference.InferenceEngine;
+import org.superml.persistence.ModelPersistence;
+import org.superml.drift.DriftDetector;
+
+public class ProductionInference {
+    public static void main(String[] args) {
+        // Load trained model
+        var model = ModelPersistence.load("my_iris_model.json");
+        
+        // Setup inference engine
+        var engine = new InferenceEngine()
+            .setModelCache(true)
+            .setPerformanceMonitoring(true)
+            .setBatchSize(100);
+        
+        // Register model
+        engine.registerModel("iris_classifier", model);
+        
+        // Setup drift monitoring
+        var driftDetector = new DriftDetector("iris_classifier")
+            .setThreshold(0.05)
+            .setAlertCallback(alert -> {
+                System.out.println("🚨 Drift detected: " + alert.getMessage());
+            });
+        
+        // Make predictions with monitoring
+        double[][] newData = {{5.1, 3.5, 1.4, 0.2}};
+        double[] predictions = engine.predict("iris_classifier", newData);
+        
+        // Monitor for drift
+        driftDetector.checkDrift(newData, predictions);
+        
+        System.out.println("🎯 Prediction: " + predictions[0]);
+        System.out.println("⚡ Inference time: " + engine.getLastInferenceTime() + "μs");
+    }
+}
+```
+
+### Kaggle Competition Integration
+
+```java
+import org.superml.kaggle.KaggleTrainingManager;
+import org.superml.kaggle.KaggleIntegration.KaggleCredentials;
+
+public class KaggleCompetition {
+    public static void main(String[] args) {
+        // Setup Kaggle credentials
+        var credentials = KaggleCredentials.fromDefaultLocation();
+        var manager = new KaggleTrainingManager(credentials);
+        
+        // One-line training on any Kaggle dataset
+        var config = new KaggleTrainingManager.TrainingConfig()
+            .setAlgorithms("logistic", "randomforest", "xgboost")
+            .setGridSearch(true)
+            .setSaveModels(true)
+            .setSubmissionFormat(true);
+        
+        var results = manager.trainOnDataset(
+            "titanic",           // competition name
+            "titanic",           // dataset name  
+            "survived",          // target column
+            config
+        );
+        
+        // Best model results
+        var bestResult = results.get(0);
+        System.out.println("🏆 Best Model: " + bestResult.algorithm);
+        System.out.println("📊 CV Score: " + String.format("%.4f", bestResult.cvScore));
+        System.out.println("💾 Model saved: " + bestResult.modelFilePath);
+        System.out.println("📤 Submission: " + bestResult.submissionFilePath);
+    }
+}
+```
+
+## 📊 Visualization Examples
+
+### Professional GUI Charts
+
+```java
+import org.superml.visualization.VisualizationFactory;
+import org.superml.datasets.Datasets;
+
+public class VisualizationShowcase {
+    public static void main(String[] args) {
+        var dataset = Datasets.loadIris();
+        
+        // 1. Interactive Confusion Matrix (XChart GUI)
+        VisualizationFactory.createXChartConfusionMatrix(
+            dataset.y,
+            someModel.predict(dataset.X),
+            new String[]{"Setosa", "Versicolor", "Virginica"}
+        ).display();
+        
+        // 2. Feature Scatter Plot with Clusters
+        VisualizationFactory.createXChartScatterPlot(
+            dataset.X,
+            dataset.y,
+            "Iris Dataset Features",
+            "Sepal Length", "Sepal Width"
+        ).display();
+        
+        // 3. Model Performance Comparison
+        VisualizationFactory.createModelComparisonChart(
+            Arrays.asList("LogisticRegression", "RandomForest", "SVM"),
+            Arrays.asList(0.95, 0.97, 0.94),
+            "Model Performance Comparison"
+        ).display();
+        
+        // 4. Automatic fallback to ASCII if no GUI
+        VisualizationFactory.createDualModeConfusionMatrix(dataset.y, predictions)
+            .setAsciiMode(true)  // Force ASCII mode
+            .display();
+    }
+}
+```
+
+## 🔧 Module Selection Guide
+
+### Minimal Setup (Core ML only)
+```xml
+<!-- Just core algorithms -->
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-core</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-linear-models</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+### Standard ML Pipeline
+```xml
+<!-- Core + preprocessing + model selection -->
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-core</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-linear-models</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-preprocessing</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-model-selection</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+### AutoML & Visualization
+```xml
+<!-- Add AutoML and professional visualization -->
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-autotrainer</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-visualization</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+### Production Deployment
+```xml
+<!-- Add inference engine and model persistence -->
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-inference</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-persistence</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-drift</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+### Everything (Recommended for Development)
+```xml
+<!-- Complete framework -->
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-bundle-all</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+## 🎓 Next Steps
+
+### Learning Path
+1. **Start Here**: Run the AutoML example above
+2. **Core Concepts**: Try the pipeline example  
+3. **Advanced Features**: Experiment with visualization
+4. **Production**: Explore inference and persistence
+5. **Competitions**: Try Kaggle integration
+6. **Custom Solutions**: Build your own ML applications
+
+### Essential Documentation
+- [**Modular Architecture**](modular-architecture.md) - Understanding the 21-module system
+- [**Algorithm Reference**](algorithms-reference.md) - Complete guide to all 12+ algorithms
+- [**Examples Collection**](examples/basic-examples.md) - 11 comprehensive examples
+- [**API Reference**](api/core-classes.md) - Complete API documentation
+- [**Production Guide**](inference-guide.md) - Deployment and monitoring
+
+### Code Examples
+All code examples are available in the `superml-examples` module:
+- `BasicClassification.java` - Fundamental concepts
+- `AutoMLExample.java` - Automated machine learning
+- `XChartVisualizationExample.java` - Professional GUI charts
+- `ProductionInferenceExample.java` - High-performance serving
+- `KaggleIntegrationExample.java` - Competition workflows
+
+---
+
+**Ready to build amazing ML applications with SuperML Java 2.0.0!** 🚀
+
+Start with AutoML for instant results, then dive deeper into the modular architecture for custom solutions.

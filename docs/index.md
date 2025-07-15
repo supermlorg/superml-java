@@ -1,6 +1,6 @@
 ---
 title: "SuperML Java Framework"
-description: "A modular machine learning framework for Java"
+description: "A comprehensive 21-module machine learning framework for Java"
 layout: default
 toc: true
 search: true
@@ -8,45 +8,58 @@ search: true
 
 # SuperML Java Framework
 
-A comprehensive machine learning library for Java, inspired by scikit-learn and designed for enterprise-grade applications.
+A comprehensive, modular machine learning library for Java, inspired by scikit-learn and designed for enterprise-grade applications. Version 2.0.0 features a sophisticated 21-module architecture.
 
 ## 🚀 Features
 
-### Core Machine Learning
-- **Linear Models**: Logistic Regression, Linear Regression, Ridge, Lasso, Softmax Regression
-- **Tree-Based Models**: Decision Trees, Random Forest, Gradient Boosting
-- **Multiclass Strategies**: One-vs-Rest Classifier and native multiclass support
-- **Clustering**: K-Means with k-means++ initialization
+### Core Machine Learning (12+ Algorithms)
+- **Linear Models** (6): Logistic Regression, Linear Regression, Ridge, Lasso, SGD Classifier/Regressor
+- **Tree-Based Models** (5): Decision Trees, Random Forest (Classifier/Regressor), Gradient Boosting
+- **Clustering** (1): K-Means with k-means++ initialization and advanced convergence
+- **Preprocessing**: StandardScaler, MinMaxScaler, RobustScaler, LabelEncoder
 
 ### Advanced Features  
-- **Multiclass Classification**: One-vs-Rest and Softmax/Multinomial approaches
-- **Model Selection**: Cross-validation, grid search, and hyperparameter tuning
-- **Preprocessing**: Data scaling, normalization, and transformation
-- **Pipeline Support**: Chain preprocessing and modeling steps
-- **Inference Layer**: High-performance model deployment and inference
-- **Model Persistence**: Save and load models with comprehensive metadata
+- **AutoML Framework**: Automated algorithm selection and hyperparameter optimization
+- **Dual-Mode Visualization**: Professional XChart GUI with ASCII terminal fallback
+- **Model Selection**: Cross-validation, Grid/Random Search, advanced hyperparameter tuning
+- **Pipeline System**: Seamless chaining of preprocessing and modeling steps
+- **High-Performance Inference**: Microsecond predictions with caching and batch processing
+- **Model Persistence**: Save/load models with automatic statistics and metadata capture
 
-### Integration & Tools
-- **Kaggle Integration**: Seamless integration with Kaggle datasets and competitions
-- **Datasets**: Synthetic data generation and real dataset loaders
-- **Comprehensive Metrics**: Accuracy, precision, recall, F1, R², MSE, and more
-- **Logging**: Structured logging with SLF4J integration
+### Production & Enterprise
+- **Cross-Platform Export**: ONNX and PMML support for enterprise deployment
+- **Drift Detection**: Real-time model and data drift monitoring with statistical tests
+- **Kaggle Integration**: One-line training on any Kaggle dataset with automated workflows
+- **Professional Logging**: Structured logging with Logback and SLF4J
+- **Comprehensive Metrics**: Complete evaluation suite for all ML tasks
+- **Thread Safety**: Concurrent prediction capabilities after model training
 
 ## 📚 Documentation
 
-- [**Quick Start Guide**](quick-start.md) - Get started in 5 minutes
-- [**Algorithms Reference**](algorithms-reference.md) - Complete guide to all 11 implemented algorithms
-- [**Implementation Status**](implementation-status.md) - Detailed status of all algorithms and features
+### **Getting Started**
+- [**Quick Start Guide**](quick-start.md) - Get started in 5 minutes with visualization examples
+- [**Modular Architecture**](modular-architecture.md) - Complete 21-module system overview
+- [**Architecture Overview**](architecture.md) - Framework design and internal workings
+
+### **Algorithm Documentation**
+- [**Algorithms Reference**](algorithms-reference.md) - Complete guide to all 12+ implemented algorithms
 - [**Tree Algorithms Guide**](tree-algorithms.md) - Decision Trees, Random Forest, Gradient Boosting
-- [**Multiclass Classification**](multiclass-guide.md) - One-vs-Rest and Softmax approaches
-- [**Inference Guide**](inference-guide.md) - Production model deployment
-- [**Model Persistence**](model-persistence.md) - Save and load trained models
-- [**Kaggle Integration**](kaggle-integration.md) - Competition workflows and data loading
-- [**API Reference**](api/core-classes.md) - Complete API documentation
-- [**Examples**](examples/basic-examples.md) - Practical code examples
-- [**Test Guide**](testing-guide.md) - Unit tests and validation
-- [**Architecture**](architecture.md) - Framework design and internals
-- [**Logging Guide**](logging-guide.md) - Structured logging configuration
+- [**Multiclass Classification**](multiclass-guide.md) - Advanced classification strategies
+
+### **Advanced Features**
+- [**Implementation Status**](implementation-status.md) - Detailed status of all modules and features
+- [**Inference Guide**](inference-guide.md) - Production model deployment and optimization
+- [**Model Persistence**](model-persistence.md) - Advanced save/load with statistics capture
+- [**Kaggle Integration**](kaggle-integration.md) - Competition workflows and automation
+
+### **API & Examples**
+- [**API Reference**](api/core-classes.md) - Complete API documentation for all modules
+- [**Basic Examples**](examples/basic-examples.md) - Fundamental ML concepts and workflows
+- [**Advanced Examples**](examples/advanced-examples.md) - XChart GUI, AutoML, and production patterns
+
+### **Development**
+- [**Testing Guide**](testing-guide.md) - Comprehensive unit tests and validation
+- [**Logging Guide**](logging-guide.md) - Professional logging configuration
 - [**Contributing**](contributing.md) - How to contribute to the project
 
 ## 🔗 Quick Links
