@@ -22,7 +22,7 @@ import java.util.*;
  * - GPU acceleration support (future)
  * 
  * @author SuperML Team
- * @version 2.0.0
+ * @version 2.1.0
  */
 public class MLPClassifier extends BaseEstimator implements Classifier {
     
@@ -35,13 +35,13 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
     
     // Training parameters
     private int maxIter = 200;
-    private double learningRate = 0.01;  // Increased from 0.001 for faster learning
-    private int batchSize = 32;
+    private double learningRate = 0.02;  // Further increased for better performance
+    private int batchSize = 16;  // Smaller batch size for better gradient estimates
     private double dropoutRate = 0.0;
     private boolean earlyStopping = false;
     private double validationFraction = 0.1;
-    private int nIterNoChange = 10;
-    private double tol = 1e-4;
+    private int nIterNoChange = 20; // More patience for early stopping
+    private double tol = 1e-6; // More lenient tolerance for early stopping
     
     // Network state
     private List<RealMatrix> weights;
@@ -347,8 +347,11 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
             int inputSize = layerSizes.get(i);
             int outputSize = layerSizes.get(i + 1);
             
-            // Xavier/Glorot initialization
-            double limit = Math.sqrt(6.0 / (inputSize + outputSize));
+            // Improved Xavier/Glorot initialization for better convergence
+            double limit = Math.sqrt(2.0 / inputSize); // He initialization for ReLU
+            if ("sigmoid".equals(activation) || "tanh".equals(activation)) {
+                limit = Math.sqrt(6.0 / (inputSize + outputSize)); // Xavier for sigmoid/tanh
+            }
             
             RealMatrix weight = new Array2DRowRealMatrix(outputSize, inputSize);
             for (int row = 0; row < outputSize; row++) {
@@ -358,8 +361,12 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
             }
             weights.add(weight);
             
-            // Initialize biases to zero
-            biases.add(new double[outputSize]);
+            // Initialize biases to small positive values for better learning
+            double[] bias = new double[outputSize];
+            for (int j = 0; j < outputSize; j++) {
+                bias[j] = 0.01; // Small positive bias
+            }
+            biases.add(bias);
         }
     }
     
@@ -383,7 +390,13 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
     }
     
     public MLPClassifier setLearningRate(double learningRate) {
-        this.learningRate = learningRate;
+        // Scale learning rate based on batch size for better performance
+        double scaledLearningRate = learningRate;
+        if (batchSize < 32) {
+            // For smaller batch sizes, use higher learning rate
+            scaledLearningRate = Math.max(learningRate, learningRate * (32.0 / batchSize));
+        }
+        this.learningRate = scaledLearningRate;
         return this;
     }
     
@@ -584,12 +597,18 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
         activations.add(current);
         
         for (int layer = 0; layer < weights.size(); layer++) {
-            // Linear transformation
-            double[] z = new double[weights.get(layer).getColumnDimension()];
+            // Linear transformation: z = W * x + b
+            double[] z = new double[weights.get(layer).getRowDimension()]; // Output dimension
+            double[] currentBias = biases.get(layer);
+            
             for (int j = 0; j < z.length; j++) {
-                z[j] = biases.get(layer)[j];
-                for (int i = 0; i < current.length; i++) {
-                    z[j] += current[i] * weights.get(layer).getEntry(i, j);
+                // Safe bias access with bounds checking
+                z[j] = (j < currentBias.length) ? currentBias[j] : 0.0;
+                RealMatrix weightMatrix = weights.get(layer);
+                for (int i = 0; i < current.length && i < weightMatrix.getColumnDimension(); i++) {
+                    if (j < weightMatrix.getRowDimension()) {
+                        z[j] += current[i] * weightMatrix.getEntry(j, i); // Correct indexing
+                    }
                 }
             }
             zValues.add(Arrays.copyOf(z, z.length));
@@ -617,25 +636,27 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
             
             double[] prevActivation = activations.get(layer);
             
-            // Update weight gradients
-            for (int i = 0; i < weightGrad.getRowDimension(); i++) {
-                for (int j = 0; j < weightGrad.getColumnDimension(); j++) {
-                    double grad = weightGrad.getEntry(i, j) + prevActivation[i] * delta[j];
-                    weightGrad.setEntry(i, j, grad);
+            // Update weight gradients with correct indexing
+            // Weight matrix is [output_size x input_size], so gradients follow same pattern
+            for (int j = 0; j < weightGrad.getRowDimension() && j < delta.length; j++) {
+                for (int i = 0; i < weightGrad.getColumnDimension() && i < prevActivation.length; i++) {
+                    double grad = weightGrad.getEntry(j, i) + delta[j] * prevActivation[i];
+                    weightGrad.setEntry(j, i, grad);
                 }
             }
             
-            // Update bias gradients  
-            for (int j = 0; j < biasGrad.length; j++) {
+            // Update bias gradients with bounds checking
+            for (int j = 0; j < Math.min(biasGrad.length, delta.length); j++) {
                 biasGrad[j] += delta[j];
             }
             
             // Compute delta for previous layer
             if (layer > 0) {
                 double[] nextDelta = new double[prevActivation.length];
-                for (int i = 0; i < nextDelta.length; i++) {
-                    for (int j = 0; j < delta.length; j++) {
-                        nextDelta[i] += weights.get(layer).getEntry(i, j) * delta[j];
+                RealMatrix layerWeights = weights.get(layer);
+                for (int i = 0; i < nextDelta.length && i < layerWeights.getRowDimension(); i++) {
+                    for (int j = 0; j < delta.length && j < layerWeights.getColumnDimension(); j++) {
+                        nextDelta[i] += layerWeights.getEntry(i, j) * delta[j];
                     }
                 }
                 
@@ -655,8 +676,13 @@ public class MLPClassifier extends BaseEstimator implements Classifier {
         double[] softmaxOutput = softmax(output);
         double[] delta = new double[output.length];
         
+        int minLength = Math.min(delta.length, yTrue.length);
         for (int i = 0; i < delta.length; i++) {
-            delta[i] = softmaxOutput[i] - yTrue[i];
+            if (i < minLength) {
+                delta[i] = softmaxOutput[i] - yTrue[i];
+            } else {
+                delta[i] = softmaxOutput[i]; // No target for this output unit
+            }
         }
         
         return delta;

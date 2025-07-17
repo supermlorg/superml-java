@@ -26,7 +26,7 @@ import java.util.List;
  * ADWIN (Adaptive Windowing) implementation for detecting concept drift
  * using adaptive sliding windows with statistical change detection.
  * 
- * Reference: Bifet, A. & Gavaldà, R. "Learning from Time-Changing Data with Adaptive Windowing" (2007)
+ * Reference: Bifet, A. &amp; Gavaldà, R. "Learning from Time-Changing Data with Adaptive Windowing" (2007)
  */
 public class ADWINDriftDetector {
     

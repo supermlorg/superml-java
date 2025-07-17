@@ -49,12 +49,16 @@ navigation:
     url: /
   - title: Quick Start
     url: /quick-start
+  - title: Release Notes
+    url: /release-notes-2.1.0
   - title: Guides
     items:
       - title: Architecture Overview
         url: /architecture
       - title: Tree Algorithms
         url: /tree-algorithms
+      - title: Neural Networks
+        url: /neural-persistence-integration
       - title: Multiclass Classification
         url: /multiclass-guide
       - title: Kaggle Integration

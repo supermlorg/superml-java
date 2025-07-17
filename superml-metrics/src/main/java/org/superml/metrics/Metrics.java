@@ -223,4 +223,56 @@ public class Metrics {
         
         return 1.0 - (residualSumSquares / totalSumSquares);
     }
+    
+    /**
+     * Calculate ROC AUC score for binary classification.
+     * @param yTrue true binary labels (0 or 1)
+     * @param yPred predicted probabilities
+     * @return ROC AUC score
+     */
+    public static double rocAuc(double[] yTrue, double[] yPred) {
+        if (yTrue.length != yPred.length) {
+            throw new IllegalArgumentException("Arrays must have the same length");
+        }
+        
+        // Create array of (prediction, label) pairs
+        int n = yTrue.length;
+        double[][] pairs = new double[n][2];
+        for (int i = 0; i < n; i++) {
+            pairs[i][0] = yPred[i];  // prediction
+            pairs[i][1] = yTrue[i];  // true label
+        }
+        
+        // Sort by prediction score (descending)
+        Arrays.sort(pairs, (a, b) -> Double.compare(b[0], a[0]));
+        
+        // Count positive and negative samples
+        int positives = 0;
+        int negatives = 0;
+        for (int i = 0; i < n; i++) {
+            if (pairs[i][1] == 1.0) positives++;
+            else negatives++;
+        }
+        
+        if (positives == 0 || negatives == 0) {
+            return 0.5; // No discrimination possible
+        }
+        
+        // Calculate AUC using trapezoidal rule
+        double auc = 0.0;
+        int truePositives = 0;
+        int falsePositives = 0;
+        
+        for (int i = 0; i < n; i++) {
+            if (pairs[i][1] == 1.0) {
+                truePositives++;
+            } else {
+                falsePositives++;
+                // Add area under curve
+                auc += (double) truePositives / positives;
+            }
+        }
+        
+        return auc / negatives;
+    }
 }

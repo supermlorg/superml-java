@@ -17,7 +17,7 @@ import java.util.Arrays;
  * - Advanced architectures and configurations
  * 
  * @author SuperML Team
- * @version 2.0.0
+ * @version 2.1.0
  */
 public class DeepLearningExamples {
     

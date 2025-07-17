@@ -24,7 +24,7 @@ package org.superml.pmml;
  * This class provides functionality to convert SuperML models to and from PMML format.
  * 
  * @author SuperML Team
- * @version 2.0.0
+ * @version 2.1.0
  * @since 2.0.0
  */
 public class PMMLConverter {

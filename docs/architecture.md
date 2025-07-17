@@ -8,14 +8,14 @@ search: true
 
 # SuperML Java Framework - Architecture Overview
 
-This document provides a comprehensive overview of the SuperML Java 2.0.0 framework architecture, design principles, and internal workings of the 21-module system.
+This document provides a comprehensive overview of the SuperML Java 2.1.0 framework architecture, design principles, and internal workings of the 21-module system.
 
 ## 🏗️ High-Level Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         SuperML Java 2.0.0 Framework                       │
-│                    (21 Modules, 12+ Algorithms Implemented)                 │
+│                         SuperML Java 2.1.0 Framework                       │
+│                    (21 Modules, 15+ Algorithms Implemented)                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  📱 User API Layer                                                         │
 │  ├── Estimator Interface & Base Classes                                    │
@@ -24,7 +24,7 @@ This document provides a comprehensive overview of the SuperML Java 2.0.0 framew
 │  ├── High-Level APIs (KaggleTrainingManager, ModelManager)                 │
 │  └── Dual-Mode Visualization (XChart GUI + ASCII)                          │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  🧠 Algorithm Layer (12+ Implementations)                                  │
+│  🧠 Algorithm Layer (15+ Implementations)                                  │
 │  ├── Linear Models (6)          ├── Tree-Based Models (5)                  │
 │  │   ├── LogisticRegression     │   ├── DecisionTreeClassifier             │
 │  │   ├── LinearRegression       │   ├── DecisionTreeRegressor              │
@@ -32,6 +32,11 @@ This document provides a comprehensive overview of the SuperML Java 2.0.0 framew
 │  │   ├── Lasso                  │   ├── RandomForestRegressor              │
 │  │   ├── SGDClassifier          │   └── GradientBoostingClassifier         │
 │  │   └── SGDRegressor           │                                           │
+│  │                              ├── Neural Networks (3)                    │
+│  │                              │   ├── MLPClassifier                       │
+│  │                              │   ├── CNNClassifier                       │
+│  │                              │   └── RNNClassifier                       │
+│  │                              │                                           │
 │  │                              ├── Clustering (1)                         │
 │  └── Preprocessing (Multiple)   │   └── KMeans (k-means++)                │
 │      ├── StandardScaler         │                                           │
@@ -72,15 +77,16 @@ This document provides a comprehensive overview of the SuperML Java 2.0.0 framew
 
 ## �️ 21-Module Architecture
 
-SuperML Java 2.0.0 is built on a sophisticated modular architecture with 21 specialized modules:
+SuperML Java 2.1.0 is built on a sophisticated modular architecture with 21 specialized modules:
 
 ### **Core Foundation** (2 modules)
 - `superml-core`: Base interfaces and estimator hierarchy
 - `superml-utils`: Shared utilities and mathematical functions
 
-### **Algorithm Implementation** (3 modules)  
+### **Algorithm Implementation** (4 modules)  
 - `superml-linear-models`: 6 linear algorithms (Logistic/Linear Regression, Ridge, Lasso, SGD)
-- `superml-tree-models`: 5 tree algorithms (Decision Trees, Random Forest, Gradient Boosting)
+- `superml-tree-models`: 5 tree algorithms (Decision Trees, Random Forest, Gradient Boosting, XGBoost)
+- `superml-neural`: 3 neural network algorithms (MLP, CNN, RNN)
 - `superml-clustering`: K-Means with advanced initialization
 
 ### **Data Processing** (3 modules)

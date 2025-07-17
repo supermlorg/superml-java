@@ -85,6 +85,44 @@ This directory contains comprehensive examples demonstrating the SuperML Java fr
 - Automated submission file generation
 - Robust model evaluation and validation strategies
 
+---
+
+### 🚀 [BasicXGBoostExample.java](BasicXGBoostExample.java)
+**XGBoost quick start and essential features**
+- Basic XGBoost training with default parameters
+- Advanced configuration with regularization and early stopping
+- Feature importance analysis with multiple metrics
+- Hyperparameter tuning best practices
+- Performance optimization and validation
+
+**Features demonstrated:**
+- `XGBoost` classifier with gradient boosting
+- L1/L2 regularization (Alpha/Lambda parameters)
+- Early stopping with validation data
+- Feature importance analysis (weight, gain, cover)
+- Tree pruning with gamma parameter
+- Row and column subsampling for overfitting prevention
+
+---
+
+### 🌟 [XGBoostExample.java](XGBoostExample.java)
+**Comprehensive XGBoost showcase for competition-level ML**
+- Advanced hyperparameter tuning and optimization
+- Model comparison with Random Forest and Gradient Boosting
+- Feature importance analysis with visualization
+- Production-ready pipeline integration
+- Cross-validation and performance monitoring
+- Inference performance testing and deployment preparation
+
+**Features demonstrated:**
+- Advanced XGBoost configuration with all parameters
+- Histogram-based approximate split finding
+- Parallel tree construction and optimization
+- Feature engineering through gradient boosting
+- Model ensemble comparison and benchmarking
+- Production pipeline with preprocessing integration
+- Competition-ready workflow and best practices
+
 ## 🚀 Running the Examples
 
 ### Prerequisites
@@ -110,6 +148,8 @@ java -cp "target/classes:examples" examples.RegressionComparison
 java -cp "target/classes:examples" examples.PipelineExample
 java -cp "target/classes:examples" examples.InferenceExample
 java -cp "target/classes:examples" examples.KaggleIntegration
+java -cp "target/classes:examples" examples.BasicXGBoostExample
+java -cp "target/classes:examples" examples.XGBoostExample
 ```
 
 ### Alternative: Maven Execution
@@ -164,8 +204,10 @@ Actual | Predicted | Class Name
 1. **BasicClassification.java** - Start here for fundamental ML concepts
 2. **RegressionComparison.java** - Learn about different regression algorithms
 3. **PipelineExample.java** - Understand workflow automation and preprocessing
-4. **InferenceExample.java** - Production deployment and performance optimization
-5. **KaggleIntegration.java** - Advanced competition techniques and best practices
+4. **BasicXGBoostExample.java** - Learn XGBoost fundamentals and gradient boosting
+5. **InferenceExample.java** - Production deployment and performance optimization
+6. **XGBoostExample.java** - Advanced XGBoost techniques and competition workflows
+7. **KaggleIntegration.java** - Complete competition strategies and best practices
 
 ## 🔗 Integration with Documentation
 
