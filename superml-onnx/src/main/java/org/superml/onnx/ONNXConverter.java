@@ -118,7 +118,7 @@ public class ONNXConverter {
         ModelMetadata metadata = new ModelMetadata();
         metadata.modelName = options.modelName != null ? options.modelName : model.getClass().getSimpleName();
         metadata.framework = "SuperML-Java";
-        metadata.version = "2.0.0";
+        metadata.version = "2.1.0";
         metadata.description = options.description;
         metadata.author = options.author;
         metadata.createdDate = new Date().toString();
@@ -144,7 +144,7 @@ public class ONNXConverter {
         ObjectNode onnxModel = objectMapper.createObjectNode();
         onnxModel.put("ir_version", 7);
         onnxModel.put("producer_name", "SuperML-Java");
-        onnxModel.put("producer_version", "2.0.0");
+        onnxModel.put("producer_version", "2.1.0");
         onnxModel.put("model_version", 1);
         
         // Add metadata

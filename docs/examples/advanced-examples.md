@@ -1,6 +1,6 @@
 ---
 title: "Advanced Examples"
-description: "Advanced usage patterns, complex workflows, and real-world scenarios with SuperML Java 2.0.0"
+description: "Advanced usage patterns, complex workflows, and real-world scenarios with SuperML Java 2.1.0"
 layout: default
 toc: true
 search: true
@@ -8,7 +8,7 @@ search: true
 
 # Advanced Examples
 
-This guide demonstrates advanced usage patterns, complex workflows, and real-world scenarios using SuperML Java 2.0.0's comprehensive 21-module architecture. These examples showcase production-ready features and sophisticated ML workflows.
+This guide demonstrates advanced usage patterns, complex workflows, and real-world scenarios using SuperML Java 2.1.0's comprehensive 21-module architecture. These examples showcase production-ready features and sophisticated ML workflows.
 
 ## 🚀 Advanced AutoML Workflows
 
@@ -26,7 +26,7 @@ import java.util.*;
 
 public class EnterpriseAutoMLExample {
     public static void main(String[] args) {
-        System.out.println("🏢 SuperML Java 2.0.0 - Enterprise AutoML Example");
+        System.out.println("🏢 SuperML Java 2.1.0 - Enterprise AutoML Example");
         
         // 1. Generate complex multi-class dataset
         var dataset = Datasets.makeClassification(2000, 25, 5, 42); // 5 classes, challenging
@@ -146,7 +146,7 @@ import java.util.*;
 
 public class AdvancedGradientBoostingExample {
     public static void main(String[] args) {
-        System.out.println("🌲 SuperML Java 2.0.0 - Advanced Gradient Boosting Example");
+        System.out.println("🌲 SuperML Java 2.1.0 - Advanced Gradient Boosting Example");
         
         // 1. Generate challenging dataset
         var dataset = Datasets.makeClassification(2000, 30, 3, 42, 0.15); // 15% noise
@@ -273,7 +273,7 @@ import java.util.*;
 
 public class BayesianHyperparameterOptimization {
     public static void main(String[] args) {
-        System.out.println("🔬 SuperML Java 2.0.0 - Bayesian Hyperparameter Optimization");
+        System.out.println("🔬 SuperML Java 2.1.0 - Bayesian Hyperparameter Optimization");
         
         // 1. Load dataset
         var dataset = Datasets.makeClassification(1500, 20, 3, 42);
@@ -417,7 +417,7 @@ import java.util.*;
 
 public class NeuralNetworkEnsembleExample {
     public static void main(String[] args) {
-        System.out.println("🧠 SuperML Java 2.0.0 - Neural Network Ensemble with Transfer Learning");
+        System.out.println("🧠 SuperML Java 2.1.0 - Neural Network Ensemble with Transfer Learning");
         
         // 1. Create complex dataset
         var dataset = Datasets.makeClassification(2000, 50, 10, 42); // 10 classes
@@ -570,7 +570,7 @@ import org.superml.visualization.VisualizationFactory;
 
 public class AdvancedFeatureEngineeringPipeline {
     public static void main(String[] args) {
-        System.out.println("🎛️ SuperML Java 2.0.0 - Advanced Feature Engineering Pipeline");
+        System.out.println("🎛️ SuperML Java 2.1.0 - Advanced Feature Engineering Pipeline");
         
         // 1. Load mixed-type dataset
         var dataset = Datasets.loadTitanic(); // Mixed numerical/categorical data
@@ -721,7 +721,7 @@ import java.util.concurrent.*;
 
 public class ProductionInferenceService {
     public static void main(String[] args) throws Exception {
-        System.out.println("🚀 SuperML Java 2.0.0 - Production Inference Service");
+        System.out.println("🚀 SuperML Java 2.1.0 - Production Inference Service");
         
         // 1. Setup production environment
         var dataset = Datasets.loadIris();
@@ -892,7 +892,7 @@ import java.util.*;
 
 public class MLExperimentTrackingExample {
     public static void main(String[] args) {
-        System.out.println("📊 SuperML Java 2.0.0 - ML Experiment Tracking");
+        System.out.println("📊 SuperML Java 2.1.0 - ML Experiment Tracking");
         
         // 1. Initialize experiment tracker
         var experimentTracker = new ExperimentTracker()
@@ -1090,4 +1090,4 @@ public class MLExperimentTrackingExample {
 
 ---
 
-**Master the full power of SuperML Java 2.0.0!** 🚀 These advanced examples showcase the framework's sophisticated capabilities for enterprise-grade machine learning applications.
+**Master the full power of SuperML Java 2.1.0!** 🚀 These advanced examples showcase the framework's sophisticated capabilities for enterprise-grade machine learning applications.

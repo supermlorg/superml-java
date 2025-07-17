@@ -1,6 +1,6 @@
 ---
 title: "Basic Examples"
-description: "Simple, focused examples to get started with SuperML Java 2.0.0"
+description: "Simple, focused examples to get started with SuperML Java 2.1.0"
 layout: default
 toc: true
 search: true
@@ -8,7 +8,7 @@ search: true
 
 # Basic Examples
 
-This guide provides simple, focused examples to help you get started with SuperML Java 2.0.0. Each example demonstrates core concepts with the 21-module architecture and can be run independently.
+This guide provides simple, focused examples to help you get started with SuperML Java 2.1.0. Each example demonstrates core concepts with the 21-module architecture and can be run independently.
 
 ## 🚀 Quick Start Examples
 
@@ -21,7 +21,7 @@ import org.superml.visualization.VisualizationFactory;
 
 public class AutoMLExample {
     public static void main(String[] args) {
-        System.out.println("🤖 SuperML Java 2.0.0 - AutoML Example");
+        System.out.println("🤖 SuperML Java 2.1.0 - AutoML Example");
         
         // 1. Load classic dataset
         var dataset = Datasets.loadIris();
@@ -63,7 +63,7 @@ import org.superml.metrics.Metrics;
 
 public class PipelineWithVisualizationExample {
     public static void main(String[] args) {
-        System.out.println("🔧 SuperML Java 2.0.0 - Pipeline + Visualization Example");
+        System.out.println("🔧 SuperML Java 2.1.0 - Pipeline + Visualization Example");
         
         // 1. Load and prepare data
         var dataset = Datasets.loadIris();
@@ -135,7 +135,7 @@ import java.util.*;
 
 public class AlgorithmComparisonExample {
     public static void main(String[] args) {
-        System.out.println("🏆 SuperML Java 2.0.0 - Algorithm Comparison Example");
+        System.out.println("🏆 SuperML Java 2.1.0 - Algorithm Comparison Example");
         
         // 1. Generate challenging dataset
         var dataset = Datasets.makeClassification(1000, 20, 5, 42);
@@ -198,7 +198,7 @@ import java.util.*;
 
 public class CrossValidationExample {
     public static void main(String[] args) {
-        System.out.println("🔍 SuperML Java 2.0.0 - Cross-Validation and Hyperparameter Tuning");
+        System.out.println("🔍 SuperML Java 2.1.0 - Cross-Validation and Hyperparameter Tuning");
         
         // 1. Load dataset
         var dataset = Datasets.loadIris();
@@ -265,7 +265,7 @@ import java.util.*;
 
 public class RegressionComparisonExample {
     public static void main(String[] args) {
-        System.out.println("📈 SuperML Java 2.0.0 - Regression Comparison Example");
+        System.out.println("📈 SuperML Java 2.1.0 - Regression Comparison Example");
         
         // 1. Generate regression dataset
         var dataset = Datasets.makeRegression(1000, 10, 0.1, 42);
@@ -340,7 +340,7 @@ import org.superml.metrics.Metrics;
 
 public class ClusteringExample {
     public static void main(String[] args) {
-        System.out.println("🔗 SuperML Java 2.0.0 - K-Means Clustering Example");
+        System.out.println("🔗 SuperML Java 2.1.0 - K-Means Clustering Example");
         
         // 1. Generate clustering dataset
         var dataset = Datasets.makeBlobs(300, 2, 4, 42); // 300 samples, 2 features, 4 clusters
@@ -408,7 +408,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ProductionInferenceExample {
     public static void main(String[] args) throws Exception {
-        System.out.println("⚡ SuperML Java 2.0.0 - Production Inference Example");
+        System.out.println("⚡ SuperML Java 2.1.0 - Production Inference Example");
         
         // 1. Train and save a model
         var dataset = Datasets.loadIris();
@@ -483,7 +483,7 @@ import java.util.*;
 
 public class XChartVisualizationShowcase {
     public static void main(String[] args) {
-        System.out.println("📊 SuperML Java 2.0.0 - XChart Visualization Showcase");
+        System.out.println("📊 SuperML Java 2.1.0 - XChart Visualization Showcase");
         
         // 1. Prepare data and models
         var dataset = Datasets.loadIris();
@@ -565,4 +565,4 @@ public class XChartVisualizationShowcase {
 
 ---
 
-**Ready to build amazing ML applications!** 🚀 Each example showcases different aspects of SuperML Java 2.0.0's powerful 21-module architecture.
+**Ready to build amazing ML applications!** 🚀 Each example showcases different aspects of SuperML Java 2.1.0's powerful 21-module architecture.

@@ -7,7 +7,8 @@ SuperML Java provides a comprehensive collection of machine learning algorithms,
 | Category | Algorithms | Use Cases |
 |----------|------------|-----------|
 | **Linear Models** | 6 algorithms | Classification, Regression, Feature Selection |
-| **Tree-Based** | 3 algorithms | Non-linear patterns, Feature importance, Ensemble learning |
+| **Tree-Based** | 4 algorithms | Non-linear patterns, Feature importance, Ensemble learning |
+| **Neural Networks** | 3 algorithms | Deep learning, Complex patterns, Image/Sequence processing |
 | **Clustering** | 1 algorithm | Unsupervised grouping, Customer segmentation |
 | **Meta-Classifiers** | 1 algorithm | Multiclass conversion, Algorithm composition |
 | **Preprocessing** | 1 transformer | Feature scaling, Data normalization |
@@ -261,6 +262,94 @@ GradientBoosting gb = new GradientBoosting()
 - When careful tuning can be done
 - Complex non-linear relationships
 - When overfitting can be controlled
+
+## 🧠 Neural Networks
+
+### MLPClassifier
+**Purpose**: Multi-Layer Perceptron for classification with deep learning capabilities
+
+**Key Features**:
+- Configurable hidden layer architecture
+- Multiple activation functions (ReLU, Sigmoid, Tanh)
+- Batch processing and mini-batch training
+- Early stopping and validation monitoring
+- Gradient descent optimization with momentum
+
+**Parameters**:
+```java
+MLPClassifier mlp = new MLPClassifier()
+    .setHiddenLayerSizes(128, 64, 32)    // Hidden layer architecture
+    .setActivation("relu")               // Activation function
+    .setLearningRate(0.001)              // Learning rate
+    .setMaxIter(200)                     // Maximum epochs
+    .setBatchSize(32)                    // Batch size
+    .setEarlyStopping(true)              // Enable early stopping
+    .setValidationFraction(0.2);         // Validation split
+```
+
+**Best Use Cases**:
+- Complex classification problems with non-linear patterns
+- High-dimensional data
+- When sufficient training data is available
+- Feature interaction modeling
+
+---
+
+### CNNClassifier
+**Purpose**: Convolutional Neural Network for image classification and spatial pattern recognition
+
+**Key Features**:
+- Convolutional and pooling layers
+- Automatic feature extraction from images
+- Configurable CNN architecture
+- Batch normalization and dropout support
+- GPU acceleration ready
+
+**Parameters**:
+```java
+CNNClassifier cnn = new CNNClassifier()
+    .setInputShape(32, 32, 3)            // Image dimensions (H, W, C)
+    .setConvLayers(32, 64, 128)          // Convolutional filters
+    .setKernelSize(3)                    // Convolution kernel size
+    .setPoolingSize(2)                   // Max pooling size
+    .setDropoutRate(0.3)                 // Dropout for regularization
+    .setLearningRate(0.001);             // Learning rate
+```
+
+**Best Use Cases**:
+- Image classification tasks
+- Computer vision problems
+- Spatial pattern recognition
+- When translation invariance is important
+
+---
+
+### RNNClassifier
+**Purpose**: Recurrent Neural Network for sequence classification and temporal pattern recognition
+
+**Key Features**:
+- LSTM and GRU cell support
+- Variable sequence length handling
+- Bidirectional processing
+- Attention mechanisms
+- Memory state management
+
+**Parameters**:
+```java
+RNNClassifier rnn = new RNNClassifier()
+    .setSequenceLength(100)              // Maximum sequence length
+    .setHiddenSize(128)                  // Hidden state size
+    .setNumLayers(2)                     // Number of RNN layers
+    .setCellType("LSTM")                 // Cell type (LSTM/GRU)
+    .setBidirectional(true)              // Bidirectional processing
+    .setLearningRate(0.001);             // Learning rate
+```
+
+**Best Use Cases**:
+- Sequence classification (text, time series)
+- Natural language processing
+- Time series prediction
+- When temporal dependencies matter
 
 ## 🎯 Clustering
 

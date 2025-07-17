@@ -1,6 +1,6 @@
 ---
 title: "Quick Start Guide"
-description: "Get up and running with SuperML Java 2.0.0 in minutes with AutoML and visualization"
+description: "Get up and running with SuperML Java 2.1.0 in minutes with AutoML, neural networks, and visualization"
 layout: default
 toc: true
 search: true
@@ -8,7 +8,7 @@ search: true
 
 # Quick Start Guide
 
-Get up and running with SuperML Java 2.0.0 in just a few minutes! This guide will walk you through setting up the framework, training your first model with AutoML, and creating professional visualizations.
+Get up and running with SuperML Java 2.1.0 in just a few minutes! This guide will walk you through setting up the framework, training your first model with AutoML, deep learning capabilities, and creating professional visualizations.
 
 ## 🚀 5-Minute Quickstart with AutoML & Visualization
 
@@ -19,27 +19,32 @@ Get up and running with SuperML Java 2.0.0 in just a few minutes! This guide wil
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-bundle-all</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
 #### Modular Installation (Advanced)
 ```xml
-<!-- Core + Linear Models + Visualization -->
+<!-- Core + Linear Models + Neural Networks + Visualization -->
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-core</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-linear-models</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
+</dependency>
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-neural</artifactId>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-visualization</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -579,12 +584,12 @@ public class VisualizationShowcase {
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-core</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-linear-models</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -594,22 +599,22 @@ public class VisualizationShowcase {
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-core</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-linear-models</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-preprocessing</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-model-selection</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -619,12 +624,12 @@ public class VisualizationShowcase {
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-autotrainer</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-visualization</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -634,17 +639,17 @@ public class VisualizationShowcase {
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-inference</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-persistence</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-drift</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -654,7 +659,7 @@ public class VisualizationShowcase {
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-bundle-all</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -670,7 +675,7 @@ public class VisualizationShowcase {
 
 ### Essential Documentation
 - [**Modular Architecture**](modular-architecture.md) - Understanding the 21-module system
-- [**Algorithm Reference**](algorithms-reference.md) - Complete guide to all 12+ algorithms
+- [**Algorithm Reference**](algorithms-reference.md) - Complete guide to all 15+ algorithms
 - [**Examples Collection**](examples/basic-examples.md) - 11 comprehensive examples
 - [**API Reference**](api/core-classes.md) - Complete API documentation
 - [**Production Guide**](inference-guide.md) - Deployment and monitoring
@@ -685,6 +690,6 @@ All code examples are available in the `superml-examples` module:
 
 ---
 
-**Ready to build amazing ML applications with SuperML Java 2.0.0!** 🚀
+**Ready to build amazing ML applications with SuperML Java 2.1.0!** 🚀
 
 Start with AutoML for instant results, then dive deeper into the modular architecture for custom solutions.

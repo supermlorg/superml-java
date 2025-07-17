@@ -25,7 +25,7 @@
     <parent>
         <groupId>org.superml</groupId>
         <artifactId>superml-java-parent</artifactId>
-        <version>2.0.0</version>
+        <version>2.1.0</version>
     </parent>
     <artifactId>superml-examples</artifactId>
     <name>SuperML Examples</name>
@@ -84,6 +84,16 @@
         <dependency>
             <groupId>org.superml</groupId>
             <artifactId>superml-metrics</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.superml</groupId>
+            <artifactId>superml-autotrainer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.superml</groupId>
+            <artifactId>superml-neural</artifactId>
             <version>${project.version}</version>
         </dependency>
         

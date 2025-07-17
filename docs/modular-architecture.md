@@ -56,11 +56,24 @@ The SuperML Java framework has been restructured into a sophisticated 21-module 
   - `RandomForestClassifier.java` - Bootstrap aggregating ensemble
   - `RandomForestRegressor.java` - Ensemble regression
   - `GradientBoostingClassifier.java` - Gradient boosting implementation
+  - `XGBoost.java` - Extreme Gradient Boosting implementation
 - **Dependencies**: superml-core, superml-utils, commons-math3
-- **Algorithms**: 5 tree-based algorithms
-- **Features**: CART splitting, bootstrap sampling, gradient boosting
+- **Algorithms**: 6 tree-based algorithms
+- **Features**: CART splitting, bootstrap sampling, gradient boosting, XGBoost
 
-#### 5. **superml-clustering**
+#### 5. **superml-neural**
+- **Description**: Deep learning and neural network algorithms
+- **Contains**:
+  - `MLPClassifier.java` - Multi-Layer Perceptron for classification
+  - `CNNClassifier.java` - Convolutional Neural Network for image processing
+  - `RNNClassifier.java` - Recurrent Neural Network for sequence processing
+  - Neural network utilities and optimizers
+  - Activation functions and layer implementations
+- **Dependencies**: superml-core, superml-utils, commons-math3
+- **Algorithms**: 3 neural network algorithms
+- **Features**: Deep learning, backpropagation, GPU acceleration ready
+
+#### 6. **superml-clustering**
 - **Description**: Unsupervised clustering algorithms
 - **Contains**:
   - `KMeans.java` - K-means with k-means++ initialization
@@ -72,7 +85,7 @@ The SuperML Java framework has been restructured into a sophisticated 21-module 
 
 ### **Data Processing and Preparation Modules**
 
-#### 6. **superml-preprocessing**
+#### 7. **superml-preprocessing**
 - **Description**: Data preprocessing and feature engineering
 - **Contains**:
   - `StandardScaler.java` - Feature standardization and normalization
@@ -262,7 +275,7 @@ The SuperML Java framework has been restructured into a sophisticated 21-module 
 - **Linear Models**: 6 algorithms (Linear/Logistic Regression, Ridge, Lasso, SGD variants)
 - **Tree Models**: 5 algorithms (Decision Trees, Random Forest, Gradient Boosting)
 - **Clustering**: 1 algorithm (K-Means with k-means++)
-- **Total**: 12+ machine learning algorithms
+- **Total**: 15+ machine learning algorithms
 
 ### **Feature Highlights**
 - ✅ **Dual-Mode Visualization**: ASCII terminal + XChart GUI with automatic fallback
@@ -316,12 +329,12 @@ superml-core (Foundation)
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-core</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-linear-models</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -330,7 +343,7 @@ superml-core (Foundation)
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-bundle-all</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -366,7 +379,7 @@ superml-core (Foundation)
 
 ---
 
-**SuperML Java 2.0.0** - A comprehensive, modular machine learning framework designed for education, research, and production deployment.
+**SuperML Java 2.1.0** - A comprehensive, modular machine learning framework designed for education, research, and production deployment.
 
 #### 5. **superml-preprocessing**
 - **Description**: Data preprocessing utilities
@@ -471,14 +484,14 @@ To use only specific functionality, include only the modules you need:
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-linear-models</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 
 <!-- For tree models only -->
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-tree-models</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
@@ -490,7 +503,7 @@ To use all functionality:
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-bundle-all</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 

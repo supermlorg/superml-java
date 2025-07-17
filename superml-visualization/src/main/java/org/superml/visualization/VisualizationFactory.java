@@ -36,7 +36,7 @@ import org.superml.visualization.regression.XChartScatterPlot;
  * - Simplified API for both visualization types
  * 
  * @author SuperML Framework
- * @version 2.0.0
+ * @version 2.1.0
  */
 public class VisualizationFactory {
     
