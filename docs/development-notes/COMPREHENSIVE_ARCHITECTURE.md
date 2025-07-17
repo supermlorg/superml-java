@@ -291,7 +291,7 @@ public class NeuralNetworkGridSearchCV {
     public static class StandardGrids {
         public static Map<String, Object[]> mlpGrid() {
             return Map.of(
-                "hidden_layer_sizes", new int[][]{{50}, {100}, {100, 50}, {200, 100, 50}},
+                "hidden_layer_sizes", new int[][]{ {50}, {100}, {100, 50}, {200, 100, 50} },
                 "activation", new String[]{"relu", "tanh"},
                 "learning_rate", new double[]{0.001, 0.01, 0.1},
                 "alpha", new double[]{0.0001, 0.001, 0.01}

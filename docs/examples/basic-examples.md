@@ -435,7 +435,7 @@ public class ProductionInferenceExample {
         
         // 4. Single prediction
         System.out.println("\n🎯 Single prediction:");
-        double[][] singleSample = {{5.1, 3.5, 1.4, 0.2}};
+        double[][] singleSample = { {5.1, 3.5, 1.4, 0.2} };
         double[] singlePrediction = engine.predict("iris_classifier", singleSample);
         System.out.println("   Prediction: " + singlePrediction[0]);
         System.out.println("   Inference time: " + engine.getLastInferenceTime() + "μs");

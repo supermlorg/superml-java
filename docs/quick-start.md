@@ -486,7 +486,7 @@ public class ProductionInference {
             });
         
         // Make predictions with monitoring
-        double[][] newData = {{5.1, 3.5, 1.4, 0.2}};
+        double[][] newData = { {5.1, 3.5, 1.4, 0.2} };
         double[] predictions = engine.predict("iris_classifier", newData);
         
         // Monitor for drift
