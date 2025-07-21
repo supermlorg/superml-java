@@ -22,18 +22,27 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.superml</groupId>
         <artifactId>superml-java-parent</artifactId>
-        <version>2.1.0</version>
+        <version>3.1.2</version>
     </parent>
+
     <artifactId>superml-examples</artifactId>
     <name>SuperML Examples</name>
     <description>Example code demonstrating SuperML framework usage</description>
+
     <dependencies>
+        <!-- Core SuperML dependencies -->
         <dependency>
             <groupId>org.superml</groupId>
             <artifactId>superml-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.superml</groupId>
+            <artifactId>superml-datasets</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -58,27 +67,7 @@
         </dependency>
         <dependency>
             <groupId>org.superml</groupId>
-            <artifactId>superml-model-selection</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.superml</groupId>
             <artifactId>superml-pipeline</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.superml</groupId>
-            <artifactId>superml-datasets</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.superml</groupId>
-            <artifactId>superml-inference</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.superml</groupId>
-            <artifactId>superml-persistence</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -88,29 +77,12 @@
         </dependency>
         <dependency>
             <groupId>org.superml</groupId>
-            <artifactId>superml-autotrainer</artifactId>
+            <artifactId>superml-visualization</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.superml</groupId>
-            <artifactId>superml-neural</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        
-        <!-- Advanced modules -->
-        <dependency>
-            <groupId>org.superml</groupId>
-            <artifactId>superml-utils</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.superml</groupId>
-            <artifactId>superml-kaggle</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.superml</groupId>
-            <artifactId>superml-onnx</artifactId>
+            <artifactId>superml-transformers</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -125,13 +97,83 @@
         </dependency>
         <dependency>
             <groupId>org.superml</groupId>
-            <artifactId>superml-visualization</artifactId>
+            <artifactId>superml-inference</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.superml</groupId>
+            <artifactId>superml-persistence</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <!-- External dependencies -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+        </dependency>
+        
+        <!-- SLF4J Logging for Model Inference -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.12</version>
+        </dependency>
+        
+        <!-- JAXB XML Binding for PMML Conversion -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        
+        <!-- Additional PMML dependencies -->
+        <dependency>
+            <groupId>org.jpmml</groupId>
+            <artifactId>pmml-model</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jpmml</groupId>
+            <artifactId>pmml-evaluator</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+
+        <!-- Test dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.12.4</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>-Xmx2048m</argLine>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

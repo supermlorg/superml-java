@@ -6,18 +6,19 @@
 
 # SuperML Java
 
-[![Build Status](https://img.shields.io/badge/build-22%2F22%20modules%20✅-success)](https://github.com/supermlorg/superml-java)
+[![Build Status](https://img.shields.io/badge/build-23%2F23%20modules%20✅-success)](https://github.com/supermlorg/superml-java)
 [![Performance](https://img.shields.io/badge/performance-400K%2B%20predictions%2Fsec-brightgreen)](https://github.com/supermlorg/superml-java)
-[![Tests](https://img.shields.io/badge/tests-145%2B%20passing-success)](https://github.com/supermlorg/superml-java)
-[![Version](https://img.shields.io/badge/version-2.1.0-blue)](https://github.com/supermlorg/superml-java)
+[![Tests](https://img.shields.io/badge/tests-160%2B%20passing-success)](https://github.com/supermlorg/superml-java)
+[![Version](https://img.shields.io/badge/version-3.1.2-blue)](https://github.com/supermlorg/superml-java)
 
 A comprehensive, modular Java Machine Learning Framework inspired by scikit-learn, developed by the SuperML community.
 
 ## Overview
 
-SuperML Java 2.1.0 is a sophisticated **22-module machine learning library** for Java that delivers **enterprise-grade performance** with **400K+ predictions/second** and **22/22 modules** compiling successfully. The framework provides:
+SuperML Java 3.1.2 is a sophisticated **23-module machine learning library** for Java that delivers **enterprise-grade performance** with **400K+ predictions/second** and **23/23 modules** compiling successfully. The framework provides:
 
-- **🎯 Supervised Learning**: 11+ algorithms including Logistic Regression, Linear Regression, Ridge, Lasso, Decision Trees, Random Forest, XGBoost with lightning-fast training
+- **🎯 Supervised Learning**: 15+ algorithms including Logistic Regression, Linear Regression, Ridge, Lasso, Decision Trees, Random Forest, XGBoost with lightning-fast training
+- **🤖 Transformer Models**: Complete implementation with Encoder-Only (BERT), Decoder-Only (GPT), and Full Transformer architectures
 - **🔍 Unsupervised Learning**: K-Means clustering with k-means++ initialization and advanced convergence criteria
 - **⚙️ Data Preprocessing**: Feature scaling, normalization, encoding, and comprehensive transformation utilities
 - **🔧 Model Selection**: Cross-validation, hyperparameter tuning (Grid/Random Search), and automated optimization
@@ -28,6 +29,7 @@ SuperML Java 2.1.0 is a sophisticated **22-module machine learning library** for
 - **⚡ Inference Engine**: High-performance model serving with **microsecond predictions**, caching, and monitoring
 - **📈 Comprehensive Metrics**: Complete evaluation suite for classification, regression, and clustering
 - **💾 Model Persistence**: Save/load models with automatic statistics capture and version management
+- **🔄 PMML Export**: Complete PMML 4.4 support for cross-platform model deployment
 - **🔄 Cross-Platform Export**: ONNX and PMML support for enterprise deployment
 - **📱 Drift Detection**: Real-time model and data drift monitoring with automated alerts
 - **📚 Professional Logging**: Configurable Logback/SLF4J logging framework
