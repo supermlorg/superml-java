@@ -23,6 +23,7 @@ import org.superml.core.BaseEstimator;
 import org.superml.core.Classifier;
 import org.superml.core.Regressor;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -31,6 +32,8 @@ import java.util.stream.IntStream;
  * Similar to sklearn.tree.DecisionTreeClassifier and DecisionTreeRegressor
  */
 public class DecisionTree extends BaseEstimator implements Classifier, Regressor {
+    
+    private static final long serialVersionUID = 1L;
     
     // Hyperparameters
     private String criterion = "gini"; // "gini", "entropy" for classification; "mse" for regression
@@ -51,7 +54,9 @@ public class DecisionTree extends BaseEstimator implements Classifier, Regressor
     /**
      * Internal class representing a node in the decision tree.
      */
-    public static class TreeNode {
+    public static class TreeNode implements Serializable {
+        private static final long serialVersionUID = 1L;
+        
         // Split criteria
         public int featureIndex = -1;
         public double threshold = 0.0;
