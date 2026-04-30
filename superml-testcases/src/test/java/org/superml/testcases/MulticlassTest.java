@@ -17,10 +17,13 @@
  * under the License.
  */
 
-package org.superml.linear_model;
+package org.superml.testcases;
 
 import org.junit.jupiter.api.Test;
 import org.superml.datasets.Datasets;
+import org.superml.linear_model.LogisticRegression;
+import org.superml.linear_model.OneVsRestClassifier;
+import org.superml.linear_model.SoftmaxRegression;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

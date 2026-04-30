@@ -5,8 +5,8 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.superml.metrics.transformers.TransformerAnalysisMetrics;
 import org.superml.metrics.transformers.TransformerAnalysisMetrics.*;
 import org.superml.visualization.transformers.TransformerAnalysisVisualization;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -67,41 +67,41 @@ public class TransformerAnalysisIntegrationTest {
 
     private void validateAttentionMetrics(AttentionAnalysis analysis) {
         // Pattern metrics validation
-        assertTrue("Sparsity should be between 0 and 1",
-                  analysis.patternMetrics.sparsity >= 0 &&
-                  analysis.patternMetrics.sparsity <= 1);
+        assertTrue(analysis.patternMetrics.sparsity >= 0 &&
+                  analysis.patternMetrics.sparsity <= 1,
+                  "Sparsity should be between 0 and 1");
 
-        assertTrue("Head diversity should be between 0 and 1",
-                  analysis.patternMetrics.headDiversity >= 0 &&
-                  analysis.patternMetrics.headDiversity <= 1);
+        assertTrue(analysis.patternMetrics.headDiversity >= 0 &&
+                  analysis.patternMetrics.headDiversity <= 1,
+                  "Head diversity should be between 0 and 1");
 
         // Distribution metrics validation
-        assertTrue("Standard deviation should be positive",
-                  analysis.distributionMetrics.stdDev >= 0);
+        assertTrue(analysis.distributionMetrics.stdDev >= 0,
+                  "Standard deviation should be positive");
 
-        assertTrue("5th percentile should be less than 95th",
-                  analysis.distributionMetrics.percentile5 <
-                  analysis.distributionMetrics.percentile95);
+        assertTrue(analysis.distributionMetrics.percentile5 <
+                  analysis.distributionMetrics.percentile95,
+                  "5th percentile should be less than 95th");
     }
 
     private void validateGradientMetrics(GradientFlowAnalysis analysis) {
         // Gradient metrics validation
-        assertTrue("Max gradient norm should be positive",
-                  analysis.gradientMetrics.maxGradientNorm > 0);
+        assertTrue(analysis.gradientMetrics.maxGradientNorm > 0,
+                  "Max gradient norm should be positive");
 
-        assertTrue("Gradient correlation should be between -1 and 1",
-                  analysis.gradientMetrics.gradientCorrelation >= -1 &&
-                  analysis.gradientMetrics.gradientCorrelation <= 1);
+        assertTrue(analysis.gradientMetrics.gradientCorrelation >= -1 &&
+                  analysis.gradientMetrics.gradientCorrelation <= 1,
+                  "Gradient correlation should be between -1 and 1");
 
         // Activation metrics validation
         for (Double mean : analysis.activationMetrics.meanActivations) {
-            assertTrue("Mean activation should be finite",
-                      !Double.isInfinite(mean) && !Double.isNaN(mean));
+            assertTrue(!Double.isInfinite(mean) && !Double.isNaN(mean),
+                      "Mean activation should be finite");
         }
 
         for (Double deadUnits : analysis.activationMetrics.deadUnits) {
-            assertTrue("Dead units ratio should be between 0 and 1",
-                      deadUnits >= 0 && deadUnits <= 1);
+            assertTrue(deadUnits >= 0 && deadUnits <= 1,
+                      "Dead units ratio should be between 0 and 1");
         }
     }
 
