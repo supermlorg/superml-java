@@ -1,6 +1,6 @@
 ---
 title: "Basic Examples"
-description: "Simple, focused examples to get started with SuperML Java 2.1.0"
+description: "Simple, focused examples to get started with SuperML Java 3.1.2"
 layout: default
 toc: true
 search: true
@@ -8,7 +8,17 @@ search: true
 
 # Basic Examples
 
-This guide provides simple, focused examples to help you get started with SuperML Java 2.1.0. Each example demonstrates core concepts with the 21-module architecture and can be run independently.
+This guide provides simple, focused examples to help you get started with SuperML Java 3.1.2. Each example demonstrates core concepts with the 21-module architecture and can be run independently.
+
+## 📦 Maven Dependency
+
+```xml
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-bundle-all</artifactId>
+    <version>3.1.2</version>
+</dependency>
+```
 
 ## 🚀 Quick Start Examples
 
@@ -21,7 +31,7 @@ import org.superml.visualization.VisualizationFactory;
 
 public class AutoMLExample {
     public static void main(String[] args) {
-        System.out.println("🤖 SuperML Java 2.1.0 - AutoML Example");
+        System.out.println("🤖 SuperML Java 3.1.2 - AutoML Example");
         
         // 1. Load classic dataset
         var dataset = Datasets.loadIris();
@@ -63,7 +73,7 @@ import org.superml.metrics.Metrics;
 
 public class PipelineWithVisualizationExample {
     public static void main(String[] args) {
-        System.out.println("🔧 SuperML Java 2.1.0 - Pipeline + Visualization Example");
+        System.out.println("🔧 SuperML Java 3.1.2 - Pipeline + Visualization Example");
         
         // 1. Load and prepare data
         var dataset = Datasets.loadIris();
@@ -125,8 +135,8 @@ public class PipelineWithVisualizationExample {
 ```java
 import org.superml.datasets.Datasets;
 import org.superml.linear_model.LogisticRegression;
-import org.superml.tree.RandomForestClassifier;
-import org.superml.tree.DecisionTreeClassifier;
+import org.superml.tree.RandomForest;
+import org.superml.tree.DecisionTree;
 import org.superml.model_selection.ModelSelection;
 import org.superml.metrics.Metrics;
 import org.superml.visualization.VisualizationFactory;
@@ -135,7 +145,7 @@ import java.util.*;
 
 public class AlgorithmComparisonExample {
     public static void main(String[] args) {
-        System.out.println("🏆 SuperML Java 2.1.0 - Algorithm Comparison Example");
+        System.out.println("🏆 SuperML Java 3.1.2 - Algorithm Comparison Example");
         
         // 1. Generate challenging dataset
         var dataset = Datasets.makeClassification(1000, 20, 5, 42);
@@ -145,8 +155,8 @@ public class AlgorithmComparisonExample {
         // 2. Define algorithms to compare
         Map<String, org.superml.core.Classifier> algorithms = new HashMap<>();
         algorithms.put("LogisticRegression", new LogisticRegression().setMaxIter(1000));
-        algorithms.put("DecisionTree", new DecisionTreeClassifier().setMaxDepth(10));
-        algorithms.put("RandomForest", new RandomForestClassifier().setNEstimators(100));
+        algorithms.put("DecisionTree", new DecisionTree().setMaxDepth(10));
+        algorithms.put("RandomForest", new RandomForest().setNEstimators(100));
         
         // 3. Train and evaluate each algorithm
         Map<String, Double> scores = new HashMap<>();

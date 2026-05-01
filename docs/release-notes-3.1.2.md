@@ -9,12 +9,14 @@ search: true
 # Release Notes - SuperML Java v3.1.2
 
 [![Release](https://img.shields.io/badge/version-3.1.2-blue)](https://github.com/supermlorg/superml-java)
-[![Modules](https://img.shields.io/badge/modules-23%20total-green)](https://github.com/supermlorg/superml-java)
-[![Tests](https://img.shields.io/badge/tests-165%2B%20passing-success)](https://github.com/supermlorg/superml-java)
+[![Modules](https://img.shields.io/badge/modules-21%20total-green)](https://github.com/supermlorg/superml-java)
+[![Tests](https://img.shields.io/badge/tests-172%2B%20passing-success)](https://github.com/supermlorg/superml-java)
+[![Maven Central](https://img.shields.io/maven-central/v/org.superml/superml-core)](https://central.sonatype.com/artifact/org.superml/superml-core)
 [![Build](https://img.shields.io/badge/build-all%20modules%20✅-success)](https://github.com/supermlorg/superml-java)
 
-**Release Date:** July 20, 2025  
+**Release Date:** April 30, 2026  
 **Version:** 3.1.2  
+**Maven Central:** [org.superml:superml-core:3.1.2](https://central.sonatype.com/artifact/org.superml/superml-core)  
 **Breaking Changes:** None (fully backward compatible with 3.0.x and 2.x.x)
 
 SuperML Java 3.1.2 is an **incremental release** that builds upon the solid foundation of 3.0.1, focusing on **performance optimizations**, **bug fixes**, and **enhanced stability** across all modules. This release ensures the framework remains **production-ready** with improved reliability and efficiency.
@@ -41,6 +43,13 @@ SuperML Java 3.1.2 is an **incremental release** that builds upon the solid foun
 - **Improved validation performance** for complex model structures
 
 ### 2. **Bug Fixes and Stability** 🔧
+
+#### **Security Fixes**
+- **Fixed:** CVE-2025-27820 — upgraded `httpclient5` 5.4.1 → 5.4.3
+- **Fixed:** CVE-2023-6378 — upgraded `logback-classic` 1.2.12 → 1.5.12, `slf4j` 1.7.36 → 2.0.16
+
+#### **Serialization**
+- **Added:** `DecisionTree` and `TreeNode` now implement `java.io.Serializable` for model persistence
 
 #### **Core Module Fixes**
 - **Fixed:** Thread safety issues in concurrent model training scenarios
@@ -88,31 +97,29 @@ SuperML Java 3.1.2 is an **incremental release** that builds upon the solid foun
 - **Operating Systems**: Windows 10+, macOS 10.15+, Linux (Ubuntu 18.04+)
 - **Memory Requirements**: Minimum 2GB, Recommended 8GB+ for large models
 
-### **Module Status** (23/23 Modules)
+### **Module Status** (21/21 Modules)
 ```
 ✅ superml-core                 - Enhanced performance, bug fixes
 ✅ superml-linear-models        - 15% faster training, stability improvements
-✅ superml-tree-models          - Memory optimizations, edge case fixes
-✅ superml-transformers         - Attention optimizations, mask handling fixes
+✅ superml-tree-models          - Serializable DecisionTree/TreeNode, memory optimizations
+✅ superml-transformers         - Attention optimizations, JUnit 5 migration
 ✅ superml-pmml                 - 50% faster export, validation improvements
 ✅ superml-clustering           - Numerical stability improvements
 ✅ superml-preprocessing        - Enhanced scaling algorithms
 ✅ superml-model-selection      - Cross-validation edge case fixes
 ✅ superml-pipeline             - Thread safety improvements
 ✅ superml-datasets             - Memory efficient data loading
-✅ superml-metrics              - Enhanced computation accuracy
+✅ superml-metrics              - Enhanced computation accuracy, condition number fix
 ✅ superml-visualization        - Improved chart rendering
 ✅ superml-persistence          - Memory leak fixes
 ✅ superml-inference            - Performance optimizations
-✅ superml-automl               - Algorithm selection improvements
-✅ superml-kaggle               - Enhanced dataset compatibility
+✅ superml-autotrainer          - Algorithm selection improvements
 ✅ superml-drift                - Real-time monitoring optimizations
-✅ superml-nlp                  - Text processing improvements
-✅ superml-onnx                 - Export reliability enhancements
+✅ superml-utils                - Utility improvements
+✅ superml-bundle-all           - All-in-one bundle
 ✅ superml-examples             - Updated with latest patterns
-✅ superml-testcases            - Expanded test coverage
-✅ superml-integration          - Cross-module compatibility
-✅ superml-benchmarks           - Performance measurement tools
+✅ superml-testcases            - 172+ tests passing (full coverage)
+✅ superml-pmml                 - PMML 4.4 export support
 ```
 
 ## 🔄 Migration Guide
@@ -125,9 +132,17 @@ SuperML Java 3.1.2 is an **incremental release** that builds upon the solid foun
 ```xml
 <dependency>
     <groupId>org.superml</groupId>
-    <artifactId>superml-java-parent</artifactId>
+    <artifactId>superml-core</artifactId>
     <version>3.1.2</version>
-    <type>pom</type>
+</dependency>
+```
+
+Or use the all-in-one bundle:
+```xml
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-bundle-all</artifactId>
+    <version>3.1.2</version>
 </dependency>
 ```
 

@@ -21,6 +21,20 @@ SuperML Java provides comprehensive model persistence functionality that allows 
 - **Version control** models with timestamps and descriptions
 - **Cross-platform compatibility** with standard file formats
 
+### Supported Models (3.1.2)
+
+All algorithm classes that implement `java.io.Serializable` can be persisted:
+
+| Module | Serializable Classes |
+|--------|---------------------|
+| superml-linear-models | `LogisticRegression`, `LinearRegression`, `Ridge`, `Lasso`, `SGDClassifier` |
+| superml-tree-models | `DecisionTreeClassifier`, `DecisionTreeRegressor`, `RandomForestClassifier`, `GradientBoostingClassifier` |
+| superml-clustering | `KMeans` |
+| superml-preprocessing | `StandardScaler`, `MinMaxScaler`, `LabelEncoder` |
+| superml-pipeline | `Pipeline` |
+
+> **Note (v3.1.2)**: `DecisionTreeClassifier` and `DecisionTreeRegressor` are now fully `Serializable`, including their internal `TreeNode` structures. They can be saved and loaded with `ModelPersistence` just like linear models.
+
 ## 🚀 Quick Start
 
 ### Basic Save and Load

@@ -1,6 +1,6 @@
 ---
 title: "Quick Start Guide"
-description: "Get up and running with SuperML Java 2.1.0 in minutes with AutoML, neural networks, and visualization"
+description: "Get up and running with SuperML Java 3.1.2 in minutes with AutoML, neural networks, and visualization"
 layout: default
 toc: true
 search: true
@@ -8,7 +8,7 @@ search: true
 
 # Quick Start Guide
 
-Get up and running with SuperML Java 2.1.0 in just a few minutes! This guide will walk you through setting up the framework, training your first model with AutoML, deep learning capabilities, and creating professional visualizations.
+Get up and running with SuperML Java 3.1.2 in just a few minutes! This guide will walk you through setting up the framework, training your first model with AutoML, deep learning capabilities, and creating professional visualizations.
 
 ## 🚀 5-Minute Quickstart with AutoML & Visualization
 
@@ -19,32 +19,32 @@ Get up and running with SuperML Java 2.1.0 in just a few minutes! This guide wil
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-bundle-all</artifactId>
-    <version>2.1.0</version>
+    <version>3.1.2</version>
 </dependency>
 ```
 
 #### Modular Installation (Advanced)
 ```xml
-<!-- Core + Linear Models + Neural Networks + Visualization -->
+<!-- Core + Linear Models + Visualization -->
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-core</artifactId>
-    <version>2.1.0</version>
+    <version>3.1.2</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-linear-models</artifactId>
-    <version>2.1.0</version>
+    <version>3.1.2</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
-    <artifactId>superml-neural</artifactId>
-    <version>2.1.0</version>
+    <artifactId>superml-tree-models</artifactId>
+    <version>3.1.2</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-visualization</artifactId>
-    <version>2.1.0</version>
+    <version>3.1.2</version>
 </dependency>
 ```
 

@@ -9,20 +9,23 @@ search: true
 # What's New in SuperML Java v3.1.2 🚀
 
 [![Release](https://img.shields.io/badge/version-3.1.2-blue)](https://github.com/supermlorg/superml-java)
+[![Maven Central](https://img.shields.io/maven-central/v/org.superml/superml-core)](https://central.sonatype.com/artifact/org.superml/superml-core)
 [![Upgrade](https://img.shields.io/badge/upgrade-recommended-brightgreen)](https://github.com/supermlorg/superml-java)
 [![Compatibility](https://img.shields.io/badge/compatibility-100%25%20backward-success)](https://github.com/supermlorg/superml-java)
 
-**SuperML Java v3.1.2** is an **incremental performance and stability release** that enhances the solid foundation established in v3.0.1. This release focuses on **optimization**, **reliability**, and **user experience improvements** across all 23 modules.
+**SuperML Java v3.1.2** is an **incremental performance and stability release** that enhances the solid foundation established in v3.0.1. This release focuses on **optimization**, **reliability**, and **user experience improvements** across all 21 modules. **Now published on Maven Central.**
 
 ## 🎯 At a Glance
 
 | **Category** | **Key Improvements** |
 |--------------|---------------------|
 | **⚡ Performance** | +15% faster training, +8% faster predictions, -10% memory usage |
+| **� Security** | CVE-2025-27820 (httpclient5), CVE-2023-6378 (logback/slf4j) fixed |
 | **🔧 Stability** | Bug fixes across core modules, enhanced thread safety |
 | **📚 Documentation** | Updated guides, new examples, performance benchmarks |
-| **🤖 Transformers** | 20% faster attention, better memory management |
+| **🤖 Transformers** | 20% faster attention, JUnit 5 migration, better memory management |
 | **🔄 PMML Export** | 50% faster generation, improved validation |
+| **📦 Maven Central** | Published at `org.superml:superml-core:3.1.2` |
 
 ## ✨ Top New Features
 
@@ -91,6 +94,13 @@ String pmml = converter.convertToXML(model);  // 50% faster!
 - ✅ **Better encoding handling**
 
 ## 🔧 Key Bug Fixes
+
+### **Security Fixes**
+- **✅ Fixed:** CVE-2025-27820 — `httpclient5` upgraded 5.4.1 → 5.4.3
+- **✅ Fixed:** CVE-2023-6378 — `logback-classic` upgraded 1.2.12 → 1.5.12, `slf4j` 1.7.36 → 2.0.16
+
+### **Serialization**
+- **✅ Added:** `DecisionTree` and `TreeNode` implement `java.io.Serializable`
 
 ### **Core Stability Improvements**
 - **✅ Fixed:** Thread safety issues in concurrent training
