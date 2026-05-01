@@ -1,9 +1,8 @@
-package org.superml.testcases;
+package org.superml.neural;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.superml.neural.CNNClassifier;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.List;

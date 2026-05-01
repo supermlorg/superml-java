@@ -17,12 +17,11 @@
  * under the License.
  */
 
-package org.superml.testcases;
+package org.superml.model_selection;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.superml.model_selection.HyperparameterTuning;
 import org.superml.linear_model.LogisticRegression;
 import org.superml.linear_model.LinearRegression;
 import org.superml.linear_model.Ridge;

@@ -1,4 +1,4 @@
-package org.superml.testcases.transformers;
+package org.superml.examples.transformers;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;

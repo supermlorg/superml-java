@@ -1,4 +1,4 @@
-package org.superml.testcases.metrics;
+package org.superml.transformers.metrics;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;

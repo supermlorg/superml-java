@@ -50,7 +50,7 @@ public class AdvancedGradientMetrics {
             double maxEigenvalue = estimateMaxEigenvalue(hessianEst);
             double minEigenvalue = estimateMinEigenvalue(hessianEst);
             eigenvalueEstimates.add(maxEigenvalue);
-            conditionNumbers.add(Math.abs(maxEigenvalue) / Math.max(Math.abs(minEigenvalue), 1e-12));
+            conditionNumbers.add(maxEigenvalue / Math.max(Math.abs(minEigenvalue), 1e-12));
         }
 
         return new HessianApproximation(

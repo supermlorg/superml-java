@@ -17,11 +17,10 @@
  * under the License.
  */
 
-package org.superml.testcases;
+package org.superml.tree;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.superml.tree.XGBoost;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;

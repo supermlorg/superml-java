@@ -17,10 +17,9 @@
  * under the License.
  */
 
-package org.superml.testcases;
+package org.superml.linear_model;
 
 import org.superml.datasets.Datasets;
-import org.superml.linear_model.LogisticRegression;
 import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;

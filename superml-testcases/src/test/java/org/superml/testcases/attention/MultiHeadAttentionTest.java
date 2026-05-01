@@ -17,14 +17,13 @@
  * under the License.
  */
 
-package org.superml.testcases.attention;
+package org.superml.transformers.attention;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 
-import org.superml.transformers.attention.MultiHeadAttention;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

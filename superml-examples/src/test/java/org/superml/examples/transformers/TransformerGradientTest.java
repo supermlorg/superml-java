@@ -123,20 +123,20 @@ public class TransformerGradientTest {
     }
 
     private void validateModelStructure(ModelData modelData) {
-        assertNotNull(modelData.gradients, "Gradients should not be null");
-        assertNotNull(modelData.parameters, "Parameters should not be null");
-        assertEquals(modelData.gradients.size(), modelData.parameters.size(),
-            "Should have same number of gradient and parameter matrices");
+        assertNotNull("Gradients should not be null", modelData.gradients);
+        assertNotNull("Parameters should not be null", modelData.parameters);
+        assertEquals("Should have same number of gradient and parameter matrices",
+            modelData.gradients.size(), modelData.parameters.size());
 
         int numLayers = modelData.gradients.size();
         for (int i = 0; i < numLayers; i++) {
             RealMatrix grads = modelData.gradients.get(i);
             RealMatrix params = modelData.parameters.get(i);
 
-            assertEquals(grads.getRowDimension(), grads.getColumnDimension(),
-                "Layer " + i + " matrices should be square");
-            assertEquals(grads.getRowDimension(), params.getRowDimension(),
-                "Layer " + i + " matrices should match sizes");
+            assertEquals("Layer " + i + " matrices should be square",
+                grads.getRowDimension(), grads.getColumnDimension());
+            assertEquals("Layer " + i + " matrices should match sizes",
+                grads.getRowDimension(), params.getRowDimension());
         }
     }
 
@@ -168,21 +168,21 @@ public class TransformerGradientTest {
     private void validateAnalysisResults(GradientAnalysisResult analysis) {
         // Validate gradient vanishing pattern
         for (int i = 1; i < analysis.gradientNorms.length; i++) {
-            assertTrue(analysis.gradientNorms[i] <= analysis.gradientNorms[i-1] * 1.5,
-                "Gradient norm should typically decrease with depth");
+            assertTrue("Gradient norm should typically decrease with depth",
+                analysis.gradientNorms[i] <= analysis.gradientNorms[i-1] * 1.5);
         }
 
         // Validate parameter-to-gradient ratios
         for (int i = 0; i < analysis.gradientToParamRatios.length; i++) {
             double ratio = analysis.gradientToParamRatios[i];
-            assertTrue(ratio > 1e-8 && ratio < 1e2,
-                "Gradient/parameter ratio should be reasonable");
+            assertTrue("Gradient/parameter ratio should be reasonable",
+                ratio > 1e-8 && ratio < 1e2);
         }
 
         // Validate sparsity progression
         for (int i = 1; i < analysis.sparsityRatios.length; i++) {
-            assertTrue(analysis.sparsityRatios[i] >= analysis.sparsityRatios[i-1] * 0.8,
-                "Sparsity should generally increase with depth");
+            assertTrue("Sparsity should generally increase with depth",
+                analysis.sparsityRatios[i] >= analysis.sparsityRatios[i-1] * 0.8);
         }
     }
 

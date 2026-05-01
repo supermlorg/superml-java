@@ -17,14 +17,13 @@
  * under the License.
  */
 
-package org.superml.testcases.layers;
+package org.superml.transformers.layers;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 
-import org.superml.transformers.layers.TransformerBlock;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

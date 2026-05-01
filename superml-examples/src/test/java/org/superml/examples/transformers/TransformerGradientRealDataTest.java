@@ -6,8 +6,8 @@ import org.superml.metrics.transformers.advanced.AdvancedGradientMetrics;
 import org.superml.metrics.transformers.advanced.AdvancedGradientMetrics.GradientAdvancedAnalysis;
 import org.superml.visualization.transformers.advanced.AdvancedGradientVisualization;
 import org.superml.visualization.transformers.advanced.AdvancedGradientVisualization.VisualizationOptions;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -94,20 +94,20 @@ public class TransformerGradientRealDataTest {
 
     private void validateGradientAnalysis(GradientAdvancedAnalysis analysis) {
         // Validate Hessian approximation
-        assertNotNull(analysis.hessianMetrics, "Hessian metrics should not be null");
-        assertTrue(!analysis.hessianMetrics.conditionNumbers.isEmpty(),
-            "Should have condition numbers");
+        assertNotNull("Hessian metrics should not be null", analysis.hessianMetrics);
+        assertTrue("Should have condition numbers",
+            !analysis.hessianMetrics.conditionNumbers.isEmpty());
 
         // Validate landscape metrics
-        assertNotNull(analysis.landscapeMetrics, "Landscape metrics should not be null");
-        assertEquals(analysis.landscapeMetrics.flatness.size(),
-            analysis.landscapeMetrics.sharpness.size(),
-            "Should have equal number of flatness/sharpness values");
+        assertNotNull("Landscape metrics should not be null", analysis.landscapeMetrics);
+        assertEquals("Should have equal number of flatness/sharpness values",
+            analysis.landscapeMetrics.flatness.size(),
+            analysis.landscapeMetrics.sharpness.size());
 
         // Validate optimization metrics
-        assertNotNull(analysis.optimizationMetrics, "Optimization metrics should not be null");
-        assertTrue(!analysis.optimizationMetrics.gradientNorms.isEmpty(),
-            "Should have gradient norms");
+        assertNotNull("Optimization metrics should not be null", analysis.optimizationMetrics);
+        assertTrue("Should have gradient norms",
+            !analysis.optimizationMetrics.gradientNorms.isEmpty());
 
         // Validate metric ranges
         validateMetricRanges(analysis);
@@ -116,18 +116,18 @@ public class TransformerGradientRealDataTest {
     private void validateMetricRanges(GradientAdvancedAnalysis analysis) {
         // Check condition numbers are positive
         analysis.hessianMetrics.conditionNumbers.forEach(
-            c -> assertTrue(c > 0, "Condition numbers should be positive"));
+            c -> assertTrue("Condition numbers should be positive", c > 0));
 
         // Check flatness/sharpness are non-negative
         analysis.landscapeMetrics.flatness.forEach(
-            f -> assertTrue(f >= 0, "Flatness should be non-negative"));
+            f -> assertTrue("Flatness should be non-negative", f >= 0));
         analysis.landscapeMetrics.sharpness.forEach(
-            s -> assertTrue(s >= 0, "Sharpness should be non-negative"));
+            s -> assertTrue("Sharpness should be non-negative", s >= 0));
 
         // Check gradient norms are finite
         analysis.optimizationMetrics.gradientNorms.forEach(
-            n -> assertTrue(!Double.isInfinite(n) && !Double.isNaN(n),
-                "Gradient norms should be finite"));
+            n -> assertTrue("Gradient norms should be finite",
+                !Double.isInfinite(n) && !Double.isNaN(n)));
     }
 
     private void visualizeResults(GradientAdvancedAnalysis analysis) {
