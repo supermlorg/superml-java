@@ -54,14 +54,14 @@ We encourage clean, modular, well-documented code.
 
 ```bash
 # Clone the repository
-git clone https://github.com/superml/superml-java.git
+git clone https://github.com/supermlorg/superml-java.git
 cd superml-java
 
 # Build the project
 mvn clean compile
 
-# Run tests
-mvn test
+# Run tests (excluding WIP modules)
+mvn test -pl '!superml-kaggle,!superml-onnx,!superml-neural'
 
 # Generate documentation
 mvn javadoc:javadoc
@@ -71,19 +71,28 @@ mvn javadoc:javadoc
 
 ```
 superml-java/
-├── src/main/java/com/superml/
-│   ├── core/                    # Base interfaces and classes
-│   ├── linear_model/           # Linear algorithms
-│   ├── cluster/                # Clustering algorithms
-│   ├── preprocessing/          # Data preprocessing
-│   ├── metrics/               # Evaluation metrics
-│   ├── model_selection/       # Cross-validation and tuning
-│   ├── pipeline/              # ML workflows
-│   └── datasets/              # Data loading and Kaggle integration
-├── src/test/java/              # Test files
-├── docs/                      # Documentation
-├── examples/                  # Usage examples
-└── pom.xml                   # Maven configuration
+├── superml-core/               # Base interfaces (BaseEstimator, Estimator, etc.)
+├── superml-linear-models/      # LogisticRegression, Ridge, Lasso, etc.
+├── superml-tree-models/        # DecisionTree, RandomForest, XGBoost, etc.
+├── superml-clustering/         # KMeans
+├── superml-preprocessing/      # StandardScaler, MinMaxScaler, etc.
+├── superml-datasets/           # Built-in datasets and data loading
+├── superml-metrics/            # Evaluation metrics
+├── superml-pipeline/           # Pipeline chaining
+├── superml-model-selection/    # CrossValidation, GridSearch, HyperparameterTuning
+├── superml-autotrainer/        # AutoML framework
+├── superml-persistence/        # Model save/load
+├── superml-inference/          # Production inference engine
+├── superml-visualization/      # XChart GUI + ASCII charts
+├── superml-transformers/       # Transformer models
+├── superml-pmml/               # PMML 4.4 export
+├── superml-drift/              # Drift detection
+├── superml-utils/              # Shared utilities
+├── superml-bundle-all/         # All-in-one bundle
+├── superml-examples/           # Example programs
+├── superml-testcases/          # Integration test suite (172+ tests)
+├── docs/                       # Documentation
+└── pom.xml                     # Parent Maven POM
 ```
 
 ### 3. Code Style Guidelines

@@ -1,6 +1,6 @@
 ---
 title: "Core Classes API Reference"
-description: "Comprehensive API documentation for SuperML Java 2.1.0 - 21 modules and 15+ algorithms"
+description: "Comprehensive API documentation for SuperML Java 3.1.2 - 21 modules and 15+ algorithms"
 layout: default
 toc: true
 search: true
@@ -8,7 +8,7 @@ search: true
 
 # Core Classes API Reference
 
-This document provides comprehensive API documentation for the core classes and interfaces in SuperML Java 2.1.0, covering all 21 modules and 15+ algorithms.
+This document provides comprehensive API documentation for the core classes and interfaces in SuperML Java 3.1.2, covering all 21 modules and 15+ algorithms.
 
 ## 🏗️ Foundation Interfaces (superml-core)
 

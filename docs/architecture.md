@@ -8,13 +8,13 @@ search: true
 
 # SuperML Java Framework - Architecture Overview
 
-This document provides a comprehensive overview of the SuperML Java 2.1.0 framework architecture, design principles, and internal workings of the 21-module system.
+This document provides a comprehensive overview of the SuperML Java 3.1.2 framework architecture, design principles, and internal workings of the 21-module system.
 
 ## 🏗️ High-Level Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         SuperML Java 2.1.0 Framework                       │
+│                         SuperML Java 3.1.2 Framework                       │
 │                    (21 Modules, 15+ Algorithms Implemented)                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  📱 User API Layer                                                         │
@@ -165,7 +165,7 @@ var pipeline = new Pipeline()
 
 ## 🧬 Algorithm Implementation Architecture
 
-SuperML Java implements **11 machine learning algorithms** across 4 categories, each following consistent architectural patterns while optimizing for their specific computational requirements.
+SuperML Java implements **15+ machine learning algorithms** across 4 categories, each following consistent architectural patterns while optimizing for their specific computational requirements.
 
 ### Algorithm Categories & Implementations
 
@@ -194,12 +194,13 @@ public abstract class LinearModelBase extends BaseEstimator {
 }
 ```
 
-#### 2. Tree-Based Models (3 algorithms)
+#### 2. Tree-Based Models (5 algorithms)
 ```java
 org.superml.tree/
-├── DecisionTree.java           // CART implementation
+├── DecisionTree.java           // CART implementation (Serializable)
 ├── RandomForest.java           // Bootstrap aggregating ensemble
-└── GradientBoosting.java       // Sequential boosting ensemble
+├── GradientBoosting.java       // Sequential boosting
+└── XGBoost.java                // Extreme Gradient Boosting
 ```
 
 **Tree Architecture Pattern:**

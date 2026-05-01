@@ -1,17 +1,17 @@
 # Algorithms Reference Guide
 
-SuperML Java provides a comprehensive collection of machine learning algorithms, each implemented with production-ready features and scikit-learn compatible APIs. This guide provides detailed information about all available algorithms, their capabilities, and usage examples.
+SuperML Java 3.1.2 provides a comprehensive collection of machine learning algorithms, each implemented with production-ready features and scikit-learn compatible APIs. All modules are available on [Maven Central](https://central.sonatype.com/artifact/org.superml/superml-core).
 
 ## 📊 Algorithm Categories Overview
 
 | Category | Algorithms | Use Cases |
 |----------|------------|-----------|
 | **Linear Models** | 6 algorithms | Classification, Regression, Feature Selection |
-| **Tree-Based** | 4 algorithms | Non-linear patterns, Feature importance, Ensemble learning |
-| **Neural Networks** | 3 algorithms | Deep learning, Complex patterns, Image/Sequence processing |
+| **Tree-Based** | 5 algorithms | Non-linear patterns, Feature importance, Ensemble learning |
+| **Neural Networks** | 3 algorithms (WIP) | Deep learning, Complex patterns, Image/Sequence processing |
 | **Clustering** | 1 algorithm | Unsupervised grouping, Customer segmentation |
-| **Meta-Classifiers** | 1 algorithm | Multiclass conversion, Algorithm composition |
-| **Preprocessing** | 1 transformer | Feature scaling, Data normalization |
+| **Meta-Classifiers** | 2 algorithms | Multiclass conversion, Algorithm composition |
+| **Preprocessing** | 4 transformers | Feature scaling, Encoding, Data normalization |
 
 ## 🔢 Linear Models
 

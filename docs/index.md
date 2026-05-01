@@ -8,11 +8,12 @@ search: true
 
 # SuperML Java Framework
 
-[![Build Status](https://img.shields.io/badge/build-22%2F22%20modules%20✅-success)](https://github.com/supermlorg/superml-java)
+[![Build Status](https://img.shields.io/badge/build-21%2F21%20modules%20✅-success)](https://github.com/supermlorg/superml-java)
+[![Maven Central](https://img.shields.io/maven-central/v/org.superml/superml-core)](https://central.sonatype.com/artifact/org.superml/superml-core)
 [![Performance](https://img.shields.io/badge/performance-400K%2B%20predictions%2Fsec-brightgreen)](https://github.com/supermlorg/superml-java)
-[![Tests](https://img.shields.io/badge/tests-145%2B%20passing-success)](https://github.com/supermlorg/superml-java)
+[![Tests](https://img.shields.io/badge/tests-172%2B%20passing-success)](https://github.com/supermlorg/superml-java)
 
-A comprehensive, modular machine learning library for Java, inspired by scikit-learn and designed for enterprise-grade applications. Version 3.1.2 features a sophisticated **23-module architecture** with **production-validated performance** delivering **400,000+ predictions per second**.
+A comprehensive, modular machine learning library for Java, inspired by scikit-learn and designed for enterprise-grade applications. Version 3.1.2 features a sophisticated **21-module architecture** with **production-validated performance** delivering **400,000+ predictions per second**.
 
 ## 🚀 Features
 
@@ -43,13 +44,13 @@ A comprehensive, modular machine learning library for Java, inspired by scikit-l
 
 ## ⚡ Performance Highlights
 
-**SuperML Java 3.0.1 achieves exceptional performance across all 23 production modules:**
+**SuperML Java 3.1.2 achieves exceptional performance across all 21 production modules:**
 
 ### 🏗️ **Build & Deployment Excellence**
-- ✅ **23/23 modules** compile successfully with zero failures
+- ✅ **21/21 modules** compile successfully with zero failures
 - ⚡ **~4 minute** complete framework build (clean → install → test)
-- 🧪 **160+ comprehensive tests** pass with full coverage validation
-- 📦 **Production JARs** ready for enterprise deployment
+- 🧪 **172+ comprehensive tests** pass with full coverage validation
+- 📦 **Published to Maven Central** — available at `central.sonatype.com/artifact/org.superml/superml-core`
 
 ### 🚀 **Runtime Performance Benchmarks**
 - ⚡ **400,000+ predictions/second** - XGBoost batch inference optimization
@@ -63,9 +64,10 @@ Algorithm              Training Time    Accuracy    Test Results
 ──────────────────────────────────────────────────────────────
 XGBoost                2.5 seconds      89%+        ✅ 20 tests passed
 Neural Networks        Variable         95%+        ✅ 46 tests passed  
-Random Forest          164ms           89%+        ✅ Feature importance
-Linear Models          <50ms           72-95%      ✅ 34 tests passed
-Cross-Validation       ~100ms          Robust      ✅ 26 tests passed
+Random Forest          164ms            89%+        ✅ Feature importance
+Linear Models          <50ms            72-95%      ✅ 34 tests passed
+Cross-Validation       ~100ms           Robust      ✅ 26 tests passed
+Total                  —                —           ✅ 172 tests passing
 ```
 
 ### 🌟 **Advanced Capabilities Verified**

@@ -6,16 +6,17 @@
 
 # SuperML Java
 
-[![Build Status](https://img.shields.io/badge/build-23%2F23%20modules%20✅-success)](https://github.com/supermlorg/superml-java)
+[![Build Status](https://img.shields.io/badge/build-21%2F21%20modules%20✅-success)](https://github.com/supermlorg/superml-java)
+[![Maven Central](https://img.shields.io/maven-central/v/org.superml/superml-core)](https://central.sonatype.com/artifact/org.superml/superml-core)
 [![Performance](https://img.shields.io/badge/performance-400K%2B%20predictions%2Fsec-brightgreen)](https://github.com/supermlorg/superml-java)
-[![Tests](https://img.shields.io/badge/tests-160%2B%20passing-success)](https://github.com/supermlorg/superml-java)
+[![Tests](https://img.shields.io/badge/tests-172%2B%20passing-success)](https://github.com/supermlorg/superml-java)
 [![Version](https://img.shields.io/badge/version-3.1.2-blue)](https://github.com/supermlorg/superml-java)
 
 A comprehensive, modular Java Machine Learning Framework inspired by scikit-learn, developed by the SuperML community.
 
 ## Overview
 
-SuperML Java 3.1.2 is a sophisticated **23-module machine learning library** for Java that delivers **enterprise-grade performance** with **400K+ predictions/second** and **23/23 modules** compiling successfully. The framework provides:
+SuperML Java 3.1.2 is a sophisticated **21-module machine learning library** for Java that delivers **enterprise-grade performance** with **400K+ predictions/second** and **21/21 modules** compiling successfully. **Now published on Maven Central.** The framework provides:
 
 - **🎯 Supervised Learning**: 15+ algorithms including Logistic Regression, Linear Regression, Ridge, Lasso, Decision Trees, Random Forest, XGBoost with lightning-fast training
 - **🤖 Transformer Models**: Complete implementation with Encoder-Only (BERT), Decoder-Only (GPT), and Full Transformer architectures
@@ -97,13 +98,13 @@ System.out.println("Model saved to: " + results.get(0).modelFilePath);
 
 ## ⚡ Performance Highlights
 
-**SuperML Java 2.1.0 delivers enterprise-grade performance across all 22 modules:**
+**SuperML Java 3.1.2 delivers enterprise-grade performance across all 21 modules:**
 
 ### 🏗️ **Build & Deployment**
-- ✅ **22/22 modules** compile successfully (100% build success rate)
+- ✅ **21/21 modules** compile successfully (100% build success rate)
 - ⚡ **~4 minute** full framework build time
-- 🧪 **145+ tests** pass across all modules with comprehensive coverage
-- 📦 **Production-ready** JARs with complete dependency resolution
+- 🧪 **172+ tests** pass across all modules with comprehensive coverage
+- 📦 **Published to Maven Central** at `org.superml:superml-core:3.1.2`
 
 ### 🚀 **Runtime Performance** 
 - ⚡ **400,000+ predictions/second** - XGBoost batch inference
@@ -213,7 +214,7 @@ List<String> allModels = manager.listModels();
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-bundle-all</artifactId>
-    <version>2.0.0</version>
+    <version>3.1.2</version>
 </dependency>
 ```
 
@@ -224,26 +225,33 @@ List<String> allModels = manager.listModels();
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-core</artifactId>
-    <version>2.0.0</version>
+    <version>3.1.2</version>
 </dependency>
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-linear-models</artifactId>
-    <version>2.0.0</version>
+    <version>3.1.2</version>
+</dependency>
+
+<!-- Add Tree Models -->
+<dependency>
+    <groupId>org.superml</groupId>
+    <artifactId>superml-tree-models</artifactId>
+    <version>3.1.2</version>
 </dependency>
 
 <!-- Add Visualization -->
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-visualization</artifactId>
-    <version>2.0.0</version>
+    <version>3.1.2</version>
 </dependency>
 
 <!-- Add AutoML -->
 <dependency>
     <groupId>org.superml</groupId>
     <artifactId>superml-autotrainer</artifactId>
-    <version>2.0.0</version>
+    <version>3.1.2</version>
 </dependency>
 ```
 
