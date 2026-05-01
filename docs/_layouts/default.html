@@ -466,7 +466,7 @@
         --bg-secondary: #f8fafc;
         --bg-tertiary: #f1f5f9;
         --bg-card: #ffffff;
-        --bg-code: #1e293b;
+        --bg-code: #f6f8fa;
         
         --text-primary: #0f172a;
         --text-secondary: #475569;
@@ -1091,9 +1091,11 @@
       /* Code Blocks */
       .article-content pre {
         background-color: var(--bg-code);
-        color: #e2e8f0;
+        color: #1e293b;
         padding: 1.5rem;
         border-radius: var(--border-radius-md);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         overflow-x: auto;
         margin: 1.5rem 0;
         font-family: var(--font-family-mono);
