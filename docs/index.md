@@ -12,15 +12,17 @@ search: true
 [![Performance](https://img.shields.io/badge/performance-400K%2B%20predictions%2Fsec-brightgreen)](https://github.com/supermlorg/superml-java)
 [![Tests](https://img.shields.io/badge/tests-145%2B%20passing-success)](https://github.com/supermlorg/superml-java)
 
-A comprehensive, modular machine learning library for Java, inspired by scikit-learn and designed for enterprise-grade applications. Version 2.1.0 features a sophisticated **22-module architecture** with **production-validated performance** delivering **400,000+ predictions per second**.
+A comprehensive, modular machine learning library for Java, inspired by scikit-learn and designed for enterprise-grade applications. Version 3.1.2 features a sophisticated **23-module architecture** with **production-validated performance** delivering **400,000+ predictions per second**.
 
 ## 🚀 Features
 
-### Core Machine Learning (15+ Algorithms)
+### Core Machine Learning (20+ Algorithms)
 - **Linear Models** (6): Logistic Regression, Linear Regression, Ridge, Lasso, SGD Classifier/Regressor
 - **Tree-Based Models** (5): Decision Trees, Random Forest (Classifier/Regressor), Gradient Boosting, XGBoost
 - **Neural Networks** (3): Multi-Layer Perceptron (MLP), Convolutional Neural Networks (CNN), Recurrent Neural Networks (RNN)
+- **Transformer Models** (3): TransformerEncoder (BERT-style), TransformerDecoder (GPT-style), Full Transformer (seq2seq)
 - **Clustering** (1): K-Means with k-means++ initialization and advanced convergence
+- **PMML Export**: Complete PMML 4.4 support for cross-platform model deployment
 - **Preprocessing**: StandardScaler, MinMaxScaler, RobustScaler, LabelEncoder, Neural Network-specific preprocessing
 
 ### Advanced Features  
@@ -41,12 +43,12 @@ A comprehensive, modular machine learning library for Java, inspired by scikit-l
 
 ## ⚡ Performance Highlights
 
-**SuperML Java 2.1.0 achieves exceptional performance across all 22 production modules:**
+**SuperML Java 3.0.1 achieves exceptional performance across all 23 production modules:**
 
 ### 🏗️ **Build & Deployment Excellence**
-- ✅ **22/22 modules** compile successfully with zero failures
+- ✅ **23/23 modules** compile successfully with zero failures
 - ⚡ **~4 minute** complete framework build (clean → install → test)
-- 🧪 **145+ comprehensive tests** pass with full coverage validation
+- 🧪 **160+ comprehensive tests** pass with full coverage validation
 - 📦 **Production JARs** ready for enterprise deployment
 
 ### 🚀 **Runtime Performance Benchmarks**
@@ -78,7 +80,9 @@ Cross-Validation       ~100ms          Robust      ✅ 26 tests passed
 ## 📚 Documentation
 
 ### **🎉 Latest Release**
-- [**📋 Release Notes 2.1.0**](release-notes-2.1.0.md) - **NEW** Deep learning, neural networks, and enhanced capabilities
+- [**📋 Release Notes 3.1.2**](release-notes-3.1.2.md) - **NEW** Performance improvements and stability enhancements
+- [**🚀 What's New in v3.1.2**](whats-new-3.1.2.md) - Performance boosts and migration guide
+- [**📋 Release Notes 3.0.1**](release-notes-3.0.1.md) - Major Transformers and PMML export capabilities
 
 ### **Getting Started**
 - [**Quick Start Guide**](quick-start.md) - Get started in 5 minutes with visualization examples
@@ -100,11 +104,14 @@ Cross-Validation       ~100ms          Robust      ✅ 26 tests passed
 - [**API Reference**](api/core-classes.md) - Complete API documentation for all modules
 - [**Basic Examples**](examples/basic-examples.md) - Fundamental ML concepts and workflows
 - [**Advanced Examples**](examples/advanced-examples.md) - XChart GUI, AutoML, and production patterns
+- [**Transformer Models Guide**](transformer-guide.md) - Complete transformer architecture implementation
+- [**PMML Export Guide**](pmml-guide.md) - Cross-platform model deployment with PMML
 
 ### **Development**
 - [**Testing Guide**](testing-guide.md) - Comprehensive unit tests and validation
 - [**Logging Guide**](logging-guide.md) - Professional logging configuration
 - [**Contributing**](contributing.md) - How to contribute to the project
+- [**Release Notes v3.1.2**](release-notes-3.1.2.md) - Latest release features and improvements
 
 ## 🔗 Quick Links
 

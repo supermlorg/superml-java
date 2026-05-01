@@ -25,21 +25,35 @@ package org.superml.examples;
 public class RunAllExamples {
     
     public static void main(String[] args) {
-        System.out.println("🚀 SuperML Java 2.0.0 - Running All Examples");
+        System.out.println("🚀 SuperML Java 3.1.2 - Running All Examples");
         System.out.println("=".repeat(80));
+        
+        int completedExamples = 0;
+        int totalExamples = 11;
         
         try {
             System.out.println("\n📊 Example 1: Simple Classification");
             System.out.println("-".repeat(50));
             SimpleClassificationExample.main(args);
-            
+            completedExamples++;
+        } catch (Exception e) {
+            System.out.println("⚠️  Example 1 failed: " + e.getMessage());
+        }
+        
+        try {
             System.out.println("\n\n📈 Example 2: Simple Regression");
             System.out.println("-".repeat(50));
             SimpleRegressionExample.main(args);
-            
+            completedExamples++;
+        } catch (Exception e) {
+            System.out.println("⚠️  Example 2 failed: " + e.getMessage());
+        }
+        
+        try {
             System.out.println("\n\n🏆 Example 3: Kaggle-style Competition");
             System.out.println("-".repeat(50));
             SimpleKaggleExample.main(args);
+            completedExamples++;
             
             System.out.println("\n\n🌳 Example 4: Tree Models (Decision Tree & Random Forest)");
             System.out.println("-".repeat(60));
