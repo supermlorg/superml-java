@@ -14,6 +14,11 @@
 
 A comprehensive, modular Java Machine Learning Framework inspired by scikit-learn, developed by the SuperML community.
 
+## Featured On
+<a href="https://superml.dev/tools/superml-java" target="_blank" rel="noopener noreferrer">
+  <img src="https://superml.dev/api/badge/superml-java.svg" alt="SuperML Java listed on SuperML" width="210" height="44" />
+</a>
+
 ## Overview
 
 SuperML Java 3.1.2 is a sophisticated **21-module machine learning library** for Java that delivers **enterprise-grade performance** with **400K+ predictions/second** and **21/21 modules** compiling successfully. **Now published on Maven Central.** The framework provides:
